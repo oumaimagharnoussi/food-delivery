@@ -2,14 +2,16 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {
+
+
+ {
     path: '',
-    redirectTo: 'folder/Inbox',
+    redirectTo: '',
     pathMatch: 'full'
   },
   {
-    path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
+    path: '',
+    loadChildren: () => import('./front/front.module').then( m => m.FrontModule)
   }
 ];
 
