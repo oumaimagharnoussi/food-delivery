@@ -38,9 +38,9 @@ export class AuthService {
    private  storage:Storage,private http: HttpClient, private router: Router,  private platform: Platform,  public toastController: ToastController
   ) {
     this.init()
-    this.platform.ready().then(() => {
+  /*  this.platform.ready().then(() => {
       this.ifLoggedIn();
-    });
+    });*/
     
   }
  
