@@ -1,0 +1,8 @@
+{
+  "name": "food-delivery",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "97096e69"
+}
