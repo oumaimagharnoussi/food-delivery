@@ -31,6 +31,7 @@ export class RegisterComponent implements OnInit {
   constructor(private register_service : RegisterService, private authService: AuthService, private router: Router) { }
 
   async ngOnInit() {
+    this.authService.ifNotLoggedIn()
     await this.authService.getDark().then((test)=>{
       if (test) {document.body.setAttribute('data-theme', 'dark');	
     this.dark=true}
@@ -90,7 +91,7 @@ export class RegisterComponent implements OnInit {
           this.test=true;
           this.form=new DeliveryBoy();
           this.confirm="";
-          this.router.navigate(['/login'])
+          this.router.navigate(['/auth/login'])
         },error=>{
           this.pressed=true;
           this.errMsg="Mail or phone already exists"

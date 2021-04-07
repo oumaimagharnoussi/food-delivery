@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
   constructor(private storage: AuthService) { }
 
   async ngOnInit() {
+    this.storage.ifNotLoggedIn()
     // If using a custom driver:
     // await this.storage.defineDriver(MyCustomDriver)
   

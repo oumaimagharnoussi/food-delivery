@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
+
+
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,8 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  side: Boolean;
+
   
   constructor() {}
 
@@ -17,9 +20,18 @@ export class AppComponent {
 
 
    ngOnInit() {
-    // If using a custom driver:
-    // await this.storage.defineDriver(MyCustomDriver)
+    console.log(window.location.pathname.toString())
+     if(window.location.pathname.toString()=="/auth/index" ||
+        window.location.pathname.toString()=="/auth/login" || 
+        window.location.pathname.toString()=="/auth/register" )
+        {
+       this.side=false;
 
+     }else{
+       this.side=true;
+     }
+ 
+    
     
      
     

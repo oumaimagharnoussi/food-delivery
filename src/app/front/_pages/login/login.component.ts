@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../../_services/auth.service';
 
@@ -22,9 +23,10 @@ export class LoginComponent implements OnInit {
   };
 
 
-  constructor(private authService:AuthService) { }
+  constructor(private authService:AuthService, private router: Router) { }
 
   async ngOnInit() {
+    this.authService.ifNotLoggedIn()
     await this.authService.getDark().then((test)=>{
       if (test) {document.body.setAttribute('data-theme', 'dark');	
     this.dark=true}
@@ -42,6 +44,8 @@ export class LoginComponent implements OnInit {
       this.pressed=true;
       this.err=false
       this.authService.set('access_token',token)
+      this.router.navigate(['/app/orders'])
+      
     console.log(token)
     },error=>{
       this.pressed=true;

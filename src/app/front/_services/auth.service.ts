@@ -50,7 +50,10 @@ export class AuthService {
 
   }
  async  ifLoggedIn() {
-  await  this.storage.get("access_token").then((response) => {
+
+
+  this.platform.ready().then(async() => {
+    await  this.storage.get("access_token").then((response) => {
 
      
       if (response) {
@@ -60,7 +63,32 @@ export class AuthService {
         this.router.navigate(['/login'])
       }
     });
+  });
+
+
+
   }
+
+
+  async  ifNotLoggedIn() {
+
+
+    this.platform.ready().then(async() => {
+      await  this.storage.get("access_token").then((response) => {
+  
+       
+        if (!response) {
+          console.log(response)
+          this.authState.next(false);
+        }else{
+          this.router.navigate(['/app/orders'])
+        }
+      });
+    });
+  
+  
+  
+    }
 
   async  getDark():Promise<boolean> {
     var test;

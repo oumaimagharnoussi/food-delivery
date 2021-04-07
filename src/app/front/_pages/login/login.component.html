@@ -4,7 +4,7 @@
     <div>
   
       <ion-toggle checked={{dark}} class="bg-green-100  bg-opacity-0 my-0" (ionChange)="onClick($event)" slot="end"></ion-toggle>
-      <a href="/index">
+      <a href="/auth/index">
         <img class="mx-auto h-5 w-auto" src="../../../assets/front/Logo_icon.png" alt="Workflow">
       </a>
       
@@ -19,8 +19,8 @@
       <input type="hidden" name="remember" value="true">
       <div class="rounded-md shadow-sm -space-y-px">
         <div>
-          <label for="email-address" class="sr-only">Email address</label>
-          <input id="email-address" name="email" [(ngModel)]="loginForm.username" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm mb-1" placeholder="Email address">
+          <label for="email-address" class="sr-only">Email Or Phone </label>
+          <input id="email-address" name="email" [(ngModel)]="loginForm.username" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm mb-1" placeholder="Email Or Phone">
         </div>
         <div>
           <label for="password" class="sr-only">Password</label>
@@ -62,7 +62,7 @@
         </div>
 
         <div class="text-sm">
-          <a href="/register" class="font-medium text-green-800 hover:text-green-500">
+          <a href="/auth/register" class="font-medium text-green-800 hover:text-green-500">
             Don't have an account?
           </a>
         </div>
