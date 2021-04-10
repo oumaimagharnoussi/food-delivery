@@ -1,0 +1,85 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+       Orders
+    </ion-title>
+    <ion-toggle checked={{dark}} class="bg-green-100  bg-opacity-0" (ionChange)="onClick($event)" slot="end"></ion-toggle>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab 1</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-card>
+    <ion-item>
+      
+      <ion-label> <b>Order#1255</b> (BISTRO)</ion-label>
+      <ion-badge slot="start" color="success">New</ion-badge>
+      <ion-button color="warning" slot="end"><ion-icon name="navigate-circle-outline"></ion-icon></ion-button>
+    </ion-item>
+  
+    <ion-card-content>
+
+      <div>
+
+    
+        <b>Distance to restaurant: </b>  10 KM <br>
+        <b>Distance to client: </b>  7 KM <br>
+        <b>Total distance: </b> 17 KM <br>
+      </div>
+      <div>
+        <b>Total price: </b> 15€ 
+      </div>
+
+    </ion-card-content>
+
+    <ion-item>
+      
+      <ion-button color="danger" slot="end">DECLINE</ion-button>
+      <ion-button color="primary" slot="end">ACCEPT</ion-button>
+    </ion-item>
+
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      
+      <ion-label> <b>Order#1255</b> (BISTRO)</ion-label>
+      <ion-badge slot="start" color="success">New</ion-badge>
+      <ion-button  class="btn btn-xl"  color="warning" slot="end"><ion-icon name="navigate-circle-outline"></ion-icon></ion-button>
+    </ion-item>
+  
+    <ion-card-content>
+
+      <div>
+
+    
+        <b>Distance to restaurant: </b>  10 KM <br>
+        <b>Distance to client: </b>  7 KM <br>
+        <b>Total distance: </b> 17 KM <br>
+      </div>
+      <div>
+        <b>Total price: </b> 15€ 
+      </div>
+
+    </ion-card-content>
+
+    <ion-item>
+      
+      <ion-button color="danger" slot="end">DECLINE</ion-button>
+      <ion-button color="primary" slot="end">ACCEPT</ion-button>
+    </ion-item>
+
+  </ion-card>
+
+  
+</ion-content>
