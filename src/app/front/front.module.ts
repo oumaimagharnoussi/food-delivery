@@ -7,11 +7,13 @@ import { RegisterComponent } from './_pages/register/register.component';
 import { LoginComponent } from './_pages/login/login.component';
 import { HomeComponent } from './_pages/home/home.component';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [RegisterComponent,LoginComponent,HomeComponent],
   imports: [
     CommonModule,
+    IonicModule,
     FrontRoutingModule,
     HttpClientModule,
     FormsModule,

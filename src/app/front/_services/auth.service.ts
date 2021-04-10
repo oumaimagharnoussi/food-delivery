@@ -10,9 +10,12 @@ import { TestBed } from "@angular/core/testing";
 
 
 
-const AUTH_API = 'https://localhost/api/';
+
+
+var AUTH_API = 'https://localhost/api/';
 const httpOptions = {
   headers: new HttpHeaders({
+    
     'Content-Type':  'application/json',
     'accept': 'application/json'
   })
@@ -38,6 +41,7 @@ export class AuthService {
    private  storage:Storage,private http: HttpClient, private router: Router,  private platform: Platform,  public toastController: ToastController
   ) {
     this.init()
+ 
   /*  this.platform.ready().then(() => {
       this.ifLoggedIn();
     });*/
@@ -122,6 +126,9 @@ export class AuthService {
 
 
   login(credentials): Observable<any>  {
+
+ 
+
     return this.http.post(AUTH_API+'login_check', credentials,httpOptions)
      
   }

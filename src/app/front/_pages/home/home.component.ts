@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { AuthService } from '../../_services/auth.service';
 
 
@@ -9,10 +10,35 @@ import { AuthService } from '../../_services/auth.service';
 })
 export class HomeComponent implements OnInit {
   dark=false;
+  pushes: any = [];
+  token="";
 
-  constructor(private storage: AuthService) { }
+  constructor(private storage: AuthService) { 
+
+  
+
+  }
+
+ 
 
   async ngOnInit() {
+
+
+
+
+
+    // to check if we have permission
+/*this.push.hasPermission()
+.then((res: any) => {
+
+  if (res.isEnabled) {
+    console.log('We have permission to send push notifications');
+  } else {
+    console.log('We do not have permission to send push notifications');
+  }
+
+});*/
+
     this.storage.ifNotLoggedIn()
     // If using a custom driver:
     // await this.storage.defineDriver(MyCustomDriver)

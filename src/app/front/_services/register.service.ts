@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
 import DeliveryBoy from '../_models/DeliveryBoy';
 import { Observable } from 'rxjs';
-const host = 'https://localhost';
+const host = 'http://localhost';
 
 const httpOptions = {
   headers: new HttpHeaders({
