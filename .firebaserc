@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "delivery-app-b0d50": {
+      "hosting": {
+        "app": [
+          "delivery-app-b0d50"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "delivery-app-b0d50"
+  }
+}

@@ -19,12 +19,15 @@
       <ion-title size="large">Tab 1</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-card>
+  <ion-card *ngFor="let order of orders">
     <ion-item>
       
-      <ion-label> <b>Order#1255</b> (BISTRO)</ion-label>
+      <ion-label> <b>Order#{{order.order.id}}</b> ({{order.order.restaurant.name}})</ion-label>
       <ion-badge slot="start" color="success">New</ion-badge>
-      <ion-button color="warning" slot="end"><ion-icon name="navigate-circle-outline"></ion-icon></ion-button>
+      <a href="orders/details/{{order.order.id}}"  >
+        <ion-button color="warning" slot="end"><ion-icon name="navigate-circle-outline"></ion-icon></ion-button>
+      </a>
+    
     </ion-item>
   
     <ion-card-content>
@@ -32,54 +35,21 @@
       <div>
 
     
-        <b>Distance to restaurant: </b>  10 KM <br>
-        <b>Distance to client: </b>  7 KM <br>
-        <b>Total distance: </b> 17 KM <br>
+        <b>Distance to restaurant: </b>  {{order.distance/1000| number : '1.1-1'}} KM  <br>
+        
       </div>
       <div>
-        <b>Total price: </b> 15€ 
+        <b>Total price: </b> {{order.order.totalPrice}} {{order.order.restaurant.currency.symbol}} 
       </div>
-
+      <ion-item>
+        <ion-button color="success" slot="end">ACCEPT</ion-button>
+      </ion-item>
     </ion-card-content>
 
-    <ion-item>
-      
-      <ion-button color="danger" slot="end">DECLINE</ion-button>
-      <ion-button color="primary" slot="end">ACCEPT</ion-button>
-    </ion-item>
+ 
 
   </ion-card>
 
-  <ion-card>
-    <ion-item>
-      
-      <ion-label> <b>Order#1255</b> (BISTRO)</ion-label>
-      <ion-badge slot="start" color="success">New</ion-badge>
-      <ion-button  class="btn btn-xl"  color="warning" slot="end"><ion-icon name="navigate-circle-outline"></ion-icon></ion-button>
-    </ion-item>
-  
-    <ion-card-content>
-
-      <div>
-
-    
-        <b>Distance to restaurant: </b>  10 KM <br>
-        <b>Distance to client: </b>  7 KM <br>
-        <b>Total distance: </b> 17 KM <br>
-      </div>
-      <div>
-        <b>Total price: </b> 15€ 
-      </div>
-
-    </ion-card-content>
-
-    <ion-item>
-      
-      <ion-button color="danger" slot="end">DECLINE</ion-button>
-      <ion-button color="primary" slot="end">ACCEPT</ion-button>
-    </ion-item>
-
-  </ion-card>
 
   
 </ion-content>

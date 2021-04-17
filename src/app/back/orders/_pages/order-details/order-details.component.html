@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/orders"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>
+       Orders
+    </ion-title>
+    <ion-toggle  class="bg-green-100  bg-opacity-0" slot="end"></ion-toggle>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab 1</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card>
+    <ion-item>
+      
+      <ion-label> <b>Order#1255</b> (BISTRO)</ion-label>
+   
+     
+      <ion-button color="primary" slot="end">ACCEPT</ion-button>
+    </ion-item>
+  
+    <ion-card-content>
+      <form [formGroup]="directionForm" (ngSubmit)="calculateAndDisplayRoute(directionForm.value)">
+      
+        <ion-button expand="full" type="submit">Get Direction</ion-button>
+      </form>
+
+      <div #mapElement class="map"></div>
+      <h2>Address:</h2>
+      <h4>{{formattedAddress}}</h4>
+
+    </ion-card-content>
+
+ 
+
+  </ion-card>
+
+  
+</ion-content>

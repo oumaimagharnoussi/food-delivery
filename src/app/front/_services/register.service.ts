@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
 import DeliveryBoy from '../_models/DeliveryBoy';
 import { Observable } from 'rxjs';
-const host = 'http://localhost';
+const host = 'https://localhost';
 
-const httpOptions = {
+const httpOptions = { 
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
     'accept': 'application/json'
@@ -29,11 +29,11 @@ export class RegisterService {
 
 
   register(user :DeliveryBoy): Observable<any> {
-    return this.http.post(host + '/api/deliveries', user, httpOptions);
+    return this.http.post('/api/deliveries', user, httpOptions);
   }
 
   login(credentials): Observable<any>  {
-    return this.http.post('https://localhost/api/login_check', credentials,httpOptions)
+    return this.http.post('/api/login_check', credentials,httpOptions)
      
   }
 

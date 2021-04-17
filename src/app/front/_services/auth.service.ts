@@ -12,12 +12,13 @@ import { TestBed } from "@angular/core/testing";
 
 
 
-var AUTH_API = 'https://localhost/api/';
+var AUTH_API = '/api/';
 const httpOptions = {
   headers: new HttpHeaders({
     
     'Content-Type':  'application/json',
     'accept': 'application/json'
+ 
   })
 };
 const TOKEN_KEY = 'my-token';
@@ -47,7 +48,12 @@ export class AuthService {
     });*/
     
   }
- 
+  private extractData(res: Response) {
+    let body = res;
+    return body || {
+     };
+  }
+
   isAuthenticated() {
   
     return this.authState.value;
@@ -93,6 +99,22 @@ export class AuthService {
   
   
     }
+    id;
+      getUserInfo() {
+
+
+   
+          this.storage.get("access_token").then((response) => {
+    
+         
+         console.log(response)
+          return response
+
+      });
+    
+ 
+    
+      }
 
   async  getDark():Promise<boolean> {
     var test;
@@ -107,6 +129,20 @@ export class AuthService {
       return test;
     
     }
+
+    async  getUser():Promise<any> {
+      var test;
+      await  this.storage.get("access_token").then((response) => {
+    
+          test =response;
+          
+          
+           
+         
+        });
+        return test;
+      
+      }
 
 
   async init() {
