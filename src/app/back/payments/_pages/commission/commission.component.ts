@@ -9,6 +9,10 @@ export class CommissionComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+  }
+
+  
 
 }

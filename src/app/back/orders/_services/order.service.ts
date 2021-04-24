@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-const host = 'https://localhost';
+const host = 'https://127.0.0.1:8000';
 @Injectable({
   providedIn: 'root'
 })
@@ -26,7 +26,7 @@ export class OrderService {
     });
 
     const options = { headers: headers };
-    return this.http.get('/api/nearby_orders/'+id , options).pipe(
+    return this.http.get(host+'/api/nearby_orders/'+id , options).pipe(
       map(this.extractData));
   }
 
@@ -38,7 +38,7 @@ export class OrderService {
     });
 
     const options = { headers: headers };
-    return this.http.get('/api/orders/'+id , options).pipe(
+    return this.http.get(host+'/api/orders/'+id , options).pipe(
       map(this.extractData));
   }
 
@@ -49,7 +49,7 @@ export class OrderService {
     });
 
     const options = { headers: headers };
-    return this.http.get('/api/deliveries/'+id , options).pipe(
+    return this.http.get(host+'/api/deliveries/'+id , options).pipe(
       map(this.extractData));
   }
 

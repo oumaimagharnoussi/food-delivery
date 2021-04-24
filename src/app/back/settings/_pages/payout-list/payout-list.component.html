@@ -1,0 +1,96 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>
+       Settings
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="moon-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab 1</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- component -->
+
+
+<div class=" items-center justify-center">
+  <div class="m-2">
+    <h1 class="text-center font-bold text-xl uppercase">Payout methods</h1>
+
+</div>
+  <ul class="flex flex-col  p-5">
+       <li class="border-gray-400 flex flex-row mb-2">
+         <div class="select-none cursor-pointer bg-blue-200 rounded-md flex flex-1 items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+           <div class="flex flex-col rounded-md w-10 h-10 bg-gray-300 justify-center items-center mr-4"><img src="http://www.sonalia.com/wp-content/uploads/2019/04/credit_card_logo.png" class="h-8 ml-3"></div>
+           <div class="flex-1 pl-1 mr-16">
+             <div class="font-medium">VISA</div>
+             <div class="text-gray-600 text-sm">**1422</div>
+           </div>
+           <div >
+            <button  class="bg-red-600 p-2 text-white  rounded-md border   hover:bg-red-400"
+          >
+          <ion-icon name="trash"></ion-icon>
+            </button>
+           </div>
+         </div>
+       </li>
+            <li class="border-gray-400 flex flex-row mb-2">
+         <div class="select-none cursor-pointer bg-gray-200 rounded-md flex flex-1 items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+           <div class="flex flex-col rounded-md w-10 h-10 bg-gray-300 justify-center items-center mr-4">                <img src="https://loozap.com/storage/files/bj/coin_20-06-2019/thumb-816x460-ijlgpnn_thumb_643375_uploaded_image1_1560180334.95.png" class="h-8 ml-3"></div>
+           <div class="flex-1 pl-1 mr-16">
+             <div class="font-medium">MobileMoney</div>
+             <div class="text-gray-600 text-sm">+31-5884****</div>
+           </div>
+           <div >
+            <button  class="bg-red-600 p-2 text-white  rounded-md border   hover:bg-red-400"
+          >
+          <ion-icon name="trash"></ion-icon>
+            </button>
+           </div>
+         </div>
+       </li>
+            <li class="border-gray-400 flex flex-row mb-2">
+         <div class="select-none cursor-pointer bg-gray-200 rounded-md flex flex-1 items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+           <div class="flex flex-col rounded-md w-10 h-10 bg-gray-300 justify-center items-center mr-4"><img src="https://www.sketchappsources.com/resources/source-image/PayPalCard.png" class="h-8 ml-3"></div>
+           <div class="flex-1 pl-1 mr-16">
+             <div class="font-medium">Paypal</div>
+             <div class="text-gray-600 text-sm">a**@**dis.com</div>
+           </div>
+           <div >
+            <button  class="bg-red-600 p-2 text-white  rounded-md border   hover:bg-red-400"
+          >
+          <ion-icon name="trash"></ion-icon>
+            </button>
+           </div>
+         </div>
+       </li>
+       <li class="border-gray-400 flex flex-row mb-2">
+        <a href="/app/settings/add" class="text-center  block w-full max-w-xs m-5 my-10 bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"><i class="mdi mdi-lock-outline mr-1"></i>
+           Add Method
+          </a>
+       </li>
+     
+   </ul>
+
+
+   
+ </div>
+
+
+
+
+
+  
+</ion-content>

@@ -9,6 +9,7 @@ import { HomeComponent } from './_pages/home/home.component';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { IonicModule } from '@ionic/angular';
 
+
 @NgModule({
   declarations: [RegisterComponent,LoginComponent,HomeComponent],
   imports: [
@@ -17,6 +18,7 @@ import { IonicModule } from '@ionic/angular';
     FrontRoutingModule,
     HttpClientModule,
     FormsModule,
+   
     IonicStorageModule.forRoot()
   ]
 })

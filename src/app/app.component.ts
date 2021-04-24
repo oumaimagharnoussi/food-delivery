@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Platform } from '@ionic/angular';
+import { AuthService } from './front/_services/auth.service';
+import { MessagingService } from './front/_services/messaging.service';
 
 
 
@@ -8,35 +12,44 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  side: Boolean;
+  side=true;
 
   
-  constructor() {}
-
-  
+  constructor(private platform:Platform, private auth:AuthService,private message:MessagingService,private router: Router) {}
 
   
 
+  
 
+  logout() {
+  this.message.deleteToken();
+  this.auth.logout();
+  
 
-   ngOnInit() {
-    console.log(window.location.pathname.toString())
-     if(window.location.pathname.toString()=="/auth/index" ||
-        window.location.pathname.toString()=="/auth/login" || 
-        window.location.pathname.toString()=="/auth/register" )
-        {
-       this.side=false;
+  
 
-     }else{
-       this.side=true;
-     }
- 
-    
-    
-     
-    
-    
 
 }
+
+   ngOnInit() {/*
+    console.log(window.location.pathname.toString())
+    this.platform.ready().then(async() => {
+      if(window.location.pathname.toString()=="/index" ||
+      window.location.pathname.toString()=="/" || 
+      window.location.pathname.toString()=="/login" || 
+      window.location.pathname.toString()=="/register" )
+      {
+     this.side=false;
+
+   }else{
+     this.side=true;
+   }
+
+    });
+
+*/
+ 
+}
+
   
 }

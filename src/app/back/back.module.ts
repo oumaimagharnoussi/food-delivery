@@ -7,6 +7,7 @@ import { TabsPageModule } from './tabs/tabs.module';
 import { OrdersModule } from './orders/orders.module';
 import { ChatModule } from './chat/chat.module';
 import { PaymentsModule } from './payments/payments.module';
+import { SettingsModule } from './settings/settings.module';
 
 @NgModule({
   declarations: [],
@@ -17,7 +18,8 @@ import { PaymentsModule } from './payments/payments.module';
     TabsPageModule,
     OrdersModule,
     ChatModule,
-    PaymentsModule
+    PaymentsModule,
+    SettingsModule
   ]
 })
 export class BackModule { }

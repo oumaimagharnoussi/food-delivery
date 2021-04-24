@@ -4,13 +4,16 @@ import DeliveryBoy from '../../_models/DeliveryBoy';
 import { RegisterService } from '../../_services/register.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../_services/auth.service';
+import { HTTP } from '@ionic-native/http/ngx';
+import { HttpHeaders } from '@angular/common/http';
+import { Platform } from '@ionic/angular';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-
+ 
 
   confirm:string;
   dark =false;
@@ -25,10 +28,10 @@ export class RegisterComponent implements OnInit {
     telephone: "",
     address: "",
     password:"",
-  
+   
   } ;
 
-  constructor(private register_service : RegisterService, private authService: AuthService, private router: Router) { }
+  constructor(private platform:Platform,private http: HTTP,private register_service : RegisterService, private authService: AuthService, private router: Router) { }
 
   async ngOnInit() {
     this.authService.ifNotLoggedIn()
@@ -84,21 +87,55 @@ export class RegisterComponent implements OnInit {
     }
 
     if (this.confirm == this.form.password){
-      this.register_service.register(deliveryBoyInfo).subscribe(
-        livreur=>{
-          console.log(livreur)
-          this.pressed=true;
-          this.test=true;
-          this.form=new DeliveryBoy();
-          this.confirm="";
-          this.router.navigate(['/auth/login'])
-        },error=>{
-          this.pressed=true;
-          this.errMsg="Mail or phone already exists"
+      if (this.platform.is("mobileweb")|| this.platform.is("desktop")){
+        this.register_service.register(deliveryBoyInfo).subscribe(
+          livreur=>{
+            console.log(livreur)
+            this.pressed=true;
+            this.test=true;
+            this.form=new DeliveryBoy();
+            this.confirm="";
+            this.router.navigate(['/login'])
+          },error=>{
+            this.pressed=true;
+            this.errMsg="Mail or phone already exists"
+  
+          }
+          
+        );
 
-        }
+      }else{
+        this.http.setServerTrustMode("nocheck");
+
+        this.http.sendRequest('https://10.0.2.2:8000/api/deliveries',{method: "post",data:
+        {
+  
+  
+          "firstName": deliveryBoyInfo.firstName.toString(),
+          "lastName": deliveryBoyInfo.lastName.toString(),
+          "email":  deliveryBoyInfo.email.toString(),
+          "telephone": deliveryBoyInfo.telephone.toString()
         
-      );
+        
+        }
+        ,serializer:"json"}).then(response => {
+          // prints 200
+          console.log(response);
+          this.router.navigate(['/login'])
+        })
+        .catch(response => {
+          // prints 403
+          console.log(response.status);
+  
+          // prints Permission denied
+          console.log(response.error);
+        });
+
+
+      }
+
+      
+
       
      
 

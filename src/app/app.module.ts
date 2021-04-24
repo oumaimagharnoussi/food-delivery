@@ -20,6 +20,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { MessagingService } from './front/_services/messaging.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP } from '@ionic-native/http/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -38,7 +39,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   AngularFireModule.initializeApp(environment.firebase),
   AngularFireMessagingModule
 ],
-  providers: [ AuthService ,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [ AuthService ,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

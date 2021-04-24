@@ -76,8 +76,7 @@
           "builder": "ngx-build-plus:dev-server",
           "options": {
             "extraWebpackConfig": "webpack.config.js",
-            "browserTarget": "app:build",
-            "proxyConfig": "src/proxy.conf.json"
+            "browserTarget": "app:build"
             
           },
           "configurations": {

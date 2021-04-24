@@ -2,6 +2,8 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { HTTP } from '@ionic-native/http/ngx';
+import { Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { OrderService } from '../../_services/order.service';
 declare var google;
@@ -18,7 +20,7 @@ export class OrderDetailsComponent implements  OnInit, AfterViewInit  {
     lat: 37.4220656,
     lng: -122.0840897
   };
-
+map:any;
   destination = {
 
     
@@ -28,13 +30,13 @@ export class OrderDetailsComponent implements  OnInit, AfterViewInit  {
   };
 
  
-  @ViewChild('mapElement') mapNativeElement: ElementRef;
+ 
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
   directionForm: FormGroup;
-  order: any[];
+  order;
   delivery: any;
-  constructor( private order_service:OrderService, private activaterout: ActivatedRoute,private fb: FormBuilder, private geolocation: Geolocation,private auth:AuthService) {
+  constructor(private platform:Platform, private http: HTTP, private order_service:OrderService, private activaterout: ActivatedRoute,private fb: FormBuilder, private geolocation: Geolocation,private auth:AuthService) {
     this.createDirectionForm();
     //To modify until find sol for capturing id from url !!!!
     console.log(window.location.pathname.toString())
@@ -48,28 +50,99 @@ export class OrderDetailsComponent implements  OnInit, AfterViewInit  {
     this.id=Number (a.slice(b+1,a.length))
    
   
-   console.log(this.userId)
+   //console.log(this.userId)
   }
 
   getOrder(id) {
-   
- 
-    this.order_service.getOrder(id).subscribe((data) => {
-      
-         this.order=data;
-         this.destination.lat=data.restaurant.currentLatitude;
-         this.destination.lng=data.restaurant.currentLongitude;
-         console.log(this.order)
+    if(!this.platform.is("desktop")&&!this.platform.is("mobileweb")){
+
+      this.http.setServerTrustMode("nocheck");
+      this.http.sendRequest('https://10.0.2.2:8000/api/orders/'+id ,{method: "get"
+      ,serializer:"json",responseType:"json"}).then((data) => {
         
-       })
-    
+           this.order=data.data;
+           this.destination.lat=data.data.restaurant.currentLatitude;
+           this.destination.lng=data.data.restaurant.currentLongitude;
+           //console.log(this.order)
+          
+         })
+    }else{
+
+      this.order_service.getOrder(id).subscribe((data) => {
+      
+        this.order=data;
+        this.destination.lat=data.restaurant.currentLatitude;
+        this.destination.lng=data.restaurant.currentLongitude;
+        console.log(this.order)
+       
+      })
+
+    }
+   
+
+  
        
    
    }
    getInfo(id) {
-   
+     if(!this.platform.is("desktop")&&!this.platform.is("mobileweb")){
+
+      this.http.setServerTrustMode("nocheck");
  
-    this.order_service.getDelivery(id).subscribe((data) => {
+      this.http.sendRequest('https://10.0.2.2:8000/api/deliveries/'+id ,{method: "get"
+      ,serializer:"json",responseType:"json"}).then((data) => {
+        
+          this.source.lat=data.data.currentLatitude;
+          this.source.lng=data.data.currentLongitude;
+           this.delivery=data.data;
+           console.log(this.delivery)
+  
+           this.map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 17,
+            center: this.destination
+          });
+          this.directionsDisplay.setMap(this.map);
+          var markerStart = new google.maps.Marker({
+            position: this.source,
+            icon: {
+              url: './assets/imgs/truck_pin.svg',
+              anchor: new google.maps.Point(35,10),
+              scaledSize: new google.maps.Size(70, 70)
+            },
+            map: this.map
+          });
+          var destinationMarker = new google.maps.Marker({
+            position: this.destination,
+            icon: {
+              url: './assets/imgs/destination_custom_pin.svg',
+              anchor: new google.maps.Point(35,10),
+              scaledSize: new google.maps.Size(70, 70)
+            },
+            map: this.map
+          });
+           this.geolocation.getCurrentPosition().then((resp) => {
+          //  this.source.lat=resp.coords.latitude
+          //  this.source.lng=resp.coords.longitude
+            
+         
+            console.log(resp.coords.latitude)
+            console.log(resp.coords.longitude)
+           }).catch((error) => {
+             console.log('Error getting location', error);
+           });
+           let watch = this.geolocation.watchPosition();
+           watch.subscribe((data) => {
+            // data can be a set of coordinates, or an error (if an error occurred).
+            // data.coords.latitude
+            // data.coords.longitude
+           });
+          
+         
+          
+         })
+     }else{
+
+      this.order_service.getDelivery(id).subscribe((data) => {
       
         this.source.lat=data.currentLatitude;
         this.source.lng=data.currentLongitude;
@@ -79,7 +152,7 @@ export class OrderDetailsComponent implements  OnInit, AfterViewInit  {
         //  this.source.lat=resp.coords.latitude
         //  this.source.lng=resp.coords.longitude
           
-          const map = new google.maps.Map(this.mapNativeElement.nativeElement, {
+          const map = new google.maps.Map(document.getElementById("map"), {
             zoom: 17,
             center: this.destination
           });
@@ -117,6 +190,9 @@ export class OrderDetailsComponent implements  OnInit, AfterViewInit  {
        
         
        })
+
+     }
+
     
        
    
@@ -124,14 +200,35 @@ export class OrderDetailsComponent implements  OnInit, AfterViewInit  {
   async ngOnInit() {
     this.getOrder(this.id);
 
-    await this.auth.getUser().then(
+    this.platform.ready().then(async() => {
+     
+      await  this.auth.getUser().then((response) => {
+        if(this.platform.is("desktop")||this.platform.is("mobileweb")){
+        this.getInfo(response.data.id);
+        }else{
+
+          let data=JSON.parse(response.data)
+          this.getInfo(data.data.id);
+        }
+
+      })
+
+ 
+
+      
+    });
+
+ /*   await this.auth.getUser().then(
       value=>{
-        this.getInfo(value.data.id);
+        this.getInfo(3);
       }
     )
-     
+     */
   
 
+
+/*
+*/
   }
 
   createDirectionForm() {
@@ -155,7 +252,7 @@ export class OrderDetailsComponent implements  OnInit, AfterViewInit  {
       if (status === 'OK') {
         that.directionsDisplay.setOptions({
           suppressPolylines: false,
-          map:this.mapNativeElement
+          map:document.getElementById("map")
         })
         that.directionsDisplay.setDirections(response);
       } else {
