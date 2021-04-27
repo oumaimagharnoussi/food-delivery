@@ -107,7 +107,7 @@ export class RegisterComponent implements OnInit {
       }else{
         this.http.setServerTrustMode("nocheck");
 
-        this.http.sendRequest('https://10.0.2.2:8000/api/deliveries',{method: "post",data:
+        this.http.sendRequest('http://10.0.2.2:8000/api/deliveries',{method: "post",data:
         {
   
   

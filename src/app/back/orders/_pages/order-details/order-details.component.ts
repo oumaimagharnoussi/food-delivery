@@ -3,9 +3,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
-import { Platform } from '@ionic/angular';
+import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { OrderService } from '../../_services/order.service';
+import { ModalOrderComponent } from '../modal-order/modal-order.component';
 declare var google;
 
 @Component({
@@ -36,7 +37,7 @@ map:any;
   directionForm: FormGroup;
   order;
   delivery: any;
-  constructor(private platform:Platform, private http: HTTP, private order_service:OrderService, private activaterout: ActivatedRoute,private fb: FormBuilder, private geolocation: Geolocation,private auth:AuthService) {
+  constructor(public modalController: ModalController,public alertController: AlertController,private platform:Platform, private http: HTTP, private order_service:OrderService, private activaterout: ActivatedRoute,private fb: FormBuilder, private geolocation: Geolocation,private auth:AuthService) {
     this.createDirectionForm();
     //To modify until find sol for capturing id from url !!!!
     console.log(window.location.pathname.toString())
@@ -52,12 +53,18 @@ map:any;
   
    //console.log(this.userId)
   }
-
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: ModalOrderComponent,
+      cssClass: 'my-custom-class'
+    });
+    return await modal.present();
+  }
   getOrder(id) {
     if(!this.platform.is("desktop")&&!this.platform.is("mobileweb")){
 
       this.http.setServerTrustMode("nocheck");
-      this.http.sendRequest('https://10.0.2.2:8000/api/orders/'+id ,{method: "get"
+      this.http.sendRequest('http://10.0.2.2:8000/api/orders/'+id ,{method: "get"
       ,serializer:"json",responseType:"json"}).then((data) => {
         
            this.order=data.data;
@@ -89,7 +96,7 @@ map:any;
 
       this.http.setServerTrustMode("nocheck");
  
-      this.http.sendRequest('https://10.0.2.2:8000/api/deliveries/'+id ,{method: "get"
+      this.http.sendRequest('http://10.0.2.2:8000/api/deliveries/'+id ,{method: "get"
       ,serializer:"json",responseType:"json"}).then((data) => {
         
           this.source.lat=data.data.currentLatitude;
@@ -99,7 +106,9 @@ map:any;
   
            this.map = new google.maps.Map(document.getElementById("map"), {
             zoom: 17,
-            center: this.destination
+            center: this.destination,
+            mapId: '68e5f02535b42522',
+            disableDefaultUI: true
           });
           this.directionsDisplay.setMap(this.map);
           var markerStart = new google.maps.Marker({
@@ -154,7 +163,9 @@ map:any;
           
           const map = new google.maps.Map(document.getElementById("map"), {
             zoom: 17,
-            center: this.destination
+            center: this.destination,
+            mapId: '68e5f02535b42522',
+            disableDefaultUI: true
           });
           this.directionsDisplay.setMap(map);
           var markerStart = new google.maps.Marker({
@@ -241,8 +252,32 @@ map:any;
   ngAfterViewInit(): void {
 
   }
+async accept(){ 
+  const alert = await this.alertController.create({
+    cssClass: 'my-custom-class',
+    header: 'Are you sure delivering order',
+    message: '',
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        cssClass: 'secondary',
+        handler: (blah) => {
+          console.log('Confirm Cancel: blah');
+        }
+      }, {
+        text: 'Okay',
+        handler: () => {
+          console.log('Confirm Okay');
+        }
+      }
+    ]
+  });
 
-  calculateAndDisplayRoute(formValues) {
+  await alert.present();
+}
+   calculateAndDisplayRoute (formValues) {
+
     const that = this;
     this.directionsService.route({
       origin: this.source,

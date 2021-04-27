@@ -18,30 +18,26 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-card>
-    <ion-item>
-      
-      <ion-label> <b>Order#1255</b> (BISTRO)</ion-label>
-   
-     
-      <ion-button color="primary" slot="end">ACCEPT</ion-button>
-    </ion-item>
+
+  <div id="map" style="height: 70VH;">
+       
+
+  </div>
+
+  <form [formGroup]="directionForm"  (ngSubmit)="calculateAndDisplayRoute(directionForm.value)">
+    <div class="justify-center">
+      <ion-badge color="secondary">
+        <h1>OID#{{id}}</h1>
+      </ion-badge>
   
-    <ion-card-content>
-      <form [formGroup]="directionForm" (ngSubmit)="calculateAndDisplayRoute(directionForm.value)">
-      
-        <ion-button expand="full" type="submit">Get Direction</ion-button>
-      </form>
-
-      <div id="map" style="height: 70VH;"></div>
-      <h2>Address:</h2>
-      <h4>{{formattedAddress}}</h4>
-
-    </ion-card-content>
-
- 
-
-  </ion-card>
-
+      <ion-button slot="start" type="submit">Get <ion-icon name="compass-outline"></ion-icon></ion-button>
+      <ion-button color="secondary"  slot="end" (click)="presentModal()"><b class="text-white"> Order details</b> </ion-button>
+      <ion-button color="success" expand="block"  slot="end" (click)="accept()"><b class="text-white"> ACCEPT</b>
+      </ion-button>
   
+    </div>
+
+
+
+  </form>
 </ion-content>

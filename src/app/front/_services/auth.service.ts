@@ -12,7 +12,7 @@ import { TestBed } from "@angular/core/testing";
 
 
 
-var AUTH_API = 'https://127.0.0.1:8000/api/';
+var AUTH_API = 'http://127.0.0.1:8000/api/';
 const httpOptions = {
   headers: new HttpHeaders({
     

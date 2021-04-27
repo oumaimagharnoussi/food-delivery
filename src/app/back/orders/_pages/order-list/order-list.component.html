@@ -15,6 +15,13 @@
       <ion-title size="large">Tab 1</ion-title>
     </ion-toolbar>
   </ion-header>
+  <div style='border-bottom: 6px solid #eaeaea'>
+    <ul class='flex cursor-pointer justify-center'>
+        <li class='py-2 px-6 bg-white rounded-t-lg'>New orders</li>
+        <li class='py-2 px-6 bg-white rounded-t-lg text-gray-500 bg-gray-200'>Accepted orders</li>
+
+    </ul>
+  </div>
   <ion-card *ngFor="let order of orders">
     <ion-item>
       
@@ -34,11 +41,18 @@
         <b>Distance to restaurant: </b>  {{order.distance/1000| number : '1.1-1'}} KM  <br>
         
       </div>
+
+      <div>
+
+    
+        <b>Distance to client: </b>  {{order.distanceClient/1000| number : '1.1-1'}} KM  <br>
+        
+      </div>
       <div>
         <b>Total price: </b> {{order.order.totalPrice}} {{order.order.restaurant.currency.symbol}} 
       </div>
       <ion-item>
-        <ion-button color="success" slot="end">ACCEPT</ion-button>
+        <ion-button (click)="accept()" color="success" slot="end">ACCEPT</ion-button>
       </ion-item>
     </ion-card-content>
 

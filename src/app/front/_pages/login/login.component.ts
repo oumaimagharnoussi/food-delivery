@@ -119,7 +119,7 @@ export class LoginComponent implements OnInit {
     }else{
       this.http.setServerTrustMode("nocheck");
 
-      this.http.sendRequest('https://10.0.2.2:8000/api/login_check',{method: "post",data:
+      this.http.sendRequest('http://10.0.2.2:8000/api/login_check',{method: "post",data:
       {
   
   
@@ -156,7 +156,7 @@ export class LoginComponent implements OnInit {
               this.authService.set("tokenDevice",this.token)
               
               let info=JSON.parse(token.data)
-              this.http.sendRequest('https://10.0.2.2:8000/api/deliveries/'+info.data.id,{method: "put",data:
+              this.http.sendRequest('http://10.0.2.2:8000/api/deliveries/'+info.data.id,{method: "put",data:
               {
           
                 "deviceToken":  this.token,
@@ -185,7 +185,10 @@ export class LoginComponent implements OnInit {
           // Method called when tapping on a notification
           PushNotifications.addListener('pushNotificationActionPerformed',
             (notification: PushNotificationActionPerformed) => {
-             // alert('Push action performed: ' + JSON.stringify(notification));
+              let id=JSON.stringify(notification.notification.data);
+              this.router.navigate(['/orders/details/'+id.toString().substring(1,id.toString().length-1)])
+              console.log(id)
+          //   alert('Push action performed: ' + JSON.stringify(notification.notification.data));
             }
           );
       

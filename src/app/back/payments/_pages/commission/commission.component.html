@@ -21,12 +21,29 @@
       <ion-title size="large">Tab 1</ion-title>
     </ion-toolbar>
   </ion-header>
+  <div class="p-2">
+    <ion-list>
 
-  <div class="flex flex-col md:flex-row p-3 justify-center">
-    <div class="md:w-9/10">
+
+    
+      <ion-item>
+   
+        <ion-select value="brown" okText="Okay" cancelText="Dismiss">
+          <ion-select-option value="brown">Last Hour</ion-select-option>
+          <ion-select-option value="blonde">Last Day</ion-select-option>
+          <ion-select-option value="black">Last Week</ion-select-option>
+          <ion-select-option value="red">Last Month</ion-select-option>
+        </ion-select>
+      </ion-item>
+    
+    </ion-list>
+</div>
+  <div class="flex flex-col justify-center sm:flex-row p-1 ">
+
+    <div class="">
         <div class="flex md:flex-row space-x-2">
        
-            <div class="shadow-md p-2">
+            <div class="shadow-md p-3">
                 <div class="">
                     <div class="flex flex-col">
                         <div class="flex space-x-4">
@@ -50,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            <div class="shadow-md p-2">
+            <div class="shadow-md p-3">
                 <div class="">
                     <div class="flex flex-col">
                         <div class="flex space-x-4">
@@ -83,117 +100,80 @@
 <div class="container mx-0 px-2 sm:px-4">
   <div class="py-4">
       <div>
-          <h2 class="text-2xl font-semibold leading-tight">History</h2>
+          <h2 class="text-xl font-semibold leading-tight">History</h2>
       </div>
-      <div class="-mx-1 sm:-mx-2 px-2 sm:px-2 py-2 overflow-x-auto">
-          <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
-              <table class="min-w-full leading-normal">
-                  <thead>
-                      <tr>
-                        <th
-                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Value
-                    </th>
-                          <th
-                              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Date
-                          </th>
-                          <th
-                              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              State
-                          </th>
-                      
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
-                              <div class="flex items-center">
-                                 
-                                  <div class="ml-3">
-                                      <p class="text-gray-900 whitespace-no-wrap">
-                                          1.8$
-                                      </p>
-                                  </div>
-                              </div>
-                          </td>
-                          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                              <p class="text-gray-900 whitespace-no-wrap text-center">12/04/2021</p>
-                          </td>
-                          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <div class="text-xs text-red-800 bg-yellow-200 rounded-md p-1">
-                                PENDING
-                            </div>
-                          </td>
-                         
-                      </tr>
-                      <tr>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
-                            <div class="flex items-center">
-                               
-                                <div class="ml-3">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        3.8$
-                                    </p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap text-center">12/04/2021</p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <div class="text-xs text-green-800 bg-green-200 rounded-md p-1">
-                              PAID
-                          </div>
-                        </td>
-                       
-                    </tr>
-                    <tr>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
-                            <div class="flex items-center">
-                               
-                                <div class="ml-3">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        8.8$
-                                    </p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap text-center">12/04/2021</p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <div class="text-xs text-green-800 bg-green-200 rounded-md p-1">
-                              PAID
-                          </div>
-                        </td>
-                       
-                    </tr>
-                      <tr>
-                          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
-                              <div class="flex items-center">
-                                
-                                  <div class="ml-3">
-                                      <p class="text-gray-900 whitespace-no-wrap">
-                                          2$
-                                      </p>
-                                  </div>
-                              </div>
-                          </td>
-                          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                              <p class="text-gray-900 whitespace-no-wrap text-center">01/04/2021</p>
-                          </td>
-                          <td class="px-5 py-5 border-b  border-gray-200 bg-white text-sm">
-                            <div class="text-xs text-red-800 bg-yellow-200 rounded-md p-1">
-                                PENDING
-                            </div>
-                          </td>
-                      
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
+      <div class="bg-white pb-4 px-1 rounded-md w-full">
+       
+  
+      <div class="overflow-x-auto mt-6">
+  
+        <table class="table-auto border-collapse w-full">
+          <thead>
+            <tr class="rounded-lg text-sm font-medium text-gray-700 text-left" style="font-size: 0.9674rem">
+              <th class="px-4 py-2 bg-gray-200 " style="background-color:#f8f8f8">OID</th>
+              <th class="px-4 py-2 " style="background-color:#f8f8f8">Value</th>
+              <th class="px-4 py-2 " style="background-color:#f8f8f8">Date</th>
+ 
+              <th class="px-4 py-2 " style="background-color:#f8f8f8">State</th>
+          
+
+            </tr>
+          </thead>
+          <tbody class="text-sm font-normal text-gray-700">
+              
+            <tr class="hover:bg-gray-100 border-b border-gray-200 py-10" (click)="detail()">
+              <td class="px-4 py-4">#1254 </td>
+              <td class="px-4 py-4">2$</td>
+              <td class="px-4 py-4">17/04/21 14:34</td>
+              <td class="px-4 py-4"><ion-badge color="success"><ion-icon name="checkmark-done-outline"></ion-icon></ion-badge></td>
+     
+            </tr>
+            <tr class="hover:bg-gray-100 border-b border-gray-200 py-10">
+                <td class="px-4 py-4">#1254</td>
+                <td class="px-4 py-4">2$</td>
+                <td class="px-4 py-4">17/04/21 14:34</td>
+                <td class="px-4 py-4"><ion-badge color="warning"><ion-icon  name="hourglass-outline"></ion-icon></ion-badge></td>
+       
+              </tr>
+              <tr class="hover:bg-gray-100 border-b border-gray-200 py-10">
+                <td class="px-4 py-4">#1254</td>
+                <td class="px-4 py-4">2$</td>
+                <td class="px-4 py-4">17/04/21 14:34</td>
+                <td class="px-4 py-4"><ion-badge color="success"><ion-icon name="checkmark-done-outline"></ion-icon></ion-badge></td>
+       
+              </tr>
+              <tr class="hover:bg-gray-100 border-b border-gray-200 py-10">
+                <td class="px-4 py-4">#1254</td>
+                <td class="px-4 py-4">2$</td>
+                <td class="px-4 py-4">17/04/21 14:34</td>
+                <td class="px-4 py-4"><ion-badge color="warning"><ion-icon  name="hourglass-outline"></ion-icon></ion-badge></td>
+       
+              </tr>
+            
+   
+          </tbody>
+        </table>
       </div>
+         <div id="pagination" class="w-full flex justify-center border-t border-gray-100 pt-4 items-center">
+          
+          <svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.4">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M9 12C9 12.2652 9.10536 12.5196 9.29289 12.7071L13.2929 16.7072C13.6834 17.0977 14.3166 17.0977 14.7071 16.7072C15.0977 16.3167 15.0977 15.6835 14.7071 15.293L11.4142 12L14.7071 8.70712C15.0977 8.31659 15.0977 7.68343 14.7071 7.29289C14.3166 6.90237 13.6834 6.90237 13.2929 7.29289L9.29289 11.2929C9.10536 11.4804 9 11.7348 9 12Z" fill="#2C2C2C"/>
+  </g>
+  </svg>
+  
+          <p class="leading-relaxed cursor-pointer mx-2 text-blue-600 hover:text-blue-600 text-sm">1</p>
+          <p class="leading-relaxed cursor-pointer mx-2 text-sm hover:text-blue-600" >2</p>
+          <p class="leading-relaxed cursor-pointer mx-2 text-sm hover:text-blue-600"> 3 </p>
+          <p class="leading-relaxed cursor-pointer mx-2 text-sm hover:text-blue-600"> 4 </p>
+          <svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M15 12C15 11.7348 14.8946 11.4804 14.7071 11.2929L10.7071 7.2929C10.3166 6.9024 9.6834 6.9024 9.2929 7.2929C8.9024 7.6834 8.9024 8.3166 9.2929 8.7071L12.5858 12L9.2929 15.2929C8.9024 15.6834 8.9024 16.3166 9.2929 16.7071C9.6834 17.0976 10.3166 17.0976 10.7071 16.7071L14.7071 12.7071C14.8946 12.5196 15 12.2652 15 12Z" fill="#18A0FB"/>
+  </svg>
+  
+        </div>
+      </div>
+  
+
   </div>
 </div>
 
