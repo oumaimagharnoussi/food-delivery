@@ -1,7 +1,7 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true"  class="ion-no-border" mode="ios">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/payout"></ion-back-button>
+      <ion-back-button defaultHref="/app/settings/payout"></ion-back-button>
     </ion-buttons>
 
 
@@ -28,7 +28,7 @@
   <div class="w-full  rounded-lg bg-white shadow-lg p-5 text-gray-700" style="max-width: 600px">
 
     <div class="mb-10">
-        <h1 class="text-center font-bold text-xl uppercase">Add payout method</h1>
+        <h1 class="text-left font-bold text-xl uppercase">Add payout method</h1>
     </div>
     <div class="mb-3 flex -mx-2">
         <div class="px-2">
@@ -52,23 +52,18 @@
     </div>
     <!--Credit card-->
     <div *ngIf="card"> 
-      <div class="mb-3">
-        <label class="font-bold text-sm mb-2 ml-1">Name on card</label>
-        <div>
-            <input class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors" placeholder="John Smith" type="text"/>
-        </div>
-    </div>
+
     <div class="mb-3">
         <label class="font-bold text-sm mb-2 ml-1">Card number</label>
         <div>
-            <input class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors" placeholder="0000 0000 0000 0000" type="text"/>
+            <input [(ngModel)]="cardNumber"  class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors" placeholder="0000 0000 0000 0000" maxlength="16" type="text"/>
         </div>
     </div>
     <div class="mb-3 -mx-2 flex items-end">
         <div class="px-2 w-1/2">
             <label class="font-bold text-sm mb-2 ml-1">Expiration date</label>
             <div>
-                <select class="form-select w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors cursor-pointer">
+                <select [(ngModel)]="cardExpMonth"  class="form-select w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors cursor-pointer">
                     <option value="01">01 - January</option>
                     <option value="02">02 - February</option>
                     <option value="03">03 - March</option>
@@ -85,7 +80,7 @@
             </div>
         </div>
         <div class="px-2 w-1/2">
-            <select class="form-select w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors cursor-pointer">
+            <select [(ngModel)]="cardExpYear" class="form-select w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors cursor-pointer">
                 <option value="2020">2020</option>
                 <option value="2021">2021</option>
                 <option value="2022">2022</option>
@@ -101,7 +96,7 @@
     </div>
 
     <div>
-        <button class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"><i class="mdi mdi-lock-outline mr-1"></i> ADD CARD</button>
+        <button (click)="addPaymentMethod()"  class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"><i class="mdi mdi-lock-outline mr-1"></i> Save CARD</button>
     </div>
 
     </div>
@@ -111,13 +106,13 @@
       <div class="mb-3">
         <label class="font-bold text-sm mb-2 ml-1">Mobile number</label>
         <div>
-            <input class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors" placeholder="+31" type="tel"/>
+            <input [(ngModel)]="mobile" class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors" placeholder="+31" type="tel"/>
         </div>
     </div>
 
 
     <div>
-        <button class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"><i class="mdi mdi-lock-outline mr-1"></i> ADD ACCOUNT</button>
+        <button (click)="addPaymentMethod()"  class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"><i class="mdi mdi-lock-outline mr-1"></i> Save ACCOUNT</button>
     </div>
       
     </div>
@@ -127,13 +122,13 @@
       <div class="mb-3">
         <label class="font-bold text-sm mb-2 ml-1">Email</label>
         <div>
-            <input class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors" placeholder="user@domain.com" type="email"/>
+            <input [(ngModel)]="email" class="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-green-500 transition-colors" placeholder="user@domain.com" type="email"/>
         </div>
     </div>
 
 
     <div>
-        <button class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"><i class="mdi mdi-lock-outline mr-1"></i> ADD ACCOUNT</button>
+        <button (click)="addPaymentMethod()"  class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"><i class="mdi mdi-lock-outline mr-1"></i> Save ACCOUNT</button>
     </div>
       
     </div>

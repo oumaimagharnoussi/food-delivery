@@ -7,6 +7,7 @@ import { AuthService } from '../../_services/auth.service';
 import { HTTP } from '@ionic-native/http/ngx';
 import { HttpHeaders } from '@angular/common/http';
 import { Platform } from '@ionic/angular';
+import {environment} from 'src/environments/environment'
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -107,7 +108,7 @@ export class RegisterComponent implements OnInit {
       }else{
         this.http.setServerTrustMode("nocheck");
 
-        this.http.sendRequest('http://10.0.2.2:8000/api/deliveries',{method: "post",data:
+        this.http.sendRequest(environment.BACK_API_MOBILE+'/api/deliveries',{method: "post",data:
         {
   
   

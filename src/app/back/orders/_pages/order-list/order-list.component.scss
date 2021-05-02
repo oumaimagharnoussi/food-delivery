@@ -6,4 +6,19 @@ ion-toggle {
     --handle-background: #019297;
     --handle-background-checked: rgb(255, 255, 255);
   }
-  
+  .back-to-top-btn {
+    background: #bdd0da;
+    position: fixed;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    left: 95%;
+    transform: translateX(-50%);
+    bottom: 65px;
+    z-index: 999;
+}

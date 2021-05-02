@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
-import DeliveryBoy from '../_models/DeliveryBoy';
 import { Observable } from 'rxjs';
 import {environment} from 'src/environments/environment'
 const host = environment.BACK_API_WPA;
-
 const httpOptions = { 
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
@@ -12,11 +10,10 @@ const httpOptions = {
   })
 };
 
-@Injectable({ 
+@Injectable({
   providedIn: 'root'
 })
-export class RegisterService {
-
+export class PayoutService {
 
   constructor(private http: HttpClient) {
 
@@ -27,17 +24,9 @@ export class RegisterService {
      };
   }
 
-
-
-  register(user :DeliveryBoy): Observable<any> {
-    return this.http.post(host+'/api/deliveries', user, httpOptions);
+  addMethod(data): Observable<any> {
+    return this.http.post(host+'/api/payment_methods', data, httpOptions);
   }
-
-  login(credentials): Observable<any>  {
-    return this.http.post(host+'/api/login_check', credentials,httpOptions)
-     
-  }
-
 
 
 }

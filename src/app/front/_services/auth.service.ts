@@ -6,13 +6,13 @@ import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
 import { Platform, ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { TestBed } from "@angular/core/testing";
+import {environment} from 'src/environments/environment'
 
 
 
 
 
-
-var AUTH_API = 'http://127.0.0.1:8000/api/';
+var AUTH_API = environment.BACK_API_WPA+'/api/';
 const httpOptions = {
   headers: new HttpHeaders({
     

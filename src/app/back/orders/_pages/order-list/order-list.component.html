@@ -1,65 +1,103 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true"  class="ion-no-border" mode="ios">
   <ion-toolbar>
 
 
     <ion-title>
        Orders 
     </ion-title>
-    <ion-toggle checked={{dark}} class="bg-green-100  bg-opacity-0" (ionChange)="onClick($event)" slot="end"></ion-toggle>
+    <ion-buttons slot="end">
+      <ion-button (click)="change()">
+        <ion-icon *ngIf="!dark" style="color: black;"  name="moon-sharp"></ion-icon>
+        <ion-icon *ngIf="dark" style="color: white;" name="sunny-sharp"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-toggle style="display: none;" checked={{dark}} class="bg-green-100  bg-opacity-0" (ionChange)="onClick($event)" slot="end"></ion-toggle>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true"  [scrollEvents]="true" 
+(ionScroll)="getScrollPos($event.detail.scrollTop)">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Tab 1</ion-title>
     </ion-toolbar>
   </ion-header>
-  <div style='border-bottom: 6px solid #eaeaea'>
+  <div *ngIf="new" >
     <ul class='flex cursor-pointer justify-center'>
-        <li class='py-2 px-6 bg-white rounded-t-lg'>New orders</li>
-        <li class='py-2 px-6 bg-white rounded-t-lg text-gray-500 bg-gray-200'>Accepted orders</li>
+        <li (click)="showNewOrders()" class='py-2 px-6  rounded-t-lg text-white-500 bg-blue-300'>New orders</li>
+        <li (click)="showAcceptedOrders()" class='py-2 px-6  rounded-t-lg '>Accepted orders</li>
 
     </ul>
+
   </div>
-  <ion-card *ngFor="let order of orders">
-    <ion-item>
-      
-      <ion-label> <b>Order#{{order.order.id}}</b> ({{order.order.restaurant.name}})</ion-label>
-      <ion-badge slot="start" color="success">New</ion-badge>
-      <a href="orders/details/{{order.order.id}}"  >
-        <ion-button color="warning" slot="end"><ion-icon name="navigate-circle-outline"></ion-icon></ion-button>
-      </a>
+  <div  *ngIf="!new">
+    <ul class='flex cursor-pointer justify-center'>
+        <li (click)="showNewOrders()" class='py-2 px-6  rounded-t-lg '>New orders</li>
+        <li (click)="showAcceptedOrders()" class='py-2 px-6  rounded-t-lg  text-white-500 bg-blue-300'>Accepted orders</li>
+
+    </ul>
     
-    </ion-item>
-  
-    <ion-card-content>
+  </div>
+  <div *ngIf="new">
+  <!-- Skeleton screen -->
 
-      <div>
-
-    
-        <b>Distance to restaurant: </b>  {{order.distance/1000| number : '1.1-1'}} KM  <br>
-        
-      </div>
-
-      <div>
-
-    
-        <b>Distance to client: </b>  {{order.distanceClient/1000| number : '1.1-1'}} KM  <br>
-        
-      </div>
-      <div>
-        <b>Total price: </b> {{order.order.totalPrice}} {{order.order.restaurant.currency.symbol}} 
-      </div>
+   
+    <ion-card *ngFor="let order of orders">
       <ion-item>
-        <ion-button (click)="accept()" color="success" slot="end">ACCEPT</ion-button>
+    
+        <ion-label> <b>Order#{{order.order.id}}</b> ({{order.order.restaurant.name}})</ion-label>
+        <ion-badge slot="start" color="primary"></ion-badge>
+        <!--
+          <a href="orders/info/{{order.order.id}}"  >
+          <ion-button color="secondary" slot="end"><ion-icon size="large" name="navigate-circle-outline"></ion-icon></ion-button>
+        </a>
+        -->
+       
+      
       </ion-item>
-    </ion-card-content>
 
+    
+      <ion-card-content>
+  
+        <div>
+  
+      
+          <b>Distance to restaurant: </b>  {{order.distance/1000| number : '1.1-1'}} KM  <br>
+          
+        </div>
+  
+        <div>
+  
+      
+          <b>Distance to client: </b>  {{order.distanceClient/1000| number : '1.1-1'}} KM  <br>
+          
+        </div>
+        <div>
+          <b>Total price: </b> {{order.order.totalPrice}} {{order.order.restaurant.currency.symbol}} 
+        </div>
+        <ion-item>
+          <ion-button (click)="accept(order.order.id)" color="success" slot="end">ACCEPT</ion-button>
+        </ion-item>
+      </ion-card-content>
+  
+   
+  
+    </ion-card>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="dots"
+        loadingText="Loading more orders...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    
+  
+  </div>
+  <div *ngIf="!new">
+    <app-accepted-list></app-accepted-list>
+  </div>
  
 
-  </ion-card>
-
-
-  
+  <div class="back-to-top-btn" *ngIf="backToTop" (click)="gotToTop()">
+    <ion-icon name="chevron-up-outline"></ion-icon>
+  </div>
 </ion-content>

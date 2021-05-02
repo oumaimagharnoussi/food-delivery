@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, IonContent, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { MessagingService } from 'src/app/front/_services/messaging.service';
 import { OrderService } from '../../_services/order.service';
 import { SseService } from '../../_services/sse.service';
 import { ChangeDetectorRef } from '@angular/core'
-import {
+import {environment} from 'src/environments/environment'
+import { 
   Plugins,
   PushNotification,
   PushNotificationToken,
@@ -21,15 +22,52 @@ const { PushNotifications } = Plugins;
   styleUrls: ['./order-list.component.scss'],
 })
 export class OrderListComponent implements OnInit {
+  @ViewChild(IonContent) content: IonContent;
   dark=false;
+  new=true;
   orders=[];
-user;
+  user;
+  backToTop: boolean = false;
   constructor(public alertController: AlertController,private router: Router,private changeRef: ChangeDetectorRef,private sse:SseService,private platform: Platform,private http: HTTP,private storage: AuthService,private order_service:OrderService, private geolocation: Geolocation,private messagin:MessagingService) { 
     this.messagin.getMessages()
      
   }
+  gotToTop() {
+    this.content.scrollToTop(1400);
+  }
+  loadData(event) {
+    let size=this.orders.length
+    setTimeout( () => {
+      console.log('Done');
+    
+    
+      event.target.complete();
+   
+    if (true) {
+      event.target.disabled = true;
+    }
+      // App logic to determine if all data is loaded
+      // and disable the infinite scroll
 
-  async accept(){
+    }, 500);
+
+  }
+  change(){
+    if(this.dark==true){
+      this.dark=false
+    }else{
+      this.dark=true
+    }
+  }
+
+  showAcceptedOrders(){
+    this.new=false;
+  }
+  showNewOrders(){
+    this.new=true;
+  }
+
+  async accept(id){
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Are you sure delivering order',
@@ -41,11 +79,13 @@ user;
           cssClass: 'secondary',
           handler: (blah) => {
             console.log('Confirm Cancel: blah');
+            
           }
         }, {
           text: 'Okay',
           handler: () => {
             console.log('Confirm Okay');
+            this.acceptOrder(id)
           }
         }
       ]
@@ -94,6 +134,7 @@ user;
       this.order_service.getOrders(id).subscribe((data: any[]) => {
       
         this.orders=data;
+        this.changeRef.detectChanges();
      //   console.log(this.orders)
        
       })
@@ -103,7 +144,7 @@ user;
  
       this.http.setServerTrustMode("nocheck");
 
-      this.http.sendRequest('http://10.0.2.2:8000/api/nearby_orders/'+id ,{method: "get"
+      this.http.sendRequest(environment.BACK_API_MOBILE+'/api/nearby_orders/'+id ,{method: "get"
       ,serializer:"json",responseType:"json"}).then((data) => {
         
            this.orders=data.data;
@@ -166,11 +207,11 @@ user;
       if (response) { 
 
         if(this.platform.is("mobileweb")||this.platform.is("desktop")){
-          this.sse.GetExchangeData('http://127.0.0.1:8000/.well-known/mercure?topic=http://127.0.0.1:8000/api/orders/{id}');
+          this.sse.GetExchangeData(environment.BACK_API_WPA+'/.well-known/mercure?topic='+environment.BACK_API_WPA+'/api/orders/{id}');
 
           this.getOrders(response.data.id);
         }else{
-          this.sse.GetExchangeData('http://10.0.2.2:8000/.well-known/mercure?topic=http://127.0.0.1:8000/api/orders/{id}');
+          this.sse.GetExchangeData(environment.BACK_API_MOBILE+'/.well-known/mercure?topic='+environment.BACK_API_WPA+'/api/orders/{id}');
           console.log(response)
           //  this.user=response.data
            // console.log(response.data.data)
@@ -196,7 +237,7 @@ user;
       await  this.storage.getUser().then((response) => {
         let data=JSON.parse(response.data);
         this.http.setServerTrustMode("nocheck");
-        this.http.sendRequest("http://10.0.2.2:8000/api/deliveries/"+data.data.id,{method:"put"
+        this.http.sendRequest(environment.BACK_API_MOBILE+"/api/deliveries/"+data.data.id,{method:"put"
       ,data:{
         currentLongitude: resp.coords.longitude,
         currentLatitude: resp.coords.latitude
@@ -231,7 +272,7 @@ user;
       await  this.storage.getUser().then((response) => {
         let data=JSON.parse(response.data);
         this.http.setServerTrustMode("nocheck");
-        this.http.sendRequest("http://10.0.2.2:8000/api/deliveries/"+data.data.id,{method:"put"
+        this.http.sendRequest(environment.BACK_API_MOBILE+"/api/deliveries/"+data.data.id,{method:"put"
       ,data:{
         currentLongitude: data.coords.longitude,
         currentLatitude: data.coords.latitude
@@ -278,5 +319,50 @@ user;
       document.body.setAttribute('data-theme', 'light');
     }
   }
+
+  acceptOrder(id){
+
+    if(this.platform.is('mobileweb') || this.platform.is('desktop')){
+      this.platform.ready().then(async() => {
+        await  this.storage.getUser().then((response) => {
+          this.order_service.accept(id,response.data.id).subscribe(
+            data=>{
+            },err=>{
+            }
+          )
+        })
+  
+  })
+    }else{
+      this.platform.ready().then(async() => {
+      await  this.storage.getUser().then((response) => {
+        let data=JSON.parse(response.data);
+        this.http.sendRequest(environment.BACK_API_MOBILE+'/api/orders/'+id,{method: "put",data:
+        {
+    
+          status:  "INDELIVERY",
+          delivery: "api/deliveries/"+data.data.id
+  
+                    
+        }
+        ,serializer:"json"})
+
+      })
+    })
+
+
+    }
+
+
+
+  }
+
+  getScrollPos(pos: number) {
+    if (pos > this.platform.height()) {
+         this.backToTop = true;
+    } else {
+         this.backToTop = false;
+    }
+}
 
 }

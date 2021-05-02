@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../_services/auth.service';
-
+import {environment} from 'src/environments/environment'
 import {
   Plugins,
   PushNotification,
@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
   }
   login(){
 
-    if(!this.platform.is("android")){
+    if(this.platform.is('desktop') || this.platform.is('mobileweb')){
 
     this.authService.login(this.loginForm)
     .subscribe((token: any) => {
@@ -119,7 +119,7 @@ export class LoginComponent implements OnInit {
     }else{
       this.http.setServerTrustMode("nocheck");
 
-      this.http.sendRequest('http://10.0.2.2:8000/api/login_check',{method: "post",data:
+      this.http.sendRequest(environment.BACK_API_MOBILE+'/api/login_check',{method: "post",data:
       {
   
   
@@ -156,7 +156,7 @@ export class LoginComponent implements OnInit {
               this.authService.set("tokenDevice",this.token)
               
               let info=JSON.parse(token.data)
-              this.http.sendRequest('http://10.0.2.2:8000/api/deliveries/'+info.data.id,{method: "put",data:
+              this.http.sendRequest(environment.BACK_API_MOBILE+'/api/deliveries/'+info.data.id,{method: "put",data:
               {
           
                 "deviceToken":  this.token,
