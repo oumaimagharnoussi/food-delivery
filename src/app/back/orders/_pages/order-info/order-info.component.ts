@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/front/_services/auth.service';
 import { OrderService } from '../../_services/order.service';
 import { ModalMapComponent } from '../modal-map/modal-map.component';
 import {environment} from 'src/environments/environment'
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-order-info',
   templateUrl: './order-info.component.html',
@@ -28,7 +29,8 @@ export class OrderInfoComponent implements OnInit {
       private order_service:OrderService,
       public alertController: AlertController,
       public modalController: ModalController,
-      private auth:AuthService) { 
+      private auth:AuthService,
+      private router:Router) { 
     this.orderId=this.getUrl()
    
   }
@@ -160,6 +162,7 @@ export class OrderInfoComponent implements OnInit {
         await  this.auth.getUser().then((response) => {
           this.order_service.accept(id,response.data.id).subscribe(
             data=>{
+              this.router.navigate(['/orders'])
             },err=>{
             }
           )
@@ -189,4 +192,6 @@ export class OrderInfoComponent implements OnInit {
 
 
   }
+
+ 
 }

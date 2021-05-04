@@ -55,6 +55,8 @@ export class PaymentinfoComponent implements OnInit {
             )
 
           }else{
+            let user=JSON.parse(response.data);
+            data.delivery=user.data.id;
             this.http.setServerTrustMode("nocheck");
 
             this.http.sendRequest(environment.BACK_API_MOBILE+'/api/payment_methods',{method: "post",data:
@@ -82,6 +84,8 @@ export class PaymentinfoComponent implements OnInit {
               }
             )
           }else{
+            let user=JSON.parse(response.data);
+            data.delivery=user.data.id;
             this.http.setServerTrustMode("nocheck");
 
             this.http.sendRequest(environment.BACK_API_MOBILE+'/api/payment_methods',{method: "post",data:
@@ -109,6 +113,8 @@ export class PaymentinfoComponent implements OnInit {
               }
             )
           }else{
+            let user=JSON.parse(response.data);
+            data.delivery=user.data.id;
             this.http.setServerTrustMode("nocheck");
 
             this.http.sendRequest(environment.BACK_API_MOBILE+'/api/payment_methods',{method: "post",data:

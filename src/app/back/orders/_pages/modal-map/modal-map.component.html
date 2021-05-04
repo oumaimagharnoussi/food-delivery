@@ -1,3 +1,18 @@
+<ion-header [translucent]="true"  class="ion-no-border" mode="ios">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <ion-back-button (click)="dismiss()" defaultHref="/orders"></ion-back-button>
+
+      </ion-buttons>
+
+    <ion-title>
+       Comissions
+    </ion-title>
+    <ion-button slot="end" (click)="calculateAndDisplayRoute()">Get <ion-icon name="compass-outline"></ion-icon></ion-button>
+ 
+
+  </ion-toolbar>
+</ion-header>
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -6,8 +21,7 @@
   </ion-header>
 
   <div id="map" style="height: 90VH;"></div>
-  <ion-button  (click)="calculateAndDisplayRoute()">Get <ion-icon name="compass-outline"></ion-icon></ion-button>
-  <ion-button color="secondary"  (click)="dismiss()"><b class="text-white"> <ion-icon size="large" name="return-down-back-outline"></ion-icon></b> </ion-button>
+
 </ion-content>
 
 

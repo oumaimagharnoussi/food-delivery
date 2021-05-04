@@ -21,7 +21,7 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { MessagingService } from './front/_services/messaging.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP } from '@ionic-native/http/ngx';
-
+import { Network } from '@ionic-native/network/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -31,15 +31,19 @@ import { HTTP } from '@ionic-native/http/ngx';
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
     }),
     ServiceWorkerModule.register('combined-sw.js', {
-      enabled: environment.production,
+      enabled: environment.production
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+  //    registrationStrategy: 'registerWhenStable:30000'
     }),
+
   AngularFireModule.initializeApp(environment.firebase),
-  AngularFireMessagingModule
+  AngularFireMessagingModule,
+/* ServiceWorkerModule.register('ngsw-worker.js', {
+    enabled: environment.production
+  })*/
 ],
-  providers: [ AuthService ,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [Network, AuthService ,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

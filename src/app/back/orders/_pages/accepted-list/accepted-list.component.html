@@ -160,7 +160,7 @@
 </div>
    
 <ion-card *ngFor="let order of orders">
-  <ion-item>
+  <ion-item> 
     
     <ion-label (click)="detail(order.id)"> <b>Order#{{order.id}}</b> ({{order.restaurant.name}})</ion-label>
     <ion-badge slot="start" color="primary"></ion-badge>
@@ -184,12 +184,12 @@
       <b>Payment: </b> Cash on delivery
     </div>
     <div>
-      <b>Delivery address: </b> {{order.adresseLivraison}} 
+      <b>Client address: </b> {{order.adresseLivraison}} 
     </div>
     <ion-item>
       <ion-button (click)="presentModal(order)" color="dark" slot="start"><ion-icon name="map-outline"></ion-icon></ion-button>
-      <ion-button (click)="accept(order.order.id)" color="dark" slot="start"><ion-icon  name="call-outline"></ion-icon> </ion-button>
-      <ion-button (click)="accept(order.order.id)" color="tertiary" slot="start"> Finish order </ion-button>
+      <ion-button color="dark" slot="start"><ion-icon  name="call-outline"></ion-icon> </ion-button>
+      <ion-button  color="tertiary" slot="start"> Finish order </ion-button>
     </ion-item>
   </ion-card-content>
 

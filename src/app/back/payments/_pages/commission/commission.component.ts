@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/front/_services/auth.service';
 import { ComissionService } from '../../_services/comission.service';
 import { ComissionDetailsComponent } from './comission-details/comission-details.component';
 import {environment} from 'src/environments/environment'
+
 @Component({
   selector: 'app-commission',
   templateUrl: './commission.component.html',
@@ -18,6 +19,9 @@ export class CommissionComponent implements OnInit {
   page=1
   test=[];
   backToTop: boolean = false;
+  customPopoverOptions: any = {
+   
+  };
   constructor(private router: Router,private comisson_service:ComissionService,
     private platform:Platform,private auth:AuthService,
     public modalController: ModalController,

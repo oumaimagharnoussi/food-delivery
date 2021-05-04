@@ -16,6 +16,7 @@ import {
 } from '@capacitor/core';
 import { Router } from '@angular/router';
 const { PushNotifications } = Plugins;
+
 @Component({
   selector: 'app-order-list',
   templateUrl: './order-list.component.html',
@@ -66,7 +67,9 @@ export class OrderListComponent implements OnInit {
   showNewOrders(){
     this.new=true;
   }
-
+  detail(id){
+    this.router.navigate(['/orders/info/'+id])
+  }
   async accept(id){
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',

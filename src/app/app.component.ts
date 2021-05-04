@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { AuthService } from './front/_services/auth.service';
 import { MessagingService } from './front/_services/messaging.service';
+import { ConnectionStatus, NetworkService } from './front/_services/network.service';
 
 
 
@@ -15,10 +16,26 @@ export class AppComponent {
   side=true;
 
   
-  constructor(private platform:Platform, private auth:AuthService,private message:MessagingService,private router: Router) {}
+  constructor(  private networkService: NetworkService,
+    private platform:Platform, private auth:AuthService,private message:MessagingService,private router: Router) {
+      this.initializeApp()
+    }
 
   
+    initializeApp() {
+      this.platform.ready().then(() => {
+      
+   
+        this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
+          if (status == ConnectionStatus.Online) {
+           console.log("hey you re connected again ! ")
+          }else{
+            console.log("hey you re connected again ! ")
 
+          }
+        });
+      });
+    }
   
 
   logout() {

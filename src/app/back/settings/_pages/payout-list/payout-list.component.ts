@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HTTP } from '@ionic-native/http/ngx';
-import { Platform } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { ComissionService } from 'src/app/back/payments/_services/comission.service';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import {environment} from 'src/environments/environment'
@@ -16,10 +16,36 @@ export class PayoutListComponent implements OnInit {
   constructor(private comisson_service:ComissionService,
     private platform:Platform,private auth:AuthService,
     private http: HTTP,
-    private router:Router) { }
+    private router:Router,
+    public alertController: AlertController) { }
 
     addPage(){
       this.router.navigate(['/app/settings/add'])
+    }
+
+    async deletetConfirm() {
+      const alert = await this.alertController.create({
+        cssClass: 'my-custom-class',
+        header: 'Confirm!',
+        message: 'Message <strong>text</strong>!!!',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: (blah) => {
+              console.log('Confirm Cancel: blah');
+            }
+          }, {
+            text: 'Okay',
+            handler: () => {
+              console.log('Confirm Okay');
+            }
+          }
+        ]
+      });
+  
+      await alert.present();
     }
 
   ngOnInit() {
