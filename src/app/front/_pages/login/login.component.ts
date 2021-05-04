@@ -98,8 +98,9 @@ export class LoginComponent implements OnInit {
       this.platform.ready().then(async() => {
 
         this.listenForMessages();
-        this.router.navigate(['/app/orders'])
+     //   this.router.navigate(['/app/orders'])
         this.authService.set('access_token',token)
+        window.location.href = "/app/orders";
         //
       
       }
@@ -196,7 +197,8 @@ export class LoginComponent implements OnInit {
         }
         this.platform.ready().then(async() => {
           this.authService.set('access_token',token)
-          this.router.navigate(['/app/orders'])
+          window.location.href = "/app/orders";
+       //   location.reload();
         }
         );
       

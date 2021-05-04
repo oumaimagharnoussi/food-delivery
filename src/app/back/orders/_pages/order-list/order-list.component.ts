@@ -30,6 +30,7 @@ export class OrderListComponent implements OnInit {
   user;
   backToTop: boolean = false;
   constructor(public alertController: AlertController,private router: Router,private changeRef: ChangeDetectorRef,private sse:SseService,private platform: Platform,private http: HTTP,private storage: AuthService,private order_service:OrderService, private geolocation: Geolocation,private messagin:MessagingService) { 
+   
     this.messagin.getMessages()
      
   }
@@ -164,6 +165,7 @@ export class OrderListComponent implements OnInit {
    }
 
  async ngOnInit() {
+  
   if(!this.platform.is("mobileweb")&&!this.platform.is("desktop")){
     this.listen();
   }

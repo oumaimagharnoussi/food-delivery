@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { AuthService } from './front/_services/auth.service';
 import { MessagingService } from './front/_services/messaging.service';
 import { ConnectionStatus, NetworkService } from './front/_services/network.service';
+import { Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
 
 
 
@@ -16,11 +17,36 @@ export class AppComponent {
   side=true;
 
   
-  constructor(  private networkService: NetworkService,
+  constructor(  private networkService: NetworkService,private changeRef: ChangeDetectorRef,
     private platform:Platform, private auth:AuthService,private message:MessagingService,private router: Router) {
       this.initializeApp()
-    }
+        let a=window.location.pathname.toString();
+        console.log("ssssssssssss:"+a)
+        this.router.events.subscribe((event: Event) => {
+          if(a=="/"||a=="/index"||a=="/login"||a=="/register"){
+            this.side=false
+            this.changeRef.detectChanges();
+          }else{
+            this.side=true
+            this.changeRef.detectChanges();
+          }
+        })
 
+    
+
+    }
+  goToOrder(){
+    this.router.navigate(['/orders'])
+  }
+  goToComission(){
+    this.router.navigate(['/payments'])
+  }
+  goToSettings(){
+    this.router.navigate(['/settings'])
+  }
+  goToProfile(){
+    this.router.navigate(['/settings/profile'])
+  }
   
     initializeApp() {
       this.platform.ready().then(() => {
@@ -38,9 +64,10 @@ export class AppComponent {
     }
   
 
-  logout() {
-  this.message.deleteToken();
-  this.auth.logout();
+ async logout() {
+ await this.message.deleteToken();
+ await this.auth.logout();
+ window.location.href = "/login";
   
 
   
