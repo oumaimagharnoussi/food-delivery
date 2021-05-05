@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { PaymentsRoutingModule } from './payments-routing.module';
 import { IonicModule } from '@ionic/angular';
 import { CommissionComponent } from './_pages/commission/commission.component';
+import { ComissionDetailsComponent } from './_pages/commission/comission-details/comission-details.component';
 
 @NgModule({
-  declarations: [CommissionComponent],
+  declarations: [CommissionComponent,ComissionDetailsComponent],
   imports: [
     CommonModule,
     PaymentsRoutingModule,

@@ -1,0 +1,133 @@
+<ion-header [translucent]="true"  class="ion-no-border" mode="ios">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/settings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>
+       Settings
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="moon-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab 1</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- component -->
+
+
+<div class=" items-center justify-center">
+  <div class="m-2">
+    <h1 class="text-left font-bold text-xl uppercase">Payout methods</h1>
+
+</div>
+  <ul *ngFor="let method of delivery?.paymentMethods" class="flex flex-col p-1 max-w">
+       <li *ngIf="method.type=='CARD'" class="border-gray-400 flex flex-row ">
+       
+            <div class="select-none cursor-pointer  rounded-md flex flex-1 items-center   transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+              <div class="flex flex-col rounded-md w-10 h-10 bg-gray-300 justify-center items-center mr-4"><img src="http://www.sonalia.com/wp-content/uploads/2019/04/credit_card_logo.png" class="h-8 ml-5"></div>
+              <div class="flex-1 pl-1 mr-16">
+                <div class="font-medium">
+                 <ion-badge *ngIf="method.principale" color="success">
+                   <input type="radio" value="" checked name="a">  DEFAULT
+                   </ion-badge>
+                   <ion-badge *ngIf="!method.principale" color="dark">
+                     <input type="radio" value="" name="a">  DEFAULT
+                     </ion-badge>
+               </div>
+                <div class="text-gray-600 text-sm"> **** {{method.cardNumber.substring(11,15)}}</div>
+
+              </div>
+              <div >
+               <button (click)="deletetConfirm()"  class="bg-dark-600 p-2 text-red  rounded-md border  "
+             >
+             <ion-icon size="large" style="color: red;" name="trash-sharp"></ion-icon>
+               </button>
+               
+              </div>
+            </div>
+           
+        
+       </li>
+            <li *ngIf="method.type=='MOBILEMONEY'" class="border-gray-400 flex flex-row ">
+             
+                  <div class="select-none cursor-pointer  rounded-md flex flex-1 items-center  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                    <div class="flex flex-col rounded-md w-10 h-10 bg-gray-300 justify-center items-center mr-4">                <img src="https://loozap.com/storage/files/bj/coin_20-06-2019/thumb-816x460-ijlgpnn_thumb_643375_uploaded_image1_1560180334.95.png" class="h-8 ml-5"></div>
+                    <div class="flex-1 pl-1 mr-16">
+                     <div class="font-medium">
+                       <ion-badge *ngIf="method.principale" color="success">
+                         <input type="radio" value="" checked name="a">  DEFAULT
+                         </ion-badge>
+                         <ion-badge *ngIf="!method.principale" color="dark">
+                           <input type="radio" value="" name="a">  DEFAULT
+                           </ion-badge>
+                     </div>
+                      <div class="text-gray-600 text-sm">{{method.mobile}}</div>
+                    </div>
+                    <div >
+                     <button  (click)="deletetConfirm()"  class="bg-dark-600 p-2 text-red  rounded-md border  "
+                   >
+                   <ion-icon size="large" style="color: red;" name="trash-sharp"></ion-icon>
+                     </button>
+         
+                    
+                     
+                    </div>
+                  </div>
+              
+        
+       </li>
+            <li *ngIf="method.type=='PAYPAL'" class="border-gray-400 flex flex-row ">
+            
+                  <div class="select-none cursor-pointer  rounded-md flex flex-1 items-center  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                    <div class="flex flex-col rounded-md w-10 h-10 bg-gray-300 justify-center items-center mr-4"><img src="https://www.sketchappsources.com/resources/source-image/PayPalCard.png" class="h-8 ml-6"></div>
+                    <div class="flex-1 pl-1 mr-16">
+                     <div class="font-medium">
+                       <ion-badge *ngIf="method.principale" color="success">
+                         <input type="radio" value="" checked name="a">  DEFAULT
+                         </ion-badge>
+                         <ion-badge *ngIf="!method.principale" color="dark">
+                           <input type="radio" value="" name="a">   DEFAULT
+                           </ion-badge>
+                     </div>
+                      <div class="text-gray-600 text-sm">{{method.email}}</div>
+                    </div>
+                    <div >
+                     <button (click)="deletetConfirm()"  class="bg-dark-600 p-2 text-red  rounded-md border  "
+                   >
+                   <ion-icon size="large" style="color: red;" name="trash-sharp"></ion-icon>
+                     </button>
+                  
+                    </div>
+                  </div>
+             
+       
+       </li>
+      
+     
+   </ul>
+   <br>
+   <div>
+    <button (click)="addPage()" class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold"><i class="mdi mdi-lock-outline mr-1"></i>  add new method</button>
+</div>
+  
+
+
+   
+ </div>
+
+
+
+
+
+  
+</ion-content>

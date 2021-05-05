@@ -6,18 +6,19 @@ import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
 import { Platform, ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { TestBed } from "@angular/core/testing";
+import {environment} from 'src/environments/environment'
 
 
 
 
 
-
-var AUTH_API = 'https://localhost/api/';
+var AUTH_API = environment.BACK_API_WPA+'/api/';
 const httpOptions = {
   headers: new HttpHeaders({
     
     'Content-Type':  'application/json',
     'accept': 'application/json'
+ 
   })
 };
 const TOKEN_KEY = 'my-token';
@@ -47,7 +48,12 @@ export class AuthService {
     });*/
     
   }
- 
+  private extractData(res: Response) {
+    let body = res;
+    return body || {
+     };
+  }
+
   isAuthenticated() {
   
     return this.authState.value;
@@ -93,6 +99,22 @@ export class AuthService {
   
   
     }
+    id;
+      getUserInfo() {
+
+
+   
+          this.storage.get("access_token").then((response) => {
+    
+         
+         console.log(response)
+          return response
+
+      });
+    
+ 
+    
+      }
 
   async  getDark():Promise<boolean> {
     var test;
@@ -107,6 +129,20 @@ export class AuthService {
       return test;
     
     }
+
+    async  getUser():Promise<any> {
+      var test;
+      await  this.storage.get("access_token").then((response) => {
+    
+          test =response;
+          
+          
+           
+         
+        });
+        return test;
+      
+      }
 
 
   async init() {
@@ -137,6 +173,7 @@ export class AuthService {
   logout(): Promise<void> {
     this.authState.next(false);
     return this._storage.remove("access_token");
+    this.router.navigate(['/index'])
   }
 
 

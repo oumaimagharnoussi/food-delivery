@@ -13,16 +13,19 @@ const routes: Routes = [
   },
   {
     path: 'index',
+    pathMatch: 'full',
     component: HomeComponent
     
     
   },
   {
     path: 'login',
+    pathMatch: 'full',
     component: LoginComponent,
   },
   {
     path: 'register',
+    pathMatch: 'full',
     component: RegisterComponent,
   },
 

@@ -1,28 +1,155 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true"  class="ion-no-border" mode="ios">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button>
-        <ion-icon name="arrow-back-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+        <ion-back-button defaultHref="/orders"></ion-back-button>
+      </ion-buttons>
 
     <ion-title>
        Comissions
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="moon-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+ 
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollEvents]="true" 
+>
+<ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Tab 1</ion-title>
     </ion-toolbar>
   </ion-header>
+  <div>
+    <ion-list>
 
+
+    
+      <ion-item>
+   
+        <ion-select [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="From" mode="ios" >
+          <ion-select-option  value="brown">Last Hour</ion-select-option>
+          <ion-select-option value="blonde">Last Day</ion-select-option>
+          <ion-select-option value="black">Last Week</ion-select-option>
+          <ion-select-option value="red">Last Month</ion-select-option>
+        </ion-select>
+      </ion-item>
+    
+    </ion-list>
+</div>
+  <div class="flex flex-col justify-center sm:flex-row p-1 ">
+
+    <div class="">
+        <div class="flex md:flex-row space-x-2">
+       
+            <div class="shadow-md p-3">
+                <div class="">
+                    <div class="flex flex-col">
+                        <div class="flex space-x-4">
+                            <div class="">
+                                <div class="uppercase text-sm text-gray-400">
+                                    Revenue
+                                </div>
+                            <div class="mt-1">
+                                    <div class="flex space-x-2 items-center">
+                                        <div class="text-2xl">
+                                            $30,00
+                                        </div>
+                                        <div class="text-xs text-red-500 bg-red-200 rounded-md p-1">
+                                            -4.5%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                                      
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="shadow-md p-3">
+                <div class="">
+                    <div class="flex flex-col">
+                        <div class="flex space-x-4">
+                            <div class="">
+                                <div class="uppercase text-sm text-gray-400">
+                                    Unpaid
+                                </div>
+                            <div class="mt-1">
+                                    <div class="flex space-x-2 items-center">
+                                        <div class="text-2xl">
+                                            $24,00
+                                        </div>
+                                        <div class="text-xs text-green-800 bg-green-200 rounded-md p-1">
+                                            +1.5%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+</div>
+
+
+<div class="container mx-0 px-2 sm:px-4">
+  <div class="py-4">
+      <div>
+          <h2 class="text-xl font-semibold leading-tight">History</h2>
+      </div>
+      <div class=" pb-4 px-1 rounded-md w-full">
+       
+  
+      <div class="overflow-x-auto mt-6">
+  
+        <table class="table-auto border-collapse w-full">
+          <thead>
+            <tr class="rounded-lg text-sm font-medium text-gray-700 text-left" style="font-size: 0.9674rem">
+              <th class="px-4 py-2 bg-gray-200 " style="background-color:#f8f8f8">OID</th>
+              <th class="px-4 py-2 " style="background-color:#f8f8f8">Value</th>
+              <th class="px-4 py-2 " style="background-color:#f8f8f8">Date</th>
+ 
+              <th class="px-4 py-2 " style="background-color:#f8f8f8">State</th>
+          
+
+            </tr>
+          </thead>
+          <tbody class="text-sm font-normal ">
+            <tr *ngFor="let comission of comissions" class=" border-b border-gray-200 py-10" (click)="presentModal(comission)">
+              <td class="px-4 py-4">#{{comission?.id}} </td>
+              <td class="px-4 py-4">{{comission?.value}}€</td>
+              <td class="px-4 py-4">{{ comission.createdAt | date : 'short'  }}</td>
+              <td *ngIf="comission.status=='PAYED'" class="px-4 py-4"><ion-badge color="success"><ion-icon name="checkmark-done-outline"></ion-icon></ion-badge></td>
+              <td *ngIf="comission.status=='PENDING'" class="px-4 py-4"><ion-badge color="warning"><ion-icon  name="hourglass-outline"></ion-icon></ion-badge></td>
+            </tr>
+        
+            
+   
+          </tbody>
+        </table>
+      </div>
+      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content
+          loadingSpinner="dots"
+          loadingText="Loading more ...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+     
+      </div>
+  
+
+  </div>
+</div>
+
+
+<div class="back-to-top-btn" *ngIf="backToTop" (click)="gotToTop()">
+  <ion-icon name="chevron-up-outline"></ion-icon>
+</div>
   
 </ion-content>

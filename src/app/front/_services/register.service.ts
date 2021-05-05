@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
 import DeliveryBoy from '../_models/DeliveryBoy';
 import { Observable } from 'rxjs';
-const host = 'http://localhost';
+import {environment} from 'src/environments/environment'
+const host = environment.BACK_API_WPA;
 
-const httpOptions = {
+const httpOptions = { 
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
     'accept': 'application/json'
   })
 };
 
-@Injectable({
+@Injectable({ 
   providedIn: 'root'
 })
 export class RegisterService {
@@ -29,11 +30,11 @@ export class RegisterService {
 
 
   register(user :DeliveryBoy): Observable<any> {
-    return this.http.post(host + '/api/deliveries', user, httpOptions);
+    return this.http.post(host+'/api/deliveries', user, httpOptions);
   }
 
   login(credentials): Observable<any>  {
-    return this.http.post('https://localhost/api/login_check', credentials,httpOptions)
+    return this.http.post(host+'/api/login_check', credentials,httpOptions)
      
   }
 

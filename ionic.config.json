@@ -4,5 +4,11 @@
     "capacitor": {}
   },
   "type": "angular",
-  "id": "97096e69"
+  "id": "97096e69",
+  "proxies": [
+    {
+      "path": "/.well-known",
+      "proxyUrl": "http://127.0.0.1:8000"
+    }
+  ]
 }
