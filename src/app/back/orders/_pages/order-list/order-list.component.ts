@@ -14,9 +14,12 @@ import {
   PushNotificationToken,
   PushNotificationActionPerformed,
 } from '@capacitor/core';
-import { Router } from '@angular/router';
-const { PushNotifications } = Plugins;
 
+
+import { Router } from '@angular/router';
+
+const { PushNotifications } = Plugins;
+const {Network} =Plugins;
 @Component({
   selector: 'app-order-list',
   templateUrl: './order-list.component.html',
@@ -29,8 +32,21 @@ export class OrderListComponent implements OnInit {
   orders=[];
   user;
   backToTop: boolean = false;
+  offline;
+  attempts=0;
   constructor(public alertController: AlertController,private router: Router,private changeRef: ChangeDetectorRef,private sse:SseService,private platform: Platform,private http: HTTP,private storage: AuthService,private order_service:OrderService, private geolocation: Geolocation,private messagin:MessagingService) { 
+
+    let handler=Network.addListener('networkStatusChange',async(status)=>{
+      if (status.connected){
    
+     this.offline=false;
+     this.changeRef.detectChanges();
+      }else{
+     
+       this.offline=true
+       this.changeRef.detectChanges();
+      }
+     })
     this.messagin.getMessages()
      
   }
@@ -138,8 +154,18 @@ export class OrderListComponent implements OnInit {
       this.order_service.getOrders(id).subscribe((data: any[]) => {
       
         this.orders=data;
+        this.attempts=0
         this.changeRef.detectChanges();
      //   console.log(this.orders)
+       
+      },err=>{
+        if(this.attempts<10){
+          this.getOrders(id)
+          this.attempts++;
+        }else{
+          console.log("problem with your backend")
+          
+        }
        
       })
 
@@ -154,7 +180,15 @@ export class OrderListComponent implements OnInit {
            this.orders=data.data;
            this.changeRef.detectChanges();
            console.log(this.orders)
+           this.attempts=0
           
+         }).catch(err=>{
+          if(this.attempts<10){
+            this.getOrders(id)
+            this.attempts++;
+          }else{
+            console.log("problem with your backend")
+          }
          })
     }
    
@@ -165,6 +199,16 @@ export class OrderListComponent implements OnInit {
    }
 
  async ngOnInit() {
+  let status=await Network.getStatus();
+  if(status.connected){
+  
+    this.offline=false;
+    this.changeRef.detectChanges();
+  }else{
+    this.offline=true;
+    this.changeRef.detectChanges();
+  
+  }
   
   if(!this.platform.is("mobileweb")&&!this.platform.is("desktop")){
     this.listen();

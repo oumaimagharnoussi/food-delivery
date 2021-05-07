@@ -1,4 +1,4 @@
-<div *ngIf="loading">
+<div *ngIf="false">
 
   <ion-card >
     <ion-item>
@@ -196,9 +196,11 @@
 
 
 </ion-card>
-<ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+<ion-infinite-scroll  threshold="100px" (ionInfinite)="loadData($event)">
   <ion-infinite-scroll-content
     loadingSpinner="dots"
     loadingText="Loading more orders...">
   </ion-infinite-scroll-content>
 </ion-infinite-scroll>
+
+

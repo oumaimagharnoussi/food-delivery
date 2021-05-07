@@ -130,6 +130,20 @@ export class AuthService {
     
     }
 
+    async  get(key):Promise<any> {
+      var test;
+      await  this.storage.get(key).then((response) => {
+    
+          test =response;
+          
+          
+           
+         
+        });
+        return test;
+      
+      }
+
     async  getUser():Promise<any> {
       var test;
       await  this.storage.get("access_token").then((response) => {

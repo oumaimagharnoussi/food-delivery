@@ -39,11 +39,25 @@
     </ul>
     
   </div>
+
   <div *ngIf="new">
   <!-- Skeleton screen -->
 
+   <div *ngIf="offline">
    
-    <ion-card *ngFor="let order of orders">
+     <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>Check your connection to see incoming orders</ion-card-subtitle>
+        <ion-card-title>You're offline</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+     
+      </ion-card-content>
+    </ion-card>
+   </div>
+   <div *ngIf="!offline">
+    <ion-card  *ngFor="let order of orders">
       <ion-item>
     
         <ion-label (click)="detail(order.order.id)"> <b>Order#{{order.order.id}}</b> ({{order.order.restaurant.name}})</ion-label>
@@ -90,6 +104,8 @@
     loadingText="Loading more orders...">
   </ion-infinite-scroll-content>
 </ion-infinite-scroll>
+   </div>
+  
 
   
   </div>

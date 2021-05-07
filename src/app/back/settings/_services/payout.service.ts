@@ -27,6 +27,10 @@ export class PayoutService {
   addMethod(data): Observable<any> {
     return this.http.post(host+'/api/payment_methods', data, httpOptions);
   }
+  deleteMethod(id): Observable<any> {
+    return this.http.delete(host+'/api/payment_methods/'+id,httpOptions);
+
+  }
 
 
 }
