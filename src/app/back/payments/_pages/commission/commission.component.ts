@@ -26,6 +26,7 @@ export class CommissionComponent implements OnInit {
    
   };
   offline: boolean;
+  attempts=0;
   constructor(private router: Router,private comisson_service:ComissionService,
     private platform:Platform,private auth:AuthService,
     public modalController: ModalController,
@@ -96,13 +97,20 @@ gotToTop() {
           this.comisson_service.getComissions(response.data.id,page).subscribe(
             data=>{
               this.comissions=this.comissions.concat(data)
+              this.attempts=0
               this.test=data
               if(page==1){
                 this.auth.set('comissionList',data)
                }
             
             },err=>{
-              this.getComissions(page)
+              if(this.attempts<10){
+                this.getComissions(page)
+                this.attempts++
+              }else{
+                console.log('backend error')
+              }
+             
             }
           )
 
@@ -114,6 +122,7 @@ gotToTop() {
             "Content-Type": "application/json",
             "accept": "application/json"
           }  ).then((data ) => {
+            this.attempts=0
             console.log(data)
             
                this.comissions= this.comissions.concat(JSON.parse( data.data)) 
@@ -122,7 +131,12 @@ gotToTop() {
                 this.auth.set('comissionList',JSON.parse( data.data))
                }
           }).catch(err=>{
-            this.getComissions(page)
+            if(this.attempts<10){
+              this.getComissions(page)
+              this.attempts++
+            }else{
+              console.log('backend error')
+            }
           })
         }
       })
