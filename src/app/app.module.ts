@@ -34,10 +34,10 @@ import { TextAvatarModule } from './text-avatar/text-avatar.module';
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
     }),
     ServiceWorkerModule.register('combined-sw.js', {
-      enabled: true
+      enabled: true,
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
-  //    registrationStrategy: 'registerWhenStable:30000'
+     registrationStrategy: 'registerWhenStable:10000'
     }),
 
   AngularFireModule.initializeApp(environment.firebase),

@@ -35,6 +35,9 @@ export class AcceptedListComponent implements OnInit {
   page=1;
   test=[];
   offline;
+  customPopoverOptions: any = {
+    
+  };
  
 
   constructor(private order_service: OrderService, 
