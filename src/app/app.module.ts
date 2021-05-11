@@ -34,7 +34,7 @@ import { TextAvatarModule } from './text-avatar/text-avatar.module';
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: true
+      enabled: true 
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
 
