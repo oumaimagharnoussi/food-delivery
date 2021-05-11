@@ -1,201 +1,59 @@
-<div *ngIf="false">
 
-  <ion-card >
-    <ion-item>
-  
-      <ion-label> <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></ion-label>
-      <ion-badge slot="start" color="primary"></ion-badge>
-      <!--
-        <a href="orders/info/{{order.order.id}}"  >
-        <ion-button color="secondary" slot="end"><ion-icon size="large" name="navigate-circle-outline"></ion-icon></ion-button>
-      </a>
-      -->
+      <div>
      
-    
-    </ion-item>
-
-  
-    <ion-card-content>
-
-      <div>
-
-    
-        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text> <br>
         
-      </div>
-
-      <div>
-
-    
-        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text> <br>
+         
+       
+            <ion-select class="mx-2" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="Filter" mode="ios" >
+              <ion-select-option  value="brown">By date</ion-select-option>
+              <ion-select-option value="blonde">By restaurant</ion-select-option>
+              <ion-select-option value="black">PICKED</ion-select-option>
+              <ion-select-option value="red">INDELIVERY</ion-select-option>
+            </ion-select>
+       
         
-      </div>
-      <div>
-        <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-      </div>
     
-    </ion-card-content>
-
- 
-
-  </ion-card>
-  <ion-card >
-    <ion-item>
-  
-      <ion-label> <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></ion-label>
-      <ion-badge slot="start" color="primary"></ion-badge>
-      <!--
-        <a href="orders/info/{{order.order.id}}"  >
-        <ion-button color="secondary" slot="end"><ion-icon size="large" name="navigate-circle-outline"></ion-icon></ion-button>
-      </a>
-      -->
-     
-    
-    </ion-item>
-
-  
-    <ion-card-content>
-
-      <div>
-
-    
-        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text> <br>
-        
-      </div>
-
-      <div>
-
-    
-        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text> <br>
-        
-      </div>
-      <div>
-        <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-      </div>
-    
-    </ion-card-content>
-
- 
-
-  </ion-card>
-  <ion-card >
-    <ion-item>
-  
-      <ion-label> <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></ion-label>
-      <ion-badge slot="start" color="primary"></ion-badge>
-      <!--
-        <a href="orders/info/{{order.order.id}}"  >
-        <ion-button color="secondary" slot="end"><ion-icon size="large" name="navigate-circle-outline"></ion-icon></ion-button>
-      </a>
-      -->
-     
-    
-    </ion-item>
-
-  
-    <ion-card-content>
-
-      <div>
-
-    
-        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text> <br>
-        
-      </div>
-
-      <div>
-
-    
-        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text> <br>
-        
-      </div>
-      <div>
-        <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-      </div>
-    
-    </ion-card-content>
-
- 
-
-  </ion-card>
-  <ion-card >
-    <ion-item>
-  
-      <ion-label> <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></ion-label>
-      <ion-badge slot="start" color="primary"></ion-badge>
-      <!--
-        <a href="orders/info/{{order.order.id}}"  >
-        <ion-button color="secondary" slot="end"><ion-icon size="large" name="navigate-circle-outline"></ion-icon></ion-button>
-      </a>
-      -->
-     
-    
-    </ion-item>
-
-  
-    <ion-card-content>
-
-      <div>
-
-    
-        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text> <br>
-        
-      </div>
-
-      <div>
-
-    
-        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text> <br>
-        
-      </div>
-      <div>
-        <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-      </div>
-    
-    </ion-card-content>
-
- 
-
-  </ion-card>
-
-</div>
-   
-<ion-card *ngFor="let order of orders">
-  <ion-item> 
-    
-    <ion-label (click)="detail(order.id)"> <b>Order#{{order.id}}</b> ({{order.restaurant.name}})</ion-label>
-    <ion-badge slot="start" color="primary"></ion-badge>
-    <!--
- <ion-button (click)="detail(order.id)" color="secondary" slot="end"><ion-icon size="large" name="navigate-circle-outline"></ion-icon></ion-button>
-    -->
-     
-  
-  
-  </ion-item>
-
-  <ion-card-content>
-
-    
-
-   
-    <div>
-      <b>Total price: </b> {{order.totalPrice}} {{order.restaurant.currency.symbol}} 
     </div>
-    <div>
-      <b>Payment: </b> Cash on delivery
-    </div>
-    <div>
-      <b>Client address: </b> {{order.adresseLivraison}} 
-    </div>
-    <ion-item>
-      <ion-button (click)="presentModal(order)" color="dark" slot="start"><ion-icon name="map-outline"></ion-icon></ion-button>
-      <ion-button color="dark" slot="start"><ion-icon  name="call-outline"></ion-icon> </ion-button>
-      <ion-button  color="tertiary" slot="start"> Finish order </ion-button>
-    </ion-item>
-  </ion-card-content>
+    <ion-list>
+      
 
+        <ion-item  *ngFor="let order of orders">
+         
+            <ion-avatar slot="start">
+              <text-avatar style="font-weight: bold;" [text]="order.restaurant.name" [color]="primaryColor"></text-avatar>
+            </ion-avatar>
+       
+          <ion-label>
+            <ion-badge color="secondary">INDELIVERY</ion-badge> 
+            <h2>
+            {{order.restaurant.name}} 
+               (OID#1245) 
+            </h2>
+            <p>
+               <b>Toatal price:</b>  {{order.totalPrice}} €   <br>
+               <b>Payment:</b> CASH  <br>
+             
+                <ion-button class="m-3"   (click)="presentModal(order)" color="dark" slot="start"><ion-icon name="map-outline"></ion-icon></ion-button>
+                <ion-button class="m-3" color="dark" slot="end"><ion-icon  name="call-outline"></ion-icon> </ion-button>
 
+          
+  
+          
+            </p>
+          </ion-label>
+     
+          
+     
+         
+        
+            <ion-icon (click)="detail(order.id)" slot="end"  size="medium" name="arrow-forward-outline"></ion-icon>
+           
+          
+        </ion-item>
+  
+  
+      </ion-list>
 
-</ion-card>
 <ion-infinite-scroll  threshold="100px" (ionInfinite)="loadData($event)">
   <ion-infinite-scroll-content
     loadingSpinner="dots"

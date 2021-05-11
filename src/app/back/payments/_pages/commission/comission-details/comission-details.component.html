@@ -18,15 +18,15 @@
     </ion-toolbar>
   </ion-header>
 
-<ion-card>
-  <ion-item>
+  <div class="p-3 mb-4">
+  <ion-item class="mb-3">
     <ion-icon name="wallet-outline" slot="start"></ion-icon>
     <ion-label>Comission details</ion-label>
-    <ion-badge *ngIf="comission?.status=='PENDING'" slot="end" color="warning"><ion-icon  name="hourglass-outline"></ion-icon></ion-badge>
+    <ion-badge *ngIf="comission?.status=='PENDING'" slot="end" color="warning"><ion-icon  name="timer-outline"></ion-icon></ion-badge>
     <ion-badge *ngIf="comission?.status=='PAYED'" slot="end" color="success"><ion-icon name="checkmark-done-outline"></ion-icon></ion-badge>
   </ion-item>
 
-  <ion-card-content>
+
     <div class="grid grid-cols-2 gap-4">
       <div>
         <h2>ID</h2>
@@ -50,44 +50,47 @@
       
     </div>
     
-  </ion-card-content>
-</ion-card>
+</div>
 
-<ion-card>
-  <ion-item>
+
+
+<div class="p-3">
+  <ion-item class="mb-3">
     <ion-icon name="cart-outline" slot="start"></ion-icon>
     <ion-label>Order details</ion-label>
   
    
   </ion-item>
 
-  <ion-card-content>
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <h2>ID</h2>
-      </div>
-      <div>
-        <h3>#{{comission?.commande?.id}}</h3>
-      </div>
-      <div>
-        <h2>Delivery date</h2>
-      </div>
-      <div>
-        <h3>{{comission?.commande?.dateLivraison | date: 'short'}}</h3>
-      </div>
-      <div>
-        <h2>Total price</h2>
-      </div>
-      <div>
-        <h3>{{comission?.commande?.totalPrice}} €</h3>
-      </div>
-   
-    
-      
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <h2>ID</h2>
     </div>
+    <div>
+      <h3>#{{comission?.commande?.id}}</h3>
+    </div>
+    <div>
+      <h2>Delivery date</h2>
+    </div>
+    <div>
+      <h3>{{comission?.commande?.dateLivraison | date: 'short'}}</h3>
+    </div>
+    <div>
+      <h2>Total price</h2>
+    </div>
+    <div>
+      <h3>{{comission?.commande?.totalPrice}} €</h3>
+    </div>
+ 
+  
     
-  </ion-card-content>
-</ion-card>
+  </div>
+  
+
+</div>
+
+
+
 
   
 

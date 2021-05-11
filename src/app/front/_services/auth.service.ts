@@ -91,7 +91,7 @@ export class AuthService {
           console.log(response)
           this.authState.next(false);
         }else{
-          this.router.navigate(['/app/orders'])
+          window.location.href = "/app/orders";
         }
       });
     });

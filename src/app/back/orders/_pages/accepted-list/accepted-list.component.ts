@@ -22,6 +22,7 @@ export class AcceptedListComponent implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
   @ViewChild(IonContent) content: IonContent;
   loading=true;
+  primaryColor="#bdd0da"
   orders=[];
   destination = {
     lat: 35.38303302544718,

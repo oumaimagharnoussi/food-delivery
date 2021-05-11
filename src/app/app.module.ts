@@ -22,6 +22,9 @@ import { MessagingService } from './front/_services/messaging.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { TextAvatarModule } from './text-avatar/text-avatar.module';
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -39,6 +42,7 @@ import { Network } from '@ionic-native/network/ngx';
 
   AngularFireModule.initializeApp(environment.firebase),
   AngularFireMessagingModule,
+  TextAvatarModule
 /* ServiceWorkerModule.register('ngsw-worker.js', {
     enabled: environment.production
   })*/

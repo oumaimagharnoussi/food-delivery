@@ -1,39 +1,49 @@
 
-<div class="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
-    <div>
-    
-        <ion-toggle checked={{dark}} class="bg-green-100  bg-opacity-0" (ionChange)="onClick($event)" slot="end"></ion-toggle>
-   
-      <img class="mx-auto h-10 w-auto mb-5" src="../../../assets/front/Logo_icon.png" alt="Workflow">
-
-
-      <img class="mx-auto h-15 w-auto" src="../../../assets/front/Image.png" alt="Workflow">
-      <h2 class=" mt-6 text-center text-3xl font-extrabold  mb-18 ">
-        Delivery boy
-      </h2>
-   
-    </div>
-    <form class="mt-8 space-y-6" action="#" method="POST">
-   
-
-  
-
+<ion-content [fullscreen]="true">
+  <div class="min-h-screen flex items-center justify-center   px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
       <div>
-        <a href="/login" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm  font-extrabold rounded-md text-white bg-green-400 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-          Sign in
-  
+        <ion-button *ngIf="dark" (click)="change()" color="light">
+          <ion-icon  style="color: white;" name="sunny-sharp"></ion-icon>
+        </ion-button>
 
-        </a>
+        <ion-button *ngIf="!dark" (click)="change()" color="dark">
+          <ion-icon  style="color: black;"  name="moon-sharp"></ion-icon>
+        </ion-button>
       
-      </div>
-      <div>
-        <a href="/register" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-extrabold rounded-md text-white bg-green-400 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-          Sign up
+        <ion-toggle style="display: none;" checked={{dark}} class="bg-green-100  bg-opacity-0" (ionChange)="onClick($event)" slot="end"></ion-toggle>
+     
+        <img class="mx-auto h-10 w-auto mb-5" src="../../../assets/front/Logo_icon.png" alt="Workflow">
   
-
-        </a>
+  
+        <img class="mx-auto h-15 w-auto" src="../../../assets/front/Image.png" alt="Workflow">
+        <h2 class=" mt-6 text-center text-3xl font-extrabold  mb-18 ">
+          Delivery boy
+        </h2>
+ 
       </div>
-    </form>
+      <form class="mt-8 space-y-6" action="#" method="POST">
+     
+  
+    
+  
+        <div>
+          <a (click)="redirect('/login')" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm  font-extrabold rounded-md text-white bg-green-400 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            Sign in
+    
+  
+          </a>
+        
+        </div>
+        <div>
+          <a (click)="redirect('/register')"  class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-extrabold rounded-md text-white bg-green-400 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            Sign up
+    
+  
+          </a>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
+  </ion-content>
+

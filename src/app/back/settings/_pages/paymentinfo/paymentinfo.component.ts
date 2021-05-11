@@ -51,6 +51,7 @@ export class PaymentinfoComponent implements OnInit {
             this.payout_service.addMethod(data).subscribe(
               data=>{
                 console.log(data)
+                window.location.href = "/app/settings/payout";
               }
             )
 
@@ -63,7 +64,7 @@ export class PaymentinfoComponent implements OnInit {
          data
             ,serializer:"json"}).then(
               response=>{
-
+                window.location.href = "/app/settings/payout";
               }
             )
 
@@ -81,6 +82,7 @@ export class PaymentinfoComponent implements OnInit {
             this.payout_service.addMethod(data).subscribe(
               data=>{
                 console.log(data)
+                window.location.href = "/app/settings/payout";
               }
             )
           }else{
@@ -92,6 +94,7 @@ export class PaymentinfoComponent implements OnInit {
          data
             ,serializer:"json"}).then(
               response=>{
+                window.location.href = "/app/settings/payout";
 
               }
             )
@@ -110,6 +113,7 @@ export class PaymentinfoComponent implements OnInit {
             this.payout_service.addMethod(data).subscribe(
               data=>{
                 console.log(data)
+                window.location.href = "/app/settings/payout";
               }
             )
           }else{
@@ -121,6 +125,7 @@ export class PaymentinfoComponent implements OnInit {
          data
             ,serializer:"json"}).then(
               response=>{
+                window.location.href = "/app/settings/payout";
 
               }
             )

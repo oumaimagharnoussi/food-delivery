@@ -20,10 +20,14 @@ export class HomeComponent implements OnInit {
     private messagingService: MessagingService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController) { 
+      this.storage.ifNotLoggedIn()
       this.listenForMessages()
 
   
 
+  }
+  redirect(route){
+    this.router.navigate([route])
   }
 
   listenForMessages() {
@@ -42,6 +46,13 @@ export class HomeComponent implements OnInit {
     });
   }
  
+  change(){
+    if(this.dark==true){
+      this.dark=false
+    }else{
+      this.dark=true
+    }
+  }
   requestPermission() {
     this.messagingService.requestPermission().subscribe(
       async token => {
@@ -93,7 +104,7 @@ export class HomeComponent implements OnInit {
 
 });*/
 
-    this.storage.ifNotLoggedIn()
+   
     // If using a custom driver:
     // await this.storage.defineDriver(MyCustomDriver)
   

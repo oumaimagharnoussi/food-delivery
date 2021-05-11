@@ -237,4 +237,9 @@ export class LoginComponent implements OnInit {
   }
 }
 
+redirect(route){
+  this.router.navigate([route])
+}
+
+
 }

@@ -68,16 +68,20 @@ async  ngOnInit() {
     
 
   }
-  doRefresh(event) {
-    console.log('Begin async operation');
-    this.comissions.length=0;
-    this.getComissions(1).then(
-      ()=>{
-        event.target.complete();
-      }
-    )
-   
- 
+ async doRefresh(event) {
+    let status=await Network.getStatus();
+    if(status.connected){
+      console.log('Begin async operation');
+      this.comissions.length=0;
+      this.getComissions(1).then(
+        ()=>{
+          event.target.complete();
+        }
+      )
+    }
+    else{
+      event.target.complete();
+    }
   }
   getScrollPos(pos: number) {
     if (pos > this.platform.height()) {

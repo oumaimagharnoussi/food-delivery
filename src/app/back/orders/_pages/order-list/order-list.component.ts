@@ -32,8 +32,9 @@ export class OrderListComponent implements OnInit {
   orders=[];
   user;
   backToTop: boolean = false;
-  offline;
+  offline:boolean;
   attempts=0;
+  primaryColor="#bdd0da"
   constructor(public alertController: AlertController,private router: Router,private changeRef: ChangeDetectorRef,private sse:SseService,private platform: Platform,private http: HTTP,private storage: AuthService,private order_service:OrderService, private geolocation: Geolocation,private messagin:MessagingService) { 
 
     let handler=Network.addListener('networkStatusChange',async(status)=>{
@@ -52,6 +53,21 @@ export class OrderListComponent implements OnInit {
   }
   gotToTop() {
     this.content.scrollToTop(1400);
+  }
+  async doRefresh(event) {
+    let status=await Network.getStatus();
+    if(status.connected){
+      console.log('Begin async operation');
+      this.orders.length=0;
+      this.ngOnInit().then(
+        ()=>{
+          event.target.complete();
+        }
+      )
+    }
+    else{
+      event.target.complete();
+    }
   }
   loadData(event) {
     let size=this.orders.length
@@ -149,7 +165,7 @@ export class OrderListComponent implements OnInit {
              }
            );
   }
-  getOrders(id) {
+async  getOrders(id) {
     if(this.platform.is("desktop")||this.platform.is("mobileweb")){
       this.order_service.getOrders(id).subscribe((data: any[]) => {
       

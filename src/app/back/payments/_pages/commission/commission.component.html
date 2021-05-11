@@ -23,21 +23,15 @@
     </ion-toolbar>
   </ion-header>
   <div>
-    <ion-list>
-
-
-    
-      <ion-item>
+ 
    
-        <ion-select [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="From" mode="ios" >
+        <ion-select class="mx-6" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="From" mode="ios" >
           <ion-select-option  value="brown">Last Hour</ion-select-option>
           <ion-select-option value="blonde">Last Day</ion-select-option>
           <ion-select-option value="black">Last Week</ion-select-option>
           <ion-select-option value="red">Last Month</ion-select-option>
         </ion-select>
-      </ion-item>
     
-    </ion-list>
 </div>
   <div class="flex flex-col justify-center sm:flex-row p-1 ">
 
@@ -107,26 +101,36 @@
        
   
       <div class="overflow-x-auto mt-6">
+        
   
         <table class="table-auto border-collapse w-full">
           <thead>
             <tr class="rounded-lg text-sm font-medium text-gray-700 text-left" style="font-size: 0.9674rem">
-              <th class="px-4 py-2 bg-gray-200 " style="background-color:#f8f8f8">OID</th>
-              <th class="px-4 py-2 " style="background-color:#f8f8f8">Value</th>
-              <th class="px-4 py-2 " style="background-color:#f8f8f8">Date</th>
+              <th class="px-4 py-2 " >State</th>
+              <th class="px-4 py-2 " >Value</th>
+              <th class="px-4 py-2 " >Date</th>
  
-              <th class="px-4 py-2 " style="background-color:#f8f8f8">State</th>
+          
+              <th class="px-4 py-2 ">
+
+              </th>
           
 
             </tr>
           </thead>
           <tbody class="text-sm font-normal ">
-            <tr *ngFor="let comission of comissions" class=" border-b border-gray-200 py-10" (click)="presentModal(comission)">
-              <td class="px-4 py-4">#{{comission?.id}} </td>
+            <tr *ngFor="let comission of comissions" class=" border-b border-gray-200 py-10" >
+              <td *ngIf="comission.status=='PAYED'" class="px-4 py-4">
+                <ion-badge color="success"><ion-icon name="checkmark-done-outline"></ion-icon></ion-badge></td>
+              <td *ngIf="comission.status=='PENDING'" class="px-4 py-4"><ion-badge color="warning">
+                <ion-icon name="timer-outline"></ion-icon>
+              </ion-badge></td>
               <td class="px-4 py-4">{{comission?.value}}€</td>
               <td class="px-4 py-4">{{ comission.createdAt | date : 'short'  }}</td>
-              <td *ngIf="comission.status=='PAYED'" class="px-4 py-4"><ion-badge color="success"><ion-icon name="checkmark-done-outline"></ion-icon></ion-badge></td>
-              <td *ngIf="comission.status=='PENDING'" class="px-4 py-4"><ion-badge color="warning"><ion-icon  name="hourglass-outline"></ion-icon></ion-badge></td>
+             
+              <td>
+                <ion-icon (click)="presentModal(comission)" slot="end"  size="medium" name="arrow-forward-outline"></ion-icon>
+              </td>
             </tr>
         
             

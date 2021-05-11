@@ -84,7 +84,12 @@ export class AppComponent {
  async  ngOnInit() {
   let status=await Network.getStatus();
   if(status.connected){
-    this.notify("welcome back","primary")
+    const toast1 = await this.toastController.create({
+      message: "Welcome ..",
+      duration: 100,
+      color: "transparent"
+    });
+    toast1.present();
   
   }else{
     this.notify("you're offline","danger")

@@ -153,5 +153,9 @@ export class RegisterComponent implements OnInit {
 
     console.log(deliveryBoyInfo);
   }
+  redirect(route){
+    this.router.navigate([route])
+  }
 
+  
 }

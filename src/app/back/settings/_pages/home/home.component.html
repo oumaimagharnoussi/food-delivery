@@ -16,15 +16,11 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
 <!-- component -->
 <!-- This is an example component -->
 <div class="my-1">
-  <div class=" rounded overflow-hidden shadow-lg">
+  <div class=" rounded overflow-hidden ">
     <div class="text-center p-6  border-b">
       <img
         class="h-24 w-24 rounded-full mx-auto"
@@ -44,7 +40,7 @@
     </div>
     <div class="border-b">
 
-      <a (click)="payoutPage()" class="px-4 py-2 hover:bg-gray-100 flex">
+      <a (click)="payoutPage()" class="px-4 py-2  flex">
         <div>
           <svg
             fill="none"
@@ -64,7 +60,7 @@
           <p class="text-xs ">Add, update payment method</p>
         </div>
       </a>
-      <a (click)="profilePage()" class="px-4 py-2 hover:bg-gray-100 flex">
+      <a (click)="profilePage()" class="px-4 py-2  flex">
         <div >
           <svg
             fill="none"
@@ -87,10 +83,10 @@
     </div>
 
     <div class="my-10">
-      <a href="#" class="px-4 py-2 pb-4   hover:bg-gray-100 flex">
+      <a href="#" class="px-4 py-2 pb-4    flex">
         <p class="text-sm font-medium  leading-none">Support FAQ</p>
       </a>
-      <a href="#" class="px-4 py-2 pb-4  hover:bg-gray-100 flex">
+      <a href="#" class="px-4 py-2 pb-4   flex">
         <p class=" font-medium   leading-none"> <ion-icon size="large" name="log-in-sharp"></ion-icon> Logout</p>
       </a>
     </div>
