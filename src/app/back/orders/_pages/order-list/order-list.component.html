@@ -5,12 +5,13 @@
     <ion-title>
        Orders 
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="change()">
-        <ion-icon *ngIf="!dark" style="color: black;"  name="moon-sharp"></ion-icon>
-        <ion-icon *ngIf="dark" style="color: white;" name="sunny-sharp"></ion-icon>
+    <ion-buttons slot="start">
+      <ion-button color="light" (click)="openFirst()">
+        <ion-icon size="large" name="menu-sharp"></ion-icon>
       </ion-button>
+
     </ion-buttons>
+  
     <ion-toggle style="display: none;" checked={{dark}} class="bg-green-100  bg-opacity-0" (ionChange)="onClick($event)" slot="end"></ion-toggle>
   </ion-toolbar>
 </ion-header>
@@ -18,13 +19,15 @@
 <ion-content [fullscreen]="true"  [scrollEvents]="true" 
 
   >
+  
+ 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
   <div *ngIf="new" >
     <ul class='flex cursor-pointer justify-center'>
-        <li (click)="showNewOrders()" class='py-2 px-6  rounded-t-lg text-white-500 bg-green-300'>New orders</li>
+        <li (click)="showNewOrders()" style="background-color: #34C47C; color:white;" class='py-2 px-6  rounded-t-lg '>New orders</li>
         <li (click)="showAcceptedOrders()" class='py-2 px-6  rounded-t-lg '>Accepted orders</li>
 
     </ul>
@@ -33,7 +36,7 @@
   <div  *ngIf="!new">
     <ul class='flex cursor-pointer justify-center'>
         <li (click)="showNewOrders()" class='py-2 px-6  rounded-t-lg '>New orders</li>
-        <li (click)="showAcceptedOrders()" class='py-2 px-6  rounded-t-lg  text-white-500 bg-green-300'>Accepted orders</li>
+        <li (click)="showAcceptedOrders()" style="background-color: #34C47C; color:white;" class='py-2 px-6  rounded-t-lg  '>Accepted orders</li>
 
     </ul>
     
@@ -63,17 +66,18 @@
       <ion-item  *ngFor="let order of orders">
        
           <ion-avatar slot="start">
-            <text-avatar style="font-weight: bold;" [text]="order.order.restaurant.name" [color]="primaryColor"></text-avatar>
+            <text-avatar *ngIf="order.order?.restaurant.logo==null" style="font-weight: bold;" [text]="order.order.restaurant.name" [color]="primaryColor"></text-avatar>
+            <img *ngIf="order.order?.restaurant.logo!=null" src="http://localhost:8000/media/{{order.order?.restaurant.logo.filePath}}">
           </ion-avatar>
      
         <ion-label>
           <ion-badge color="primary">NEW</ion-badge> 
           <h2>
-            {{order.order.restaurant.name}}   (OID#1245) 
+            {{order.order.restaurant.name}}   (OID#{{order.order.id}}) 
           </h2>
           <p>
              <b>Toatal distance:</b> {{order.distanceClient/1000 + order.distance/1000| number : '1.1-1'}} KM  <br>
-             <b>Comission:</b> 4€
+             <b>Comission:</b> {{order.order.totalPrice*0.2 |number}}€ 
           </p>
         </ion-label>
        

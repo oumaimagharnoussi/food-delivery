@@ -5,7 +5,7 @@
          
        
             <ion-select class="mx-2" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="Filter" mode="ios" >
-              <ion-select-option  value="brown">By date</ion-select-option>
+          
               <ion-select-option value="blonde">By restaurant</ion-select-option>
               <ion-select-option value="black">PICKED</ion-select-option>
               <ion-select-option value="red">INDELIVERY</ion-select-option>
@@ -19,22 +19,23 @@
 
         <ion-item  *ngFor="let order of orders">
          
-            <ion-avatar slot="start">
-              <text-avatar style="font-weight: bold;" [text]="order.restaurant.name" [color]="primaryColor"></text-avatar>
-            </ion-avatar>
+          <ion-avatar slot="start">
+            <text-avatar *ngIf="order.restaurant?.logo==null" style="font-weight: bold;" [text]="order.restaurant?.name" [color]="primaryColor"></text-avatar>
+            <img *ngIf="order.restaurant?.logo!=null" src="http://localhost:8000/media/{{order.restaurant?.logo.filePath}}">
+          </ion-avatar>
        
           <ion-label>
             <ion-badge color="secondary">INDELIVERY</ion-badge> 
             <h2>
             {{order.restaurant.name}} 
-               (OID#1245) 
+               (OID#{{order.id}}) 
             </h2>
             <p>
                <b>Toatal price:</b>  {{order.totalPrice}} €   <br>
                <b>Payment:</b> CASH  <br>
              
-                <ion-button class="m-3"   (click)="presentModal(order)" color="dark" slot="start"><ion-icon name="map-outline"></ion-icon></ion-button>
-                <ion-button class="m-3" color="dark" slot="end"><ion-icon  name="call-outline"></ion-icon> </ion-button>
+                <ion-button class="m-3 " color="tertiary" (click)="presentModal(order)"  slot="start"><ion-icon name="map-outline"></ion-icon></ion-button>
+                <ion-button class="m-3" color="tertiary" slot="end"><ion-icon  name="call-outline"></ion-icon> </ion-button>
 
           
   

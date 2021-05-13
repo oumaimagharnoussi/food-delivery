@@ -1,17 +1,13 @@
 <ion-header [translucent]="true"  class="ion-no-border" mode="ios">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/settings"></ion-back-button>
+      <ion-back-button color="light"  defaultHref="/settings"></ion-back-button>
     </ion-buttons>
 
     <ion-title>
        Settings
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="moon-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -46,10 +42,10 @@
  
     <ion-label>
       <h2>
-        <ion-badge *ngIf="method.principale" color="secondary">
+        <ion-badge *ngIf="method.principale" color="success">
           <input type="radio" value="" checked >  DEFAULT
           </ion-badge>
-          <ion-badge *ngIf="!method.principale" color="secondary">
+          <ion-badge *ngIf="!method.principale" color="dark">
             <input type="radio" value="" >  DEFAULT
             </ion-badge>
       </h2>

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
-import { AlertController, IonContent, Platform } from '@ionic/angular';
+import { AlertController, IonContent, MenuController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { MessagingService } from 'src/app/front/_services/messaging.service';
 import { OrderService } from '../../_services/order.service';
@@ -35,7 +35,17 @@ export class OrderListComponent implements OnInit {
   offline:boolean;
   attempts=0;
   primaryColor="#bdd0da"
-  constructor(public alertController: AlertController,private router: Router,private changeRef: ChangeDetectorRef,private sse:SseService,private platform: Platform,private http: HTTP,private storage: AuthService,private order_service:OrderService, private geolocation: Geolocation,private messagin:MessagingService) { 
+  constructor(public alertController: AlertController,
+    private router: Router,
+    private changeRef: ChangeDetectorRef,
+    private sse:SseService,
+    private platform: Platform,
+    private http: HTTP,
+    private storage: AuthService,
+    private order_service:OrderService, 
+    private geolocation: Geolocation,
+    private messagin:MessagingService,
+    private menu: MenuController) { 
 
     let handler=Network.addListener('networkStatusChange',async(status)=>{
       if (status.connected){
@@ -51,6 +61,12 @@ export class OrderListComponent implements OnInit {
     this.messagin.getMessages()
      
   }
+  openFirst() {
+    this.menu.enable(true, 'first');
+    this.menu.open('first');
+  }
+
+
   gotToTop() {
     this.content.scrollToTop(1400);
   }
@@ -406,7 +422,8 @@ async  getOrders(id) {
         {
     
           status:  "INDELIVERY",
-          delivery: "api/deliveries/"+data.data.id
+          delivery: "api/deliveries/"+data.data.id,
+          acceptedDeliveryAt: new Date()
   
                     
         }

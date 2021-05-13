@@ -141,6 +141,31 @@ export class OrderInfoComponent implements OnInit {
   
     await alert.present();
   }
+  async finish(){ 
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirm delivery completed',
+      message: '',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.finishOrder(this.order.id)
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
 
   async presentModal() {
     const modal = await this.modalController.create({
@@ -182,6 +207,50 @@ export class OrderInfoComponent implements OnInit {
                     
         }
         ,serializer:"json"})
+
+      })
+    })
+
+
+    }
+
+
+
+  }
+
+  finishOrder(id){
+
+    if(this.platform.is('mobileweb') || this.platform.is('desktop')){
+      this.platform.ready().then(async() => {
+        await  this.auth.getUser().then((response) => {
+          this.order_service.finish(id,response.data.id).subscribe(
+            data=>{
+              window.location.href = "/app/payments";
+          
+            },err=>{
+            }
+          )
+        })
+  
+  })
+    }else{
+      this.platform.ready().then(async() => {
+      await  this.auth.getUser().then((response) => {
+        let data=JSON.parse(response.data);
+        this.http.sendRequest(environment.BACK_API_MOBILE+'/api/orders/'+id,{method: "put",data:
+        {
+    
+          status:  "DELIVERED",
+          delivery: "api/deliveries/"+data.data.id,
+          deliveredAt: new Date()
+  
+                    
+        }
+        ,serializer:"json"}).then(
+          ()=>{
+            window.location.href = "/app/payments";
+          }
+        )
 
       })
     })

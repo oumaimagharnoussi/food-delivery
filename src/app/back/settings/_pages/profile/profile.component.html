@@ -1,17 +1,13 @@
 <ion-header [translucent]="true"  class="ion-no-border" mode="ios">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/settings"></ion-back-button>
+      <ion-back-button color="light"  defaultHref="/settings"></ion-back-button>
     </ion-buttons>
 
     <ion-title>
        Settings
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="moon-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -24,8 +20,8 @@
 <!-- component -->
 <div class="p-0">
 
-  <div class="mt-2 p-4">
-      <div>
+  <div class="mt-2  p-2">
+      <div class="p-2">
           <div class="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Full Name</div>
           <div class="flex flex-col md:flex-row">
               <div class="w-full flex-1 mx-2 svelte-1l8159u">
@@ -50,13 +46,10 @@
               </div>
           </div>
       </div>
-      <div class="flex p-2 mt-4">
-          <button class="text-base hover:scale-110 focus:outline-none flex justify-center px-8 py-2 rounded font-bold cursor-pointer 
-      hover:bg-gray-200  
-      bg-gray-100 
-      text-gray-700 
-      border duration-200 ease-in-out 
-      border-gray-600 transition">Update</button>
+      <div class=" pl-3 mt-4">
+          <ion-button color="success" expand="block" class="text-base hover:scale-110 focus:outline-none  justify-center  rounded font-bold cursor-pointer 
+    
+     transition">Update</ion-button>
           <div class="flex-auto flex flex-row-reverse">
          
           </div>

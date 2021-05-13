@@ -178,7 +178,7 @@ export class AcceptedListComponent implements OnInit {
         await  this.storage.getUser().then((response) => {
           let data=JSON.parse(response.data)
           this.http.setServerTrustMode("nocheck");
-          this.http.get(environment.BACK_API_MOBILE+'/api/orders?status=INDELIVERY&delivery.id='+data.data.id ,  {},
+          this.http.get(environment.BACK_API_MOBILE+'/api/orders?status=INDELIVERY&delivery.id='+data.data.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc' ,  {},
           {
             "Content-Type": "application/json",
             "accept": "application/json"

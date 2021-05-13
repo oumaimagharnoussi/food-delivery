@@ -4,10 +4,10 @@
 
 <ion-app>
     <ion-split-pane contentId="main-content">
-      <ion-menu *ngIf="side" contentId="main-content" type="overlay">
+      <ion-menu *ngIf="side"  side="start" menuId="first" contentId="main-content">
         <ion-content>
           <div>
-            <nav style="background-color: #2dd36f;" class=" flex flex-col w-auto h-screen px-4 tex-black-900">
+            <nav  class=" flex flex-col w-auto h-screen px-4">
               <div class="flex flex-wrap mt-8">
                 <div class="w-1/2">
                   <img
@@ -16,9 +16,9 @@
                   />
                 </div>
                 <div class="w-1/2">
-                  <span class="font-semibold text-black m-2">Ava Harper</span>
+                  <span class="font-semibold  m-2">Ava Harper</span>
                   <br>
-                  <button  class=" text-white px-4 py-2 m-2 rounded-md border border-blue-500 hover:bg-white hover:text-green-500"
+                  <button  class="  px-4 py-2 m-2 rounded-md border border-green-500  hover:text-green-500"
                  >
                     ONLINE
                   </button>
@@ -26,7 +26,7 @@
               </div>
               <div class="mt-10 mb-4">
                 <ul class="ml-4">
-                  <li class="mb-2 px-4 py-4 text-black-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
+                  <li class="mb-2 px-4 py-4 -100 flex flex-row  border-gray-300 hover:   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
                     <span>
                       <svg class="fill-current h-5 w-5 " viewBox="0 0 24 24">
                         <path
@@ -42,7 +42,7 @@
                   </li>
                 
                 
-                  <li class="mb-2 px-4 py-4 text-black-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
+                  <li class="mb-2 px-4 py-4 -100 flex flex-row  border-gray-300 hover:   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
                     <span>
                       <svg class="fill-current h-5 w-5 " viewBox="0 0 24 24">
                         <path
@@ -57,7 +57,7 @@
                     </a>
                   </li>
 
-                  <li class="mb-2 px-4 py-4 text-black-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
+                  <li class="mb-2 px-4 py-4 -100 flex flex-row  border-gray-300 hover:   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
                     <span>
                       <svg
                         class="fill-current h-5 w-5 "
@@ -83,7 +83,7 @@
                     </a>
                   </li>
              
-                  <li class="mb-2 px-4 py-4 text-black-100 flex flex-row  border-gray-300 hover:text-black   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
+                  <li class="mb-2 px-4 py-4 -100 flex flex-row  border-gray-300 hover:   hover:bg-gray-300  hover:font-bold rounded rounded-lg">
                     <span>
                       <svg
                         class="fill-current h-5 w-5 "
@@ -111,10 +111,10 @@
                   </li>
                 </ul>
               </div>
-              <button  class="bg-green-600 my-8 text-white px-4 py-2 rounded-md border border-orange-500 hover:bg-white hover:text-red-500"
+              <ion-button color="success"  class=" my-8 text-white  rounded-md border hover:bg-white"
               (click)="logout()">
                 Logout
-              </button>
+              </ion-button>
             </nav>
 
 

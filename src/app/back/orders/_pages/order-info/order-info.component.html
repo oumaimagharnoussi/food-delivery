@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" class="ion-no-border" mode="ios">
   <ion-toolbar>
     <ion-buttons  slot="start">
-      <ion-back-button defaultHref="/orders"></ion-back-button>
+      <ion-back-button color="light"  defaultHref="/orders"></ion-back-button>
     </ion-buttons>
 
     <ion-title>
@@ -17,7 +17,7 @@
   <ion-item class="mb-3">
     <ion-icon name="cart-outline" slot="start"></ion-icon>
     <ion-label>Order details</ion-label>
-    <ion-button slot="end" color="light" (click)="presentModal()"><ion-icon size="medium" name="navigate-outline"></ion-icon></ion-button>
+    <ion-button slot="end" color="success" (click)="presentModal()"><ion-icon size="medium" name="navigate-outline"></ion-icon></ion-button>
   
    
   </ion-item>
@@ -30,12 +30,24 @@
       <div>
         <h3>#{{order?.id}}</h3>
       </div>
+      <div  *ngIf="order?.status=='INDELIVERY'" >
+        <h2>Accepted date</h2>
+      </div>
+      <div  *ngIf="order?.status=='INDELIVERY'" >
+        <h3>{{order?.acceptedDeliveryAt | date : 'short' }}</h3>
+      </div>
 
       <div>
         <h2>Total price</h2>
       </div>
       <div>
         <h3>{{order?.totalPrice}} € </h3>
+      </div>
+      <div>
+        <h2>Comission</h2>
+      </div>
+      <div>
+        <h3>{{order?.totalPrice*0.2|number}} € </h3>
       </div>
       <div>
         <h2>Payment</h2>
@@ -53,7 +65,7 @@
         <h2>Distance to resturant</h2>
       </div>
       <div>
-        <h3>0.8KM</h3>
+        <h3>0.8 KM </h3>
       </div>
       <div>
         <h2>Distance to client</h2>
@@ -72,7 +84,7 @@
     
       
     </div>
-    <ion-button  *ngIf="order?.status=='INDELIVERY'" color="success" expand="full" ><b class="text-white"> Finish order</b></ion-button>
+    <ion-button  *ngIf="order?.status=='INDELIVERY'" color="success" expand="full" (click)="finish()" ><b class="text-white"> Finish order</b></ion-button>
 
     <ion-button  *ngIf="order?.status!='INDELIVERY'" color="success" expand="full"  (click)="accept()"><b class="text-white"> ACCEPT</b>
     </ion-button>

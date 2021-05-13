@@ -43,7 +43,7 @@ getAcceptedOrders(id,page){
   });
 
   const options = { headers: headers };
-  return this.http.get(host+'/api/orders?status=INDELIVERY&delivery.id='+id+'&page='+page , options).pipe(
+  return this.http.get(host+'/api/orders?status=INDELIVERY&delivery.id='+id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc' , options).pipe(
     map(this.extractData));
 
 
@@ -75,7 +75,15 @@ getAcceptedOrders(id,page){
   accept(order_id,delivery_id): Observable<any> {
     return this.http.put(host+'/api/orders/'+order_id, {
       delivery:"api/deliveries/"+delivery_id,
-      status: "INDELIVERY"
+      status: "INDELIVERY",
+      acceptedDeliveryAt: new Date()
+    }, httpOptions);
+  }
+  finish(order_id,delivery_id): Observable<any> {
+    return this.http.put(host+'/api/orders/'+order_id, {
+      
+      status: "DELIVERED",
+    
     }, httpOptions);
   }
 
