@@ -43,7 +43,7 @@ export class ComissionService {
     });
 
     const options = { headers: headers };
-    return this.http.get(host+'/api/comissions?page='+page+'&delivery.id='+id  , options).pipe(
+    return this.http.get(host+'/api/comissions?page='+page+'&delivery.id='+id+'&order%5BcreatedAt%5D=desc'  , options).pipe(
       map(this.extractData));
   }
 }

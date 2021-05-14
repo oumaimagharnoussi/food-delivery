@@ -186,8 +186,12 @@ export class AuthService {
 
   logout(): Promise<void> {
     this.authState.next(false);
-    return this._storage.remove("access_token");
-    this.router.navigate(['/index'])
+    this._storage.remove("access_token");
+    this._storage.remove("acceptedList");
+    this._storage.remove("comissionList");
+    this._storage.remove("deliveryInfo");
+      return this._storage.remove("dark");
+  
   }
 
 

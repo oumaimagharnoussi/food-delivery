@@ -38,7 +38,10 @@
             ],
             "styles": [
               "src/theme/variables.scss",
-              "src/global.scss"
+              "src/global.scss",
+              {
+                "input": "node_modules/flag-icon-css/sass/flag-icon.scss"
+              }
             ],
             "scripts": []
           },

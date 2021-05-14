@@ -23,12 +23,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { TextAvatarModule } from './text-avatar/text-avatar.module';
-
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule,FormsModule, ReactiveFormsModule, IonicModule.forRoot(), AppRoutingModule,FrontModule,BackModule,
+  imports: [BrowserModule,FormsModule,
+    IonIntlTelInputModule,
+     ReactiveFormsModule, IonicModule.forRoot(), AppRoutingModule,FrontModule,BackModule,
     IonicStorageModule.forRoot({
       name: '__mydb',
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]

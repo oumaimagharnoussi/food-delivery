@@ -22,6 +22,7 @@ export class PaymentinfoComponent implements OnInit {
   cardExpMonth:string;
   cardExpYear:string;
 
+  phoneNumber :any;
 
   constructor(private platform:Platform,
     private auth:AuthService,
@@ -29,6 +30,9 @@ export class PaymentinfoComponent implements OnInit {
     private http:HTTP) {
 
     this.radioSelected = "card";
+   }
+   show(){
+     console.log(this.phoneNumber)
    }
 
   ngOnInit() {}
@@ -74,7 +78,7 @@ export class PaymentinfoComponent implements OnInit {
         if(this.money){
           let data={
             type:"MOBILEMONEY",
-            mobile:this.mobile,
+            mobile:this.phoneNumber.internationalNumber,
             delivery: "api/deliveries/"+response.data.id
           }
           console.log(data)

@@ -121,7 +121,7 @@ gotToTop() {
         }else{
           let data=JSON.parse(response.data)
           this.http.setServerTrustMode("nocheck");
-          this.http.get(environment.BACK_API_MOBILE+'/api/comissions?page='+page+'&delivery.id='+data.data.id ,  {},
+          this.http.get(environment.BACK_API_MOBILE+'/api/comissions?page='+page+'&delivery.id='+data.data.id+'&order%5BcreatedAt%5D=desc' ,  {},
           {
             "Content-Type": "application/json",
             "accept": "application/json"

@@ -9,6 +9,7 @@ import { HomeComponent } from './_pages/home/home.component';
 import { PaymentinfoComponent } from './_pages/paymentinfo/paymentinfo.component';
 import { ProfileComponent } from './_pages/profile/profile.component';
 import { PayoutListComponent } from './_pages/payout-list/payout-list.component';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 
 @NgModule({
   declarations: [HomeComponent,PaymentinfoComponent,ProfileComponent,PayoutListComponent],
@@ -17,7 +18,8 @@ import { PayoutListComponent } from './_pages/payout-list/payout-list.component'
     SettingsRoutingModule,
     IonicModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IonIntlTelInputModule
 
   ]
 })

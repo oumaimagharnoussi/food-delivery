@@ -83,7 +83,7 @@ export class PayoutListComponent implements OnInit {
         const alert = await this.alertController.create({
           cssClass: 'my-custom-class',
           header: 'Confirm!',
-          message: 'Message <strong>text</strong>!!!',
+          message: 'Are you sure <strong>delete</strong> payment method?',
           buttons: [
             {
               text: 'Cancel',

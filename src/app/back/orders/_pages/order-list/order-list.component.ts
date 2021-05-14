@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
-import { AlertController, IonContent, MenuController, Platform } from '@ionic/angular';
+import { AlertController, IonContent, MenuController, ModalController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { MessagingService } from 'src/app/front/_services/messaging.service';
 import { OrderService } from '../../_services/order.service';
@@ -17,6 +17,7 @@ import {
 
 
 import { Router } from '@angular/router';
+import { ModalMapComponent } from '../modal-map/modal-map.component';
 
 const { PushNotifications } = Plugins;
 const {Network} =Plugins;
@@ -45,7 +46,8 @@ export class OrderListComponent implements OnInit {
     private order_service:OrderService, 
     private geolocation: Geolocation,
     private messagin:MessagingService,
-    private menu: MenuController) { 
+    private menu: MenuController,
+    public modalController: ModalController) { 
 
     let handler=Network.addListener('networkStatusChange',async(status)=>{
       if (status.connected){
@@ -66,6 +68,24 @@ export class OrderListComponent implements OnInit {
     this.menu.open('first');
   }
 
+  async presentModal(order) {
+    const modal = await this.modalController.create({
+      component: ModalMapComponent,
+      cssClass: 'my-custom-class',
+      componentProps: {
+        'source': {
+          lat: 35.38303302544718,
+          lng: 8.902773358214844
+        },
+        'destination': {
+          lat: 35.48303302544718,
+          lng: 8.702773358214844
+        }
+      }
+
+    });
+    return await modal.present();
+  }
 
   gotToTop() {
     this.content.scrollToTop(1400);
