@@ -17,7 +17,7 @@
   <ion-item class="mb-3">
     <ion-icon name="cart-outline" slot="start"></ion-icon>
     <ion-label>Order details</ion-label>
-    <ion-button slot="end" color="success" (click)="presentModal()"><ion-icon size="medium" name="navigate-outline"></ion-icon></ion-button>
+    <ion-button slot="end" color="tertiary" (click)="presentModal()"><ion-icon size="medium" name="navigate-outline"></ion-icon></ion-button>
   
    
   </ion-item>
@@ -90,9 +90,9 @@
     
       
     </div>
-    <ion-button  *ngIf="order?.status=='INDELIVERY'" color="success" expand="full" (click)="finish()" ><b class="text-white"> Finish order</b></ion-button>
+    <ion-button  *ngIf="order?.status=='INDELIVERY'" color="tertiary" expand="full" (click)="finish()" ><b class="text-white"> Finish order</b></ion-button>
 
-    <ion-button  *ngIf="order?.status!='INDELIVERY'" color="success" expand="full"  (click)="accept()"><b class="text-white"> ACCEPT</b>
+    <ion-button  *ngIf="order?.status!='INDELIVERY'" color="tertiary" expand="full"  (click)="accept()"><b class="text-white"> ACCEPT</b>
     </ion-button>
 
 </div>
