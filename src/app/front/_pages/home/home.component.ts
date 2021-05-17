@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
 import {environment} from 'src/environments/environment'
-import {HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AuthService } from '../../_services/auth.service';
 import { MessagingService } from '../../_services/messaging.service';
@@ -147,8 +147,14 @@ onClick(event){
 }
 
 greetings(url: string) {
-  return this.http.get(`${url}/greetings`, 
-    {headers:{"accept": "application/json"}
-    });
+ const httpOptions = {
+    headers: new HttpHeaders({
+      
+      'Content-Type':  'application/json',
+      'accept': 'application/json'
+   
+    })
+  };
+  return this.http.get(`${url}/greetings?page=1`, httpOptions);
 }
 }
