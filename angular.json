@@ -40,7 +40,8 @@
               "src/theme/variables.scss",
               "src/global.scss",
               {
-                "input": "node_modules/flag-icon-css/sass/flag-icon.scss"
+                "input": "node_modules/flag-icon-css/sass/flag-icon.scss", "inject": false,
+                "bundleName": "flag-icon-css"
               }
             ],
             "scripts": []
