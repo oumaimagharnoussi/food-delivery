@@ -39,10 +39,7 @@
             "styles": [
               "src/theme/variables.scss",
               "src/global.scss",
-              {
-                "input": "node_modules/flag-icon-css/sass/flag-icon.scss", "inject": false,
-                "bundleName": "flag-icon-css"
-              }
+              "node_modules/flag-icon-css/css/flag-icon.min.css"
             ],
             "scripts": []
           },
