@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
+import {environment} from 'src/environments/environment'
+import {HttpClient } from '@angular/common/http';
 
 import { AuthService } from '../../_services/auth.service';
 import { MessagingService } from '../../_services/messaging.service';
@@ -15,11 +17,12 @@ export class HomeComponent implements OnInit {
   dark=false;
   pushes: any = [];
   token="";
+  _greetings: any = [];
 
   constructor(private storage: AuthService, private router: Router,
     private messagingService: MessagingService,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController) { 
+    private toastCtrl: ToastController, private http: HttpClient) { 
       this.storage.ifNotLoggedIn()
       this.listenForMessages()
 
@@ -91,7 +94,6 @@ export class HomeComponent implements OnInit {
 
 
 
-
     // to check if we have permission
 /*this.push.hasPermission()
 .then((res: any) => {
@@ -116,6 +118,11 @@ export class HomeComponent implements OnInit {
 
    });
 
+   this.greetings(environment.BACK_API_WPA).subscribe(
+    (data) => this._greetings = data
+  );
+
+
 }
 
 onClick(event){
@@ -139,4 +146,9 @@ onClick(event){
   }
 }
 
+greetings(url: string) {
+  return this.http.get(`${url}/greetings`, 
+    {headers:{"accept": "application/json"}
+    });
+}
 }
