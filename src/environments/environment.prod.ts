@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+
   BACK_API_WPA:'http://192.168.1.2:8000',
   BACK_API_MOBILE:'http://192.168.1.2:8000',
   firebase :{
