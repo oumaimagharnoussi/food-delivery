@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { OrderService } from '../../_services/order.service';
 import { ModalMapComponent } from '../modal-map/modal-map.component';
-import {environment} from 'src/environments/environment'
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-order-info',
@@ -25,7 +23,7 @@ export class OrderInfoComponent implements OnInit {
   delivery: any;
 
   constructor(private platform:Platform,
-     private http: HTTP,
+
       private order_service:OrderService,
       public alertController: AlertController,
       public modalController: ModalController,
@@ -68,52 +66,25 @@ export class OrderInfoComponent implements OnInit {
   }
 
   getOrder(id) {
-    if(!this.platform.is("desktop")&&!this.platform.is("mobileweb")){
-
-      this.http.setServerTrustMode("nocheck");
-      this.http.sendRequest(environment.BACK_API_MOBILE+'/api/orders/'+id ,{method: "get"
-      ,serializer:"json",responseType:"json"}).then((data) => {
-           this.order=data.data;
-           this.destination.lat=data.data.restaurant.currentLatitude;
-           this.destination.lng=data.data.restaurant.currentLongitude;
-         })
-    }else
-    {
+  
+ 
       this.order_service.getOrder(id).subscribe((data) => { 
         this.order=data;
         this.destination.lat=data.restaurant.currentLatitude;
         this.destination.lng=data.restaurant.currentLongitude;
 
       })
-    }
+    
    }
 
    getInfo(id) {
-    if(!this.platform.is("desktop")&&!this.platform.is("mobileweb")){
-
-     this.http.setServerTrustMode("nocheck");
-
-     this.http.sendRequest(environment.BACK_API_MOBILE+'/api/deliveries/'+id ,{method: "get"
-     ,serializer:"json",responseType:"json"}).then((data) => {
-       
-        this.source.lat=data.data.currentLatitude;
-        this.source.lng=data.data.currentLongitude;
-        this.delivery=data.data;
-        
-        })
-    }else{
-
+   
      this.order_service.getDelivery(id).subscribe((data) => {
       this.delivery=data;
       this.source.lat=data.currentLatitude;
       this.source.lng=data.currentLongitude;
       })
 
-    }
-
-   
-      
-  
   }
 
    async accept(){ 
@@ -182,10 +153,10 @@ export class OrderInfoComponent implements OnInit {
 
   acceptOrder(id){
 
-    if(this.platform.is('mobileweb') || this.platform.is('desktop')){
+  
       this.platform.ready().then(async() => {
         await  this.auth.getUser().then((response) => {
-          this.order_service.accept(id,response.data.id).subscribe(
+          this.order_service.accept(id,response.data).subscribe(
             data=>{
               this.router.navigate(['/orders'])
             },err=>{
@@ -194,71 +165,19 @@ export class OrderInfoComponent implements OnInit {
         })
   
   })
-    }else{
-      this.platform.ready().then(async() => {
-      await  this.auth.getUser().then((response) => {
-        let data=JSON.parse(response.data);
-        this.http.sendRequest(environment.BACK_API_MOBILE+'/api/orders/'+id,{method: "put",data:
-        {
     
-          status:  "INDELIVERY",
-          delivery: "api/deliveries/"+data.data.id
-  
-                    
-        }
-        ,serializer:"json"})
-
-      })
-    })
-
-
-    }
 
 
 
   }
 
   finishOrder(id){
-
-    if(this.platform.is('mobileweb') || this.platform.is('desktop')){
-      this.platform.ready().then(async() => {
-        await  this.auth.getUser().then((response) => {
-          this.order_service.finish(id,response.data.id).subscribe(
+      this.order_service.finish(id).subscribe(
             data=>{
               window.location.href = "/app/payments";
           
-            },err=>{
             }
           )
-        })
-  
-  })
-    }else{
-      this.platform.ready().then(async() => {
-      await  this.auth.getUser().then((response) => {
-        let data=JSON.parse(response.data);
-        this.http.sendRequest(environment.BACK_API_MOBILE+'/api/orders/'+id,{method: "put",data:
-        {
-    
-          status:  "DELIVERED",
-          delivery: "api/deliveries/"+data.data.id,
-          deliveredAt: new Date()
-  
-                    
-        }
-        ,serializer:"json"}).then(
-          ()=>{
-            window.location.href = "/app/payments";
-          }
-        )
-
-      })
-    })
-
-
-    }
-
-
 
   }
 

@@ -23,8 +23,8 @@ export class ProfileComponent implements OnInit {
   offline: boolean;
 
   constructor(private comisson_service:ComissionService,
-    private platform:Platform,private auth:AuthService,
-    private http: HTTP,
+    private platform:Platform,
+    private auth:AuthService,
     private changeRef: ChangeDetectorRef) { }
 
  async ngOnInit() {
@@ -69,8 +69,8 @@ export class ProfileComponent implements OnInit {
 
      
       await  this.auth.getUser().then((response) => {
-        if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-          this.comisson_service.getDelivery(response.data.id).subscribe(
+     
+          this.comisson_service.getDelivery(response.data).subscribe(
             data=>{
               this.delivery=data
               this.auth.set('deliveryInfo',this.delivery)
@@ -78,20 +78,7 @@ export class ProfileComponent implements OnInit {
             }
           )
 
-        }else{
-          let data=JSON.parse(response.data)
-          this.http.setServerTrustMode("nocheck");
-          this.http.get(environment.BACK_API_MOBILE+'/api/deliveries/'+data.data.id ,  {},
-          {
-            "Content-Type": "application/json",
-            "accept": "application/json"
-          }  ).then((data ) => {
-            console.log(data)
-            
-               this.delivery= JSON.parse( data.data)
-               this.auth.set('deliveryInfo',this.delivery)
-          })
-        }
+        
       })
     })
   }

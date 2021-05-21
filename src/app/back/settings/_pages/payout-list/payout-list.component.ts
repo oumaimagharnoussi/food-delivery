@@ -18,59 +18,90 @@ const {Network} =Plugins;
 export class PayoutListComponent implements OnInit {
   delivery: any;
   offline: boolean;
+  userID: any;
 
   constructor(private comisson_service:ComissionService,
     private platform:Platform,private auth:AuthService,
-    private http: HTTP,
+   
     private router:Router,
     public alertController: AlertController,
     private  payour_service : PayoutService,
     private changeRef: ChangeDetectorRef,
-    private toastController: ToastController) { }
-
- async   addPage(){
-      let status=await Network.getStatus();
-      if(status.connected){
-        this.router.navigate(['/app/settings/add'])
-      }else{
-        this.notify("please connect to internet","warning")
-      }
-
+    private toastController: ToastController) { 
     
     }
-    async  notify(message,color){
-      const toast1 = await this.toastController.create({
-        message: message,
-        duration: 2000,
-        color:color
-      });
-      toast1.present();
-
+  async  offlineMode(){
+      let status=await Network.getStatus();
+      if(status.connected){
+        
+        this.getInfo()
+        this.offline=false;
+        this.changeRef.detectChanges();
+      }else{
+        
+        this.offline=true;
+        this.auth.get("deliveryInfo").then(
+          test=>{
+            this.delivery=test;
+          }
+         )
+        this.changeRef.detectChanges();
+        
+      }
+  
+      let handler=Network.addListener('networkStatusChange',async(status)=>{
+        if (status.connected){
+          
+     
+          this.getInfo()
+  
+          this.offline=false;
+          this.changeRef.detectChanges();
+        }else{
+          
+          this.offline=true;
+          this.auth.get("deliveryInfo").then(
+            test=>{
+              this.delivery=test;
+            }
+           )
+          this.changeRef.detectChanges();
+        }
+       })
     }
+    async  ngOnInit() { 
+     this.offlineMode();
+
+  
+     // this.getInfo()
+    }
+  
+
+    getInfo(){
+      this.platform.ready().then(async() => {
+    
+          await  this.auth.getUser().then((response) => {
+      
+           
+            this.comisson_service.getDelivery(response.data).subscribe(
+              data=>{
+                this.delivery=data
+                this.auth.set('deliveryInfo',this.delivery)
+              }
+            )
+       
+        })
+      })
+    }
+
+
     delete(id){
 
-      if(this.platform.is("desktop")||this.platform.is("mobileweb")){
+     
         this.payour_service.deleteMethod(id).subscribe(
-          data=>{
-          console.log("removed")
-          this.getInfo()
-          }
+          data => this.getInfo()   
         )
-
-      }else{
-      
-        this.http.setServerTrustMode("nocheck");
-        this.http.delete(environment.BACK_API_MOBILE+'/api/payment_methods/'+id ,  {},
-        {
-          "Content-Type": "application/json",
-          "accept": "application/json"
-        }  ).then((data ) => {
-          console.log("deleted")
-          this.getInfo()
-          
-             
-        })
-      }
+     
 
     }
 
@@ -90,13 +121,13 @@ export class PayoutListComponent implements OnInit {
               role: 'cancel',
               cssClass: 'secondary',
               handler: (blah) => {
-                console.log('Confirm Cancel: blah');
+               
               }
             }, {
               text: 'Okay',
               handler: () => {
                 this.delete(id)
-                console.log('Confirm Okay');
+               
               }
             }
           ]
@@ -107,74 +138,24 @@ export class PayoutListComponent implements OnInit {
     
     }
 
-async  ngOnInit() { 
-     let status=await Network.getStatus();
-    if(status.connected){
-      this.getInfo()
 
-      this.offline=false;
-      this.changeRef.detectChanges();
+  async addPage(){
+    let status=await Network.getStatus();
+    if(status.connected){
+      this.router.navigate(['/app/settings/add'])
     }else{
-      this.offline=true;
-      this.auth.get("deliveryInfo").then(
-        test=>{
-          this.delivery=test;
-        }
-       )
-      this.changeRef.detectChanges();
-      
+      this.notify("please connect to internet","warning")
     }
 
-    let handler=Network.addListener('networkStatusChange',async(status)=>{
-      if (status.connected){
-   
-        this.getInfo()
-
-        this.offline=false;
-        this.changeRef.detectChanges();
-      }else{
-        this.offline=true;
-        this.auth.get("deliveryInfo").then(
-          test=>{
-            this.delivery=test;
-          }
-         )
-        this.changeRef.detectChanges();
-      }
-     })
-
-this.getInfo()
   }
-  getInfo(){
-    this.platform.ready().then(async() => {
+  async  notify(message,color){
+    const toast1 = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color:color
+    });
+    toast1.present();
 
-     
-      await  this.auth.getUser().then((response) => {
-        if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-          this.comisson_service.getDelivery(response.data.id).subscribe(
-            data=>{
-              this.delivery=data
-              this.auth.set('deliveryInfo',this.delivery)
-              console.log(this.delivery)
-            }
-          )
-
-        }else{
-          let data=JSON.parse(response.data)
-          this.http.setServerTrustMode("nocheck");
-          this.http.get(environment.BACK_API_MOBILE+'/api/deliveries/'+data.data.id ,  {},
-          {
-            "Content-Type": "application/json",
-            "accept": "application/json"
-          }  ).then((data ) => {
-            console.log(data)
-            
-               this.delivery= JSON.parse( data.data)
-               this.auth.set('deliveryInfo',this.delivery)
-          })
-        }
-      })
-    })
   }
 
 }

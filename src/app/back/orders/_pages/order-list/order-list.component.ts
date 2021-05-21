@@ -41,7 +41,6 @@ export class OrderListComponent implements OnInit {
     private changeRef: ChangeDetectorRef,
     private sse:SseService,
     private platform: Platform,
-    private http: HTTP,
     private storage: AuthService,
     private order_service:OrderService, 
     private geolocation: Geolocation,
@@ -139,32 +138,6 @@ export class OrderListComponent implements OnInit {
   detail(id){
     this.router.navigate(['/orders/info/'+id])
   }
-  async accept(id){
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Are you sure delivering order',
-      message: '',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-            
-          }
-        }, {
-          text: 'Okay',
-          handler: () => {
-            console.log('Confirm Okay');
-            this.acceptOrder(id)
-          }
-        }
-      ]
-    });
-  
-    await alert.present();
-  }
 
   listen(){
              // On success, we should be able to receive notifications
@@ -201,9 +174,9 @@ export class OrderListComponent implements OnInit {
              }
            );
   }
-async  getOrders(id) {
-    if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-      this.order_service.getOrders(id).subscribe((data: any[]) => {
+async  getOrders(user) {
+ 
+      this.order_service.getOrders(user).subscribe((data: any[]) => {
       
         this.orders=data;
         this.attempts=0
@@ -212,7 +185,7 @@ async  getOrders(id) {
        
       },err=>{
         if(this.attempts<10){
-          this.getOrders(id)
+          this.getOrders(user)
           this.attempts++;
         }else{
           console.log("problem with your backend")
@@ -222,28 +195,7 @@ async  getOrders(id) {
       })
 
 
-    }else{
- 
-      this.http.setServerTrustMode("nocheck");
-
-      this.http.sendRequest(environment.BACK_API_MOBILE+'/api/nearby_orders/'+id ,{method: "get"
-      ,serializer:"json",responseType:"json"}).then((data) => {
-        
-           this.orders=data.data;
-           this.changeRef.detectChanges();
-           console.log(this.orders)
-           this.attempts=0
-          
-         }).catch(err=>{
-          if(this.attempts<10){
-            this.getOrders(id)
-            this.attempts++;
-          }else{
-            console.log("problem with your backend")
-          }
-         })
-    }
-   
+    
 
     
        
@@ -271,29 +223,9 @@ async  getOrders(id) {
     {
       this.platform.ready().then(async() => {
         await  this.storage.getUser().then((response) => {
-    
-         
           if (response) { 
-    
-            if(this.platform.is("mobileweb")||this.platform.is("desktop")){
-            //  this.sse.GetExchangeData('http://127.0.0.1:8000/.well-known/mercure?topic=http://127.0.0.1:8000/api/orders/{id}');
-    
-              this.getOrders(response.data.id);
-            }else{
-              //this.sse.GetExchangeData('http://10.0.2.2:8000/.well-known/mercure?topic=http://127.0.0.1:8000/api/orders/{id}');
-              console.log(response)
-              //  this.user=response.data
-               // console.log(response.data.data)
-                let data=JSON.parse(response.data)
-               // console.log(data)
-                this.getOrders(data.data.id);
-            }
-    
-    
-    
-    
-          }else{
-           // this.router.navigate(['/login'])
+            this.getOrders(response.data);
+
           }
         });
       });
@@ -307,31 +239,17 @@ async  getOrders(id) {
      
       if (response) { 
 
-        if(this.platform.is("mobileweb")||this.platform.is("desktop")){
+     
           this.sse.GetExchangeData(environment.BACK_API_WPA+'/.well-known/mercure?topic='+environment.BACK_API_WPA+'/api/orders/{id}');
+        
+            this.getOrders(response.data);
 
-          this.getOrders(response.data.id);
-        }else{
-          this.sse.GetExchangeData(environment.BACK_API_MOBILE+'/.well-known/mercure?topic='+environment.BACK_API_WPA+'/api/orders/{id}');
-          console.log(response)
-          //  this.user=response.data
-           // console.log(response.data.data)
-            let data=JSON.parse(response.data)
-           // console.log(data)
-            this.getOrders(data.data.id);
-        }
-
-
-
-
-      }else{
-       // this.router.navigate(['/login'])
       }
     });
   });
 
-
-  
+  //TODO
+  /*
   this.geolocation.getCurrentPosition().then(async (resp) => {
 
     if(!this.platform.is('desktop')&&!this.platform.is('mobileweb')){
@@ -350,8 +268,6 @@ async  getOrders(id) {
         )
       
       
-
-    }else{
 
     }
 
@@ -387,7 +303,7 @@ async  getOrders(id) {
     });
   }
     
-   });
+   });*/
 
 
 
@@ -421,43 +337,7 @@ async  getOrders(id) {
     }
   }
 
-  acceptOrder(id){
 
-    if(this.platform.is('mobileweb') || this.platform.is('desktop')){
-      this.platform.ready().then(async() => {
-        await  this.storage.getUser().then((response) => {
-          this.order_service.accept(id,response.data.id).subscribe(
-            data=>{
-            },err=>{
-            }
-          )
-        })
-  
-  })
-    }else{
-      this.platform.ready().then(async() => {
-      await  this.storage.getUser().then((response) => {
-        let data=JSON.parse(response.data);
-        this.http.sendRequest(environment.BACK_API_MOBILE+'/api/orders/'+id,{method: "put",data:
-        {
-    
-          status:  "INDELIVERY",
-          delivery: "api/deliveries/"+data.data.id,
-          acceptedDeliveryAt: new Date()
-  
-                    
-        }
-        ,serializer:"json"})
-
-      })
-    })
-
-
-    }
-
-
-
-  }
 
   getScrollPos(pos: number) {
     if (pos > this.platform.height()) {

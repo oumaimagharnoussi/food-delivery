@@ -26,8 +26,8 @@ export class PaymentinfoComponent implements OnInit {
 
   constructor(private platform:Platform,
     private auth:AuthService,
-    private payout_service:PayoutService,
-    private http:HTTP) {
+    private payout_service:PayoutService
+    ) {
 
     this.radioSelected = "card";
    }
@@ -49,61 +49,34 @@ export class PaymentinfoComponent implements OnInit {
             cardExpYear: Number( this.cardExpYear),
             delivery: "api/deliveries/"+response.data.id
           }
-          console.log(data)
-
-          if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-            this.payout_service.addMethod(data).subscribe(
+       
+        
+            this.payout_service.addMethod(data,response.data).subscribe(
               data=>{
-                console.log(data)
+            
                 window.location.href = "/app/settings/payout";
               }
             )
 
-          }else{
-            let user=JSON.parse(response.data);
-            data.delivery=user.data.id;
-            this.http.setServerTrustMode("nocheck");
-
-            this.http.sendRequest(environment.BACK_API_MOBILE+'/api/payment_methods',{method: "post",data:
-         data
-            ,serializer:"json"}).then(
-              response=>{
-                window.location.href = "/app/settings/payout";
-              }
-            )
-
-          }
+          
 
         }
         if(this.money){
           let data={
             type:"MOBILEMONEY",
             mobile:this.phoneNumber.internationalNumber,
-            delivery: "api/deliveries/"+response.data.id
+            delivery: ""
           }
-          console.log(data)
-          if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-            this.payout_service.addMethod(data).subscribe(
+        
+          
+            this.payout_service.addMethod(data,response.data).subscribe(
               data=>{
-                console.log(data)
+             
                 window.location.href = "/app/settings/payout";
               }
             )
-          }else{
-            let user=JSON.parse(response.data);
-            data.delivery=user.data.id;
-            this.http.setServerTrustMode("nocheck");
-
-            this.http.sendRequest(environment.BACK_API_MOBILE+'/api/payment_methods',{method: "post",data:
-         data
-            ,serializer:"json"}).then(
-              response=>{
-                window.location.href = "/app/settings/payout";
-
-              }
-            )
-            
-          }
+          
+           
     
         }
         if(this.paypal){
@@ -112,29 +85,15 @@ export class PaymentinfoComponent implements OnInit {
             email:this.email,
             delivery: "api/deliveries/"+response.data.id
           }
-          console.log(data)
-          if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-            this.payout_service.addMethod(data).subscribe(
+        
+     
+            this.payout_service.addMethod(data,response.data).subscribe(
               data=>{
-                console.log(data)
+               
                 window.location.href = "/app/settings/payout";
               }
             )
-          }else{
-            let user=JSON.parse(response.data);
-            data.delivery=user.data.id;
-            this.http.setServerTrustMode("nocheck");
-
-            this.http.sendRequest(environment.BACK_API_MOBILE+'/api/payment_methods',{method: "post",data:
-         data
-            ,serializer:"json"}).then(
-              response=>{
-                window.location.href = "/app/settings/payout";
-
-              }
-            )
-            
-          }
+          
     
         }
 

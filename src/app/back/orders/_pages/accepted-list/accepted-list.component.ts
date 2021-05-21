@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { HTTP } from '@ionic-native/http/ngx';
 import { IonContent, ModalController, Platform, ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { OrderService } from '../../_services/order.service';
@@ -7,7 +6,6 @@ import { SseService } from '../../_services/sse.service';
 import { ModalMapComponent } from '../modal-map/modal-map.component';
 import { IonInfiniteScroll } from '@ionic/angular';
 import { Router } from '@angular/router';
-import {environment} from 'src/environments/environment'
 import { StorageService } from 'src/app/front/_services/storage.service';
 import { 
   Plugins
@@ -44,7 +42,6 @@ export class AcceptedListComponent implements OnInit {
     private platform:Platform,
     private storage: AuthService,
     public modalController: ModalController,
-    private http: HTTP,
     private sse:SseService,
     private router:Router,
     private offline_storage:StorageService,
@@ -156,11 +153,10 @@ export class AcceptedListComponent implements OnInit {
   getAcceptedOrders(page){
   
     
-    if(this.platform.is('mobileweb') || this.platform.is('desktop')){
-     // this.sse.GetExchangeData('http://127.0.0.1:8000/.well-known/mercure?topic=http://127.0.0.1:8000/api/orders/{id}');
+  
       this.platform.ready().then(async() => {
         await  this.storage.getUser().then((response) => {
-          this.order_service.getAcceptedOrders(response.data.id,page).subscribe(
+          this.order_service.getAcceptedOrders(response.data,page).subscribe(
              (data : any[])=>{
                if(page==1){
                 this.storage.set('acceptedList',data)
@@ -172,27 +168,7 @@ export class AcceptedListComponent implements OnInit {
           )
         })
       })
-    }else{
-   //   this.sse.GetExchangeData('http://10.0.2.2:8000/.well-known/mercure?topic=http://127.0.0.1:8000/api/orders/{id}');
-      this.platform.ready().then(async() => {
-        await  this.storage.getUser().then((response) => {
-          let data=JSON.parse(response.data)
-          this.http.setServerTrustMode("nocheck");
-          this.http.get(environment.BACK_API_MOBILE+'/api/orders?status=INDELIVERY&delivery.id='+data.data.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc' ,  {},
-          {
-            "Content-Type": "application/json",
-            "accept": "application/json"
-          }  ).then((data ) => {
-      
-            this.storage.set('acceptedList',JSON.parse(data.data))
-               this.orders= this.orders.concat( JSON.parse(data.data))
-               this.loading=false
-          })
-
-       
-        })
-      })
-    }
+    
 }
 
   async presentModal(order) {

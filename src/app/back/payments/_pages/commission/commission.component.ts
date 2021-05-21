@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { HTTP } from '@ionic-native/http/ngx';
+
 import { IonContent, IonInfiniteScroll, ModalController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { ComissionService } from '../../_services/comission.service';
@@ -27,15 +27,17 @@ export class CommissionComponent implements OnInit {
   };
   offline: boolean;
   attempts=0;
+  userID: any;
   constructor(private router: Router,private comisson_service:ComissionService,
     private platform:Platform,private auth:AuthService,
     public modalController: ModalController,
-    private http: HTTP,
+    
     private changeRef: ChangeDetectorRef) { }
 
 async  ngOnInit() {
     let status=await Network.getStatus();
     if(status.connected){
+      
       this.getComissions(this.page)
       this.offline=false;
       this.changeRef.detectChanges();
@@ -50,6 +52,7 @@ async  ngOnInit() {
     }
     let handler=Network.addListener('networkStatusChange',async(status)=>{
       if (status.connected){
+        this.comissions.length=0;
    
         this.getComissions(1)
         this.changeRef.detectChanges();
@@ -95,55 +98,37 @@ gotToTop() {
 }
  async getComissions(page){
     this.platform.ready().then(async() => {
-     
       await  this.auth.getUser().then((response) => {
-        if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-          this.comisson_service.getComissions(response.data.id,page).subscribe(
-            data=>{
-              this.comissions=this.comissions.concat(data)
-              this.attempts=0
-              this.test=data
-              if(page==1){
-                this.auth.set('comissionList',data)
-               }
-            
-            },err=>{
-              if(this.attempts<10){
-                this.getComissions(page)
-                this.attempts++
-              }else{
-                console.log('backend error')
-              }
-             
-            }
-          )
+  
+        
 
-        }else{
-          let data=JSON.parse(response.data)
-          this.http.setServerTrustMode("nocheck");
-          this.http.get(environment.BACK_API_MOBILE+'/api/comissions?page='+page+'&delivery.id='+data.data.id+'&order%5BcreatedAt%5D=desc' ,  {},
-          {
-            "Content-Type": "application/json",
-            "accept": "application/json"
-          }  ).then((data ) => {
-            this.attempts=0
-            console.log(data)
-            
-               this.comissions= this.comissions.concat(JSON.parse( data.data)) 
-               this.test=JSON.parse( data.data)
-               if(page==1){
-                this.auth.set('comissionList',JSON.parse( data.data))
-               }
-          }).catch(err=>{
+        this.comisson_service.getComissions(response.data ,page).subscribe(
+          data=>{
+            this.comissions=this.comissions.concat(data);
+            this.attempts=0;
+            this.test=data;
+            if(page==1){
+              this.auth.set('comissionList',data)
+             }
+          
+          },err=>{
             if(this.attempts<10){
               this.getComissions(page)
               this.attempts++
             }else{
               console.log('backend error')
             }
-          })
-        }
-      })
+           
+          }
+        )
+
+      
+   
+
+
+    
+    })
+      
     })
 
   }
