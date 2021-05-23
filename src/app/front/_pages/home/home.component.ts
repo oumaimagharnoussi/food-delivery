@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
 import { AuthService } from '../../_services/auth.service';
-
-
-
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -14,9 +12,10 @@ export class HomeComponent implements OnInit {
   dark=false;
   pushes: any = [];
   token="";
+  public  url = 'https://food.dev.confledis.fr/';
+  private _greetings: any;
 
-
-  constructor(private storage: AuthService, private router: Router,
+  constructor(private storage: AuthService, private router: Router, private http: HttpClient
  ) { 
       this.storage.ifNotLoggedIn()
     
@@ -55,9 +54,18 @@ export class HomeComponent implements OnInit {
 
    });
 
+   this.greetings(this.url).subscribe(
+    (data) => {this._greetings = data;
+    console.log(data);
+    }
+  );
 
 
-
+}
+greetings(url: string) {
+  return this.http.get(`${url}/greetings`, 
+    {headers:{"accept": "application/json"}
+    });
 }
 
 onClick(event){
