@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/front/_services/auth.service';
 import { OrderService } from '../../_services/order.service';
 import { ModalMapComponent } from '../modal-map/modal-map.component';
 import { Router } from '@angular/router';
+import { DeliveryService } from 'src/app/back/settings/_services/delivery.service';
 @Component({
   selector: 'app-order-info',
   templateUrl: './order-info.component.html',
@@ -28,6 +29,7 @@ export class OrderInfoComponent implements OnInit {
       public alertController: AlertController,
       public modalController: ModalController,
       private auth:AuthService,
+      private delivery_serv: DeliveryService,
       private router:Router) { 
     this.orderId=this.getUrl()
    
@@ -40,7 +42,7 @@ export class OrderInfoComponent implements OnInit {
      
       await  this.auth.getUser().then((response) => {
         if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-        this.getInfo(response.data.id);
+        this.getInfo(response.data);
         }else{
 
           let data=JSON.parse(response.data)
@@ -68,7 +70,7 @@ export class OrderInfoComponent implements OnInit {
   getOrder(id) {
   
  
-      this.order_service.getOrder(id).subscribe((data) => { 
+      this.order_service.getOrderInfo(id).subscribe((data) => { 
         this.order=data;
         this.destination.lat=data.restaurant.currentLatitude;
         this.destination.lng=data.restaurant.currentLongitude;
@@ -79,7 +81,7 @@ export class OrderInfoComponent implements OnInit {
 
    getInfo(id) {
    
-     this.order_service.getDelivery(id).subscribe((data) => {
+     this.delivery_serv.getDelivery(id).subscribe((data) => {
       this.delivery=data;
       this.source.lat=data.currentLatitude;
       this.source.lng=data.currentLongitude;
@@ -156,7 +158,7 @@ export class OrderInfoComponent implements OnInit {
   
       this.platform.ready().then(async() => {
         await  this.auth.getUser().then((response) => {
-          this.order_service.accept(id,response.data).subscribe(
+          this.order_service.acceptOrder(id,response.data).subscribe(
             data=>{
               this.router.navigate(['/orders'])
             },err=>{
@@ -172,7 +174,7 @@ export class OrderInfoComponent implements OnInit {
   }
 
   finishOrder(id){
-      this.order_service.finish(id).subscribe(
+      this.order_service.finishOrder(id).subscribe(
             data=>{
               window.location.href = "/app/payments";
           

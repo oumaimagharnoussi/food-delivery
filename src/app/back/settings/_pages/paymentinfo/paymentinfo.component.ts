@@ -51,7 +51,7 @@ export class PaymentinfoComponent implements OnInit {
           }
        
         
-            this.payout_service.addMethod(data,response.data).subscribe(
+            this.payout_service.addNewPayoutMethod(data,response.data).subscribe(
               data=>{
             
                 window.location.href = "/app/settings/payout";
@@ -69,7 +69,7 @@ export class PaymentinfoComponent implements OnInit {
           }
         
           
-            this.payout_service.addMethod(data,response.data).subscribe(
+            this.payout_service.addNewPayoutMethod(data,response.data).subscribe(
               data=>{
              
                 window.location.href = "/app/settings/payout";
@@ -87,7 +87,7 @@ export class PaymentinfoComponent implements OnInit {
           }
         
      
-            this.payout_service.addMethod(data,response.data).subscribe(
+            this.payout_service.addNewPayoutMethod(data,response.data).subscribe(
               data=>{
                
                 window.location.href = "/app/settings/payout";

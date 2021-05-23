@@ -18,6 +18,7 @@ import {
 
 import { Router } from '@angular/router';
 import { ModalMapComponent } from '../modal-map/modal-map.component';
+import { NearbyOrdersService } from '../../_services/nearby-orders.service';
 
 const { PushNotifications } = Plugins;
 const {Network} =Plugins;
@@ -46,7 +47,8 @@ export class OrderListComponent implements OnInit {
     private geolocation: Geolocation,
     private messagin:MessagingService,
     private menu: MenuController,
-    public modalController: ModalController) { 
+    public modalController: ModalController,
+    private nearby_service: NearbyOrdersService) { 
 
     let handler=Network.addListener('networkStatusChange',async(status)=>{
       if (status.connected){
@@ -176,7 +178,7 @@ export class OrderListComponent implements OnInit {
   }
 async  getOrders(user) {
  
-      this.order_service.getOrders(user).subscribe((data: any[]) => {
+      this.nearby_service.getNearbyOrders(user).subscribe((data: any[]) => {
       
         this.orders=data;
         this.attempts=0

@@ -7,6 +7,7 @@ import {environment} from 'src/environments/environment'
 import { 
   Plugins
 } from '@capacitor/core';
+import { DeliveryService } from '../../_services/delivery.service';
 const {Network} =Plugins;
 @Component({
   selector: 'app-profile',
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit {
   };
   offline: boolean;
 
-  constructor(private comisson_service:ComissionService,
+  constructor(private delivery_serv: DeliveryService,
     private platform:Platform,
     private auth:AuthService,
     private changeRef: ChangeDetectorRef) { }
@@ -70,7 +71,7 @@ export class ProfileComponent implements OnInit {
      
       await  this.auth.getUser().then((response) => {
      
-          this.comisson_service.getDelivery(response.data).subscribe(
+          this.delivery_serv.getDelivery(response.data).subscribe(
             data=>{
               this.delivery=data
               this.auth.set('deliveryInfo',this.delivery)

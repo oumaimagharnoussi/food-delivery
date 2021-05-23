@@ -1,26 +1,15 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, from, of, throwError } from "rxjs";
-import { map } from "rxjs/operators";
+import { BehaviorSubject, Observable } from "rxjs";
 import {Storage} from '@ionic/storage-angular'
-import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
-import { Platform, ToastController } from "@ionic/angular";
+import { Platform } from "@ionic/angular";
 import { Router } from "@angular/router";
-import { TestBed } from "@angular/core/testing";
-import {environment} from 'src/environments/environment'
+import { HttpClientService } from "src/app/api/http-client.service";
 
 
 
 
 
-var AUTH_API = environment.BACK_API_WPA+'/api/';
-const httpOptions = {
-  headers: new HttpHeaders({
-    
-    'Content-Type':  'application/json',
-    'accept': 'application/json'
- 
-  })
-};
+
 const TOKEN_KEY = 'my-token';
 @Injectable({
   providedIn: 'root'
@@ -30,7 +19,7 @@ export class AuthService {
     // Init with null to filter out the first value in a guard!
     authState: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
    
-    token = '';
+    token:any;
 
 
 
@@ -39,20 +28,18 @@ export class AuthService {
   
  
   constructor(
-   private  storage:Storage,private http: HttpClient, private router: Router,  private platform: Platform,  public toastController: ToastController
+   private http: HttpClientService,
+   private  storage:Storage,
+   private router: Router,
+   private platform: Platform,
+
   ) {
+    this.setEndpoint()
     this.init()
- 
-  /*  this.platform.ready().then(() => {
-      this.ifLoggedIn();
-    });*/
     
+     
   }
-  private extractData(res: Response) {
-    let body = res;
-    return body || {
-     };
-  }
+
 
   isAuthenticated() {
   
@@ -91,6 +78,7 @@ export class AuthService {
           console.log(response)
           this.authState.next(false);
         }else{
+          this.token=response.data
           window.location.href = "/app/orders";
         }
       });
@@ -99,63 +87,36 @@ export class AuthService {
   
   
     }
-    id;
-      getUserInfo() {
-
-
-   
-          this.storage.get("access_token").then((response) => {
-    
-         
-         console.log(response)
-          return response
-
-      });
-    
- 
-    
-      }
+  
 
   async  getDark():Promise<boolean> {
-    var test;
+    var darkState;
     await  this.storage.get("dark").then((response) => {
-  
-        test =response;
-        
-        
-         
-       
+      darkState =response;
       });
-      return test;
-    
+      return darkState;
     }
 
     async  get(key):Promise<any> {
-      var test;
-      await  this.storage.get(key).then((response) => {
-    
-          test =response;
-          
-          
-           
-         
+      var value;
+      await  this.storage.get(key).then((response) => {    
+          value =response;
         });
-        return test;
-      
+        return value;
       }
 
     async  getUser():Promise<any> {
-      var test;
+      var user;
       await  this.storage.get("access_token").then((response) => {
-    
-          test =response;
-          
-          
-           
-         
+          user =response;
         });
-        return test;
-      
+        if (this.platform.is('mobileweb') || this.platform.is('desktop')) {
+          return user;
+        }else {
+          let info=JSON.parse(user);
+          let detail=info.data;
+          return detail;
+        }
       }
 
 
@@ -176,27 +137,45 @@ export class AuthService {
 
 
   login(credentials): Observable<any>  {
-
- 
-
-    return this.http.post(AUTH_API+'login_check', credentials,httpOptions)
+    this.setEndpoint()
+    return this.http.save(credentials);
      
   }
 
 
-  logout(): Promise<void> {
+ async logout(): Promise<void> {
     this.authState.next(false);
-    this._storage.remove("access_token");
-    this._storage.remove("acceptedList");
-    this._storage.remove("comissionList");
-    this._storage.remove("deliveryInfo");
-      return this._storage.remove("dark");
-  
+
+    await  this.storage.get("access_token").then((response) => {
+      this.http.endpoint='deliveries';
+      this.http.update(response.data.id,{
+        deviceToken: ""
+      }).subscribe(
+        ()=>{
+          this._storage.remove("access_token");
+          this._storage.remove("acceptedList");
+          this._storage.remove("comissionList");
+          this._storage.remove("deliveryInfo");
+          this._storage.remove("dark").then(
+            ()=>{window.location.href = "/login";}
+          );;
+        }
+
+      )
+    })
+    
+       
+           
+          
+        
+
+      
+    
+    return;
   }
 
-
-
-
-
+  setEndpoint(){
+    this.http.endpoint='login_check';
+  }
 
 }

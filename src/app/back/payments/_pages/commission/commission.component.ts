@@ -3,12 +3,14 @@ import { Router } from '@angular/router';
 
 import { IonContent, IonInfiniteScroll, ModalController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
-import { ComissionService } from '../../_services/comission.service';
+
 import { ComissionDetailsComponent } from './comission-details/comission-details.component';
 import {environment} from 'src/environments/environment'
 import { 
   Plugins
 } from '@capacitor/core';
+import { ComissionService } from '../../_services/comission.service';
+
 const {Network} =Plugins;
 @Component({
   selector: 'app-commission',
@@ -29,6 +31,7 @@ export class CommissionComponent implements OnInit {
   attempts=0;
   userID: any;
   constructor(private router: Router,private comisson_service:ComissionService,
+    
     private platform:Platform,private auth:AuthService,
     public modalController: ModalController,
     
@@ -102,7 +105,7 @@ gotToTop() {
   
         
 
-        this.comisson_service.getComissions(response.data ,page).subscribe(
+        this.comisson_service.getDeliveryComissions(response.data ,page).subscribe(
           data=>{
             this.comissions=this.comissions.concat(data);
             this.attempts=0;

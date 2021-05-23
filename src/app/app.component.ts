@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Platform, ToastController } from '@ionic/angular';
 import { AuthService } from './front/_services/auth.service';
 import { MessagingService } from './front/_services/messaging.service';
-import { ConnectionStatus, NetworkService } from './front/_services/network.service';
-import { Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
+
+import { Event} from '@angular/router';
 import {Plugins} from '@capacitor/core';
 const {Network} =Plugins;
 
@@ -20,7 +20,7 @@ export class AppComponent {
   
   constructor(      private toastController: ToastController,
     private changeRef: ChangeDetectorRef,
-    private platform:Platform, private auth:AuthService,private message:MessagingService,private router: Router) {
+     private auth:AuthService,private message:MessagingService,private router: Router) {
       //this.initializeApp()
       let handler=Network.addListener('networkStatusChange',async(status)=>{
        if (status.connected){
@@ -72,8 +72,12 @@ export class AppComponent {
 
  async logout() {
  await this.message.deleteToken();
- await this.auth.logout();
- window.location.href = "/login";
+ await this.auth.logout().then(
+  ()=>{
+   // window.location.href = "/login";
+  } 
+ );
+ 
   
 
   

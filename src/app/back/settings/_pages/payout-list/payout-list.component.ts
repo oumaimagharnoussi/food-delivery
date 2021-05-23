@@ -9,6 +9,9 @@ import { PayoutService } from '../../_services/payout.service';
 import { 
   Plugins
 } from '@capacitor/core';
+import { DeliveryService } from '../../_services/delivery.service';
+
+
 const {Network} =Plugins;
 @Component({
   selector: 'app-payout-list',
@@ -20,16 +23,23 @@ export class PayoutListComponent implements OnInit {
   offline: boolean;
   userID: any;
 
-  constructor(private comisson_service:ComissionService,
+  constructor(private delivery_serv: DeliveryService,
     private platform:Platform,private auth:AuthService,
    
     private router:Router,
     public alertController: AlertController,
-    private  payour_service : PayoutService,
+    private  payout_service : PayoutService,
     private changeRef: ChangeDetectorRef,
-    private toastController: ToastController) { 
+    private toastController: ToastController,
+
+   ) { 
+    
     
     }
+
+  
+ 
+  
   async  offlineMode(){
       let status=await Network.getStatus();
       if(status.connected){
@@ -83,7 +93,7 @@ export class PayoutListComponent implements OnInit {
           await  this.auth.getUser().then((response) => {
       
            
-            this.comisson_service.getDelivery(response.data).subscribe(
+            this.delivery_serv.getDelivery(response.data).subscribe(
               data=>{
                 this.delivery=data
                 this.auth.set('deliveryInfo',this.delivery)
@@ -98,7 +108,7 @@ export class PayoutListComponent implements OnInit {
     delete(id){
 
      
-        this.payour_service.deleteMethod(id).subscribe(
+        this.payout_service.deletePayoutMethod(id).subscribe(
           data => this.getInfo()   
         )
      

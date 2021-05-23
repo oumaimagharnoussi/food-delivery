@@ -24,13 +24,18 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { TextAvatarModule } from './text-avatar/text-avatar.module';
 import { IonIntlTelInputModule } from 'ion-intl-tel-input';
+import { ApiModule } from './api/api.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpConfigInterceptor } from './api/httpConfig.interceptor';
+
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule,FormsModule,
     IonIntlTelInputModule,
-     ReactiveFormsModule, IonicModule.forRoot(), AppRoutingModule,FrontModule,BackModule,
+    
+     ReactiveFormsModule, IonicModule.forRoot(), AppRoutingModule,FrontModule,BackModule,ApiModule,
     IonicStorageModule.forRoot({
       name: '__mydb',
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
@@ -49,7 +54,12 @@ import { IonIntlTelInputModule } from 'ion-intl-tel-input';
     enabled: environment.production
   })*/
 ],
-  providers: [Network, AuthService ,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [Network, AuthService ,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpConfigInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
-import {environment} from 'src/environments/environment'
-import {HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { AuthService } from '../../_services/auth.service';
-import { MessagingService } from '../../_services/messaging.service';
+
 
 
 @Component({
@@ -17,14 +14,12 @@ export class HomeComponent implements OnInit {
   dark=false;
   pushes: any = [];
   token="";
-  _greetings: any = [];
+
 
   constructor(private storage: AuthService, private router: Router,
-    private messagingService: MessagingService,
-    private alertCtrl: AlertController,
-    private toastCtrl: ToastController, private http: HttpClient) { 
+ ) { 
       this.storage.ifNotLoggedIn()
-      this.listenForMessages()
+    
 
   
 
@@ -33,21 +28,7 @@ export class HomeComponent implements OnInit {
     this.router.navigate([route])
   }
 
-  listenForMessages() {
-    this.messagingService.getMessages().subscribe(async (msg: any) => {
-      const alert = await this.alertCtrl.create({
-        header: msg.notification.title ,
-        subHeader: msg.notification.body,
-        message: msg.data.info,
-        buttons: [ 'OK',   
-      
-        ],
-        
-      });
  
-      await alert.present();
-    });
-  }
  
   change(){
     if(this.dark==true){
@@ -56,35 +37,7 @@ export class HomeComponent implements OnInit {
       this.dark=true
     }
   }
-  requestPermission() {
-    this.messagingService.requestPermission().subscribe(
-      async token => {
-        const toast = await this.toastCtrl.create({
-          message: 'Got your token',
-          duration: 2000
-        });
-        toast.present();
-      },
-      async (err) => {
-        const alert = await this.alertCtrl.create({
-          header: 'Error',
-          message: err,
-          buttons: ['OK'],
-        });
- 
-        await alert.present();
-      }
-    );
-  }
- 
-  async deleteToken() {
-    this.messagingService.deleteToken();
-    const toast = await this.toastCtrl.create({
-      message: 'Token removed',
-      duration: 2000
-    });
-    toast.present();
-  }
+
 
  
 
@@ -94,22 +47,6 @@ export class HomeComponent implements OnInit {
 
 
 
-    // to check if we have permission
-/*this.push.hasPermission()
-.then((res: any) => {
-
-  if (res.isEnabled) {
-    console.log('We have permission to send push notifications');
-  } else {
-    console.log('We do not have permission to send push notifications');
-  }
-
-});*/
-
-   
-    // If using a custom driver:
-    // await this.storage.defineDriver(MyCustomDriver)
-  
    await this.storage.getDark().then((test)=>{
       if (test) {document.body.setAttribute('data-theme', 'dark');	
     this.dark=true}
@@ -118,9 +55,7 @@ export class HomeComponent implements OnInit {
 
    });
 
-   this.greetings(environment.BACK_API_WPA).subscribe(
-    (data) => this._greetings = data
-  );
+
 
 
 }
@@ -146,15 +81,4 @@ onClick(event){
   }
 }
 
-greetings(url: string) {
- const httpOptions = {
-    headers: new HttpHeaders({
-      
-      'Content-Type':  'application/json',
-      'accept': 'application/json'
-   
-    })
-  };
-  return this.http.get(`${url}/greetings?page=1`, httpOptions);
-}
 }
