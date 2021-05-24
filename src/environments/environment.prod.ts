@@ -3,7 +3,7 @@ export const environment = {
 
   BACK_API_WPA:'https://food.dev.confledis.fr',
   BACK_API_MOBILE:'https://food.dev.confledis.fr',
-  api_url:'https://food.dev.confledis.fr/api',
+  api_url:'https://food.dev.confledis.fr/api/',
 
   firebase :{
     apiKey: "AIzaSyC9Y1XY7jFJCvB5Wt3_EEUc-BETpOWbQXc",
