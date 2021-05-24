@@ -108,7 +108,7 @@ export class RegisterComponent implements OnInit {
       }else{
         this.http.setServerTrustMode("nocheck");
 
-        this.http.sendRequest(environment.BACK_API_MOBILE+'/api/deliveries',{method: "post",data:
+        this.http.sendRequest(environment.api_url+'/api/deliveries',{method: "post",data:
         {
   
   

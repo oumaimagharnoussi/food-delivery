@@ -6,6 +6,7 @@ import { Platform } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 
+
 const httpOptions = { 
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
@@ -18,6 +19,11 @@ const httpOptions = {
 
 export class HttpClientService {
    endpoint: string;
+   headers:{
+    "Content-Type": "application/json",
+    "accept": "application/json"
+  }
+
    
 
   constructor(private http: HttpClient,
@@ -31,11 +37,20 @@ export class HttpClientService {
       if (this.platform.is('capacitor')) {
         this.httpNative.setServerTrustMode("nocheck");
         return from(
-          this.httpNative.sendRequest(this.getUrl()+params,{method: "get"
-          ,serializer:"json",responseType:"json"})
+          this.httpNative.get(this.getUrl()+params,{},{
+            "Content-Type": "application/json",
+            "accept": "application/json"
+          }
+)
         ).pipe(
           map(data=>{
-            return data.data
+              if(typeof data.data ==='string'){
+                return JSON.parse(data.data) ;
+              }else{
+                return data.data
+              }
+              
+            
           })
         )
       }else{
@@ -47,11 +62,10 @@ export class HttpClientService {
       if (this.platform.is('capacitor')) {
         this.httpNative.setServerTrustMode("nocheck");
         return from(
-          this.httpNative.sendRequest(`${this.getUrl()}/${id}`,{method: "get"
-          ,serializer:"json",responseType:"json"})
+          this.httpNative.get(`${this.getUrl()}/${id}`,{},this.headers)
         ).pipe(
           map(data=>{
-            return data.data
+            return JSON.parse(data.data) 
           })
         )
       }else{
@@ -67,7 +81,7 @@ export class HttpClientService {
          ,data:object ,serializer:"json"})
         ).pipe(
           map(data=>{
-            return data.data
+            return data
           })
         )
 

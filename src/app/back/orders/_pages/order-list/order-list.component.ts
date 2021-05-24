@@ -178,9 +178,12 @@ export class OrderListComponent implements OnInit {
   }
 async  getOrders(user) {
  
-      this.nearby_service.getNearbyOrders(user).subscribe((data: any[]) => {
-      
-        this.orders=data;
+      this.nearby_service.getNearbyOrders(user).subscribe((data) => {
+       
+          this.orders=data;
+        
+    
+       
         this.attempts=0
         this.changeRef.detectChanges();
      //   console.log(this.orders)
@@ -226,7 +229,7 @@ async  getOrders(user) {
       this.platform.ready().then(async() => {
         await  this.storage.getUser().then((response) => {
           if (response) { 
-            this.getOrders(response.data);
+            this.getOrders(response);
 
           }
         });
@@ -242,9 +245,9 @@ async  getOrders(user) {
       if (response) { 
 
      
-          this.sse.GetExchangeData(environment.BACK_API_WPA+'/.well-known/mercure?topic='+environment.BACK_API_WPA+'/api/orders/{id}');
+          this.sse.GetExchangeData(environment.server+'/.well-known/mercure?topic='+environment.server+'orders/{id}');
         
-            this.getOrders(response.data);
+            this.getOrders(response);
 
       }
     });

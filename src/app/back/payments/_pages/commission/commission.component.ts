@@ -107,12 +107,16 @@ gotToTop() {
 
         this.comisson_service.getDeliveryComissions(response.data ,page).subscribe(
           data=>{
-            this.comissions=this.comissions.concat(data);
+           
+              if(page==1){
+                this.auth.set('comissionList',data)
+               }
+              this.comissions=this.comissions.concat(data);
+            
+          
             this.attempts=0;
             this.test=data;
-            if(page==1){
-              this.auth.set('comissionList',data)
-             }
+         
           
           },err=>{
             if(this.attempts<10){

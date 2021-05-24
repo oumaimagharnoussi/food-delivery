@@ -157,11 +157,18 @@ export class AcceptedListComponent implements OnInit {
       this.platform.ready().then(async() => {
         await  this.storage.getUser().then((response) => {
           this.order_service.getAcceptedOrders(response.data,page).subscribe(
-             (data : any[])=>{
-               if(page==1){
-                this.storage.set('acceptedList',data)
-               }
-              this.orders=this.orders.concat(data)
+             (data )=>{
+
+             
+                if(page==1){
+                  this.storage.set('acceptedList',data)
+                 }
+                this.orders=this.orders.concat(data)
+               
+
+          
+             
+              
               this.test=data
               this.loading=false
             }

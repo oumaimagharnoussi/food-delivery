@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../_services/auth.service';
-import {environment} from 'src/environments/environment'
+
 import {
   Plugins,
   PushNotification,
@@ -10,10 +10,10 @@ import {
   PushNotificationActionPerformed,
 } from '@capacitor/core';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
-import { HTTP } from '@ionic-native/http/ngx';
+
 import { MessagingService } from '../../_services/messaging.service';
 import { DeliveryService } from 'src/app/back/settings/_services/delivery.service';
-import { Observable } from 'rxjs';
+
 
 const { PushNotifications } = Plugins;
 
@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private platform: Platform,
     private delivery_serv: DeliveryService) { 
+      this.authService.ifNotLoggedIn()
 
       }
 
@@ -62,7 +63,7 @@ export class LoginComponent implements OnInit {
     });
   }
   async ngOnInit() {
-    this.authService.ifNotLoggedIn()
+    
     await this.authService.getDark().then((test)=>{
       if (test) {document.body.setAttribute('data-theme', 'dark');	
     this.dark=true}
@@ -88,7 +89,7 @@ export class LoginComponent implements OnInit {
     //request FCM token
     this.saveToken(token).then(
       ()=>{
-        this.requestMessaginToken(token.data)
+        this.requestMessaginToken(token)
       }
     )
 
@@ -103,7 +104,14 @@ export class LoginComponent implements OnInit {
 
  async saveToken(token){
   this.platform.ready().then(async() => {
-    this.authService.set('access_token',token)  
+    console.log("save token this : ",token)
+    if(this.platform.is('capacitor')){
+      let data=JSON.parse(token.data)
+      this.authService.set('access_token',data)  
+    }else{
+      this.authService.set('access_token',token)  
+    }
+    
   })
  }
 
@@ -125,8 +133,8 @@ export class LoginComponent implements OnInit {
           PushNotifications.addListener('registration',
             (tokenF: PushNotificationToken) => {
             //  alert('Push registration success, token: ' + tokenF.value);
-            let info=JSON.parse(user)
-              this.updateTokenDevice(info.data.id,tokenF.value)
+            let info=JSON.parse(user.data)
+            this.updateTokenDevice(info,tokenF.value)
 
             }
           );
@@ -187,7 +195,8 @@ async updateTokenDevice(user,FCM_token){
    let data={
     deviceToken: FCM_token
    }
- return this.delivery_serv.updateDelivery(user,data).subscribe(
+   
+ return this.delivery_serv.updateDelivery(user.data,data).subscribe(
    ()=>{
     
     window.location.href = "/app/orders";

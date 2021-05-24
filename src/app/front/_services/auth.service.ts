@@ -110,13 +110,7 @@ export class AuthService {
       await  this.storage.get("access_token").then((response) => {
           user =response;
         });
-        if (this.platform.is('mobileweb') || this.platform.is('desktop')) {
-          return user;
-        }else {
-          let info=JSON.parse(user);
-          let detail=info.data;
-          return detail;
-        }
+       return user
       }
 
 

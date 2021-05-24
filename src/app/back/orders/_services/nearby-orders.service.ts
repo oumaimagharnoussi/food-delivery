@@ -15,7 +15,7 @@ export class NearbyOrdersService {
 
   getNearbyOrders(user){
     this.setEndpoint()
-    return this.http.findOne(user.id)
+    return this.http.findOne(user.data.id)
   }
 
   setEndpoint(){
