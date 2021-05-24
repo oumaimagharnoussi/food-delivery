@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   dark=false;
   pushes: any = [];
   token="";
-  public  url = 'https://food.dev.confledis.fr/';
+  public  url = 'https://food.dev.confledis.fr';
   public greetingsData: any;
 
   constructor(private storage: AuthService, private router: Router, private http: HttpClient
