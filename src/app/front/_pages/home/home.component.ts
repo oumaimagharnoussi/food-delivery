@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   pushes: any = [];
   token="";
   public  url = 'https://food.dev.confledis.fr/';
-  private _greetings: any;
+  public greetingsData: any;
 
   constructor(private storage: AuthService, private router: Router, private http: HttpClient
  ) { 
@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
    });
 
    this.greetings(this.url).subscribe(
-    (data) => {this._greetings = data;
+    (data) => {this.greetingsData = data;
     console.log(data);
     }
   );
