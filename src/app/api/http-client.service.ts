@@ -37,7 +37,7 @@ export class HttpClientService {
       if (this.platform.is('capacitor')) {
         this.httpNative.setServerTrustMode("nocheck");
         return from(
-          this.httpNative.get(this.getUrl()+params,{},{
+          this.httpNative.get(`${this.getUrl()}${params}`,{},{
             "Content-Type": "application/json",
             "accept": "application/json"
           }
@@ -54,7 +54,7 @@ export class HttpClientService {
           })
         )
       }else{
-        return this.http.get<any>(this.getUrl()+params);
+        return this.http.get<any>(`${this.getUrl()}${params}`);
       }      
     }
   
