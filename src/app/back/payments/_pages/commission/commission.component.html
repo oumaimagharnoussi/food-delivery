@@ -4,7 +4,7 @@
         <ion-back-button color="light" defaultHref="/orders"></ion-back-button>
       </ion-buttons>
 
-    <ion-title>
+    <ion-title> 
        Comissions
     </ion-title>
  
@@ -93,50 +93,74 @@
 
 
 <div class="container mx-0 px-2 sm:px-4">
-  <div class="py-4">
+  <div class="py-2">
       <div>
           <h2 class="text-xl font-semibold leading-tight">History</h2>
       </div>
-      <div class=" pb-4 px-1 rounded-md w-full">
+      <div class=" px-1 rounded-md w-full">
        
   
-      <div class="overflow-x-auto mt-6">
+      <div class="overflow-x-auto ">
+
+        <ion-list>
+          <ion-item>
+            <ion-avatar slot="start">
+          
+            
+  
+              
+            
+          
+          </ion-avatar>
+
+            <div class="grid grid-cols-2 gap-14">
+          
+              <div>Value</div>
+              <div>Date</div>
+         
+
+              </div>
+
+
+          </ion-item>
+      
+
+          <ion-item  *ngFor="let comission of comissions">
+           
+            <ion-avatar slot="start">
+          
+              <ion-badge *ngIf="comission.status=='PAYED'" color="success"><ion-icon name="checkmark-done-outline"></ion-icon></ion-badge>
+  
+              <ion-badge *ngIf="comission.status=='PENDING'" color="warning">
+              <ion-icon name="time-outline"></ion-icon>
+            </ion-badge>
+          </ion-avatar>
+            <div class="grid grid-cols-2 gap-4">
+            
+              
+              <div>{{comission?.value}} €</div>
+              <div>{{ comission.createdAt | date : 'short'  }}</div>
+
+          
+              </div>
+
+         
+           
+       
+            
+       
+           
+          
+              <ion-icon (click)="presentModal(comission)" slot="end"  size="medium" name="chevron-forward"></ion-icon>
+             
+            
+          </ion-item>
+    
+    
+        </ion-list>
         
   
-        <table class="table-auto border-collapse w-full">
-          <thead>
-            <tr class="rounded-lg text-sm font-medium text-gray-700 text-left" style="font-size: 0.9674rem">
-              <th class="px-4 py-2 " >State</th>
-              <th class="px-4 py-2 " >Value</th>
-              <th class="px-4 py-2 " >Date</th>
- 
-          
-              <th class="px-4 py-2 ">
-
-              </th>
-          
-
-            </tr>
-          </thead>
-          <tbody class="text-sm font-normal ">
-            <tr *ngFor="let comission of comissions" class=" border-b border-gray-200 py-10" >
-              <td *ngIf="comission.status=='PAYED'" class="px-4 py-4">
-                <ion-badge color="success"><ion-icon name="checkmark-done-outline"></ion-icon></ion-badge></td>
-              <td *ngIf="comission.status=='PENDING'" class="px-4 py-4"><ion-badge color="warning">
-                <ion-icon name="timer-outline"></ion-icon>
-              </ion-badge></td>
-              <td class="px-4 py-4">{{comission?.value}}€</td>
-              <td class="px-4 py-4">{{ comission.createdAt | date : 'short'  }}</td>
-             
-              <td>
-                <ion-icon (click)="presentModal(comission)" slot="end"  size="medium" name="chevron-forward"></ion-icon>
-              </td>
-            </tr>
-        
-            
-   
-          </tbody>
-        </table>
+      
       </div>
       <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
         <ion-infinite-scroll-content

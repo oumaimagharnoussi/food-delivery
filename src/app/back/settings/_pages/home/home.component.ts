@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
+import { DeliveryService } from '../../_services/delivery.service';
 
 @Component({
   selector: 'app-home',
@@ -10,12 +11,36 @@ import { AuthService } from 'src/app/front/_services/auth.service';
 })
 export class HomeComponent implements OnInit {
   dark=false;
+  delivery;
 
   constructor(private router:Router,
     public actionSheetController: ActionSheetController,
-    private storage: AuthService) { }
+    private storage: AuthService,
+    private delivery_service: DeliveryService,
+    private platform: Platform) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getInfo();
+  }
+
+  getInfo(){
+    this.platform.ready().then(async() => {
+
+     
+      await  this.storage.getUser().then((response) => {
+     
+          this.delivery_service.getDelivery(response.data).subscribe(
+            data=>{
+              this.delivery=data
+              this.storage.set('deliveryInfo',this.delivery)
+              
+            }
+          )
+
+        
+      })
+    })
+  }
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Appearence',

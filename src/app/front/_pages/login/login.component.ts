@@ -171,11 +171,7 @@ export class LoginComponent implements OnInit {
         this.listenForMessages();
         this.token=tokenF;
         this.updateTokenDevice(user,tokenF)
-        const toast = await this.toastCtrl.create({
-          message: 'Got your token',
-          duration: 2000
-        });
-        toast.present();
+        
       },
       async (err) => {
         const alert = await this.alertCtrl.create({
