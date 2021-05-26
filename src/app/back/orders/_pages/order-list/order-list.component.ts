@@ -245,7 +245,7 @@ async  getOrders(user) {
       if (response) { 
 
      
-          this.sse.GetExchangeData(environment.server+'/.well-known/mercure?topic='+environment.server+'orders/{id}');
+          this.sse.GetExchangeData(environment.server+'/.well-known/mercure?topic='+environment.api_url+'orders/{id}');
         
             this.getOrders(response);
 
