@@ -47,6 +47,13 @@ finishOrder(id): Observable<any>{
   return this.http.update(id,order);
 }
 
+getDistances(orderID: number,deliveryID: number){
+  this.http.endpoint='distances';
+  return this.http.findAll('/'+deliveryID+'/'+orderID)
+
+
+}
+
 
 
   setEndpoint(){

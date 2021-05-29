@@ -22,6 +22,7 @@ export class OrderInfoComponent implements OnInit {
     lng: 8.902773358214844
   };
   delivery: any;
+  distances: any;
 
   constructor(private platform:Platform,
 
@@ -85,6 +86,11 @@ export class OrderInfoComponent implements OnInit {
       this.delivery=data;
       this.source.lat=data.currentLatitude;
       this.source.lng=data.currentLongitude;
+      this.order_service.getDistances(this.orderId,data.id).subscribe(
+        (data)=>{
+          this.distances=data;
+        }
+      )
       })
 
   }
