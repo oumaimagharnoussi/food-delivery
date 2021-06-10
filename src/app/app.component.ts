@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Platform, ToastController } from '@ionic/angular';
 import { AuthService } from './front/_services/auth.service';
 import { MessagingService } from './front/_services/messaging.service';
-
 import { Event} from '@angular/router';
 import {Plugins} from '@capacitor/core';
+
 const {Network} =Plugins;
 
 
@@ -18,9 +18,10 @@ export class AppComponent {
   side=true;
 
   
-  constructor(      private toastController: ToastController,
+  constructor(private toastController: ToastController,
     private changeRef: ChangeDetectorRef,
-     private auth:AuthService,private message:MessagingService,private router: Router) {
+     private auth:AuthService,private message:MessagingService,private router: Router,
+     ) {
       //this.initializeApp()
       let handler=Network.addListener('networkStatusChange',async(status)=>{
        if (status.connected){

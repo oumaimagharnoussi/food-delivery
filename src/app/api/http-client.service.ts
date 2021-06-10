@@ -4,8 +4,9 @@ import { from, Observable } from 'rxjs';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Platform } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
 
+import { map } from 'rxjs/operators';
+import { DeviceIdService } from './device-id.service';
 
 const httpOptions = { 
   headers: new HttpHeaders({
@@ -23,15 +24,23 @@ export class HttpClientService {
     "Content-Type": "application/json",
     "accept": "application/json"
   }
+   headersMobile={
+    "Content-Type": "application/json",
+    "accept": "application/json",
+    "uuid": this.device_service.uuid
+  }
 
    
 
   constructor(private http: HttpClient,
-    private httpNative: HTTP,private platform: Platform) {
+    private httpNative: HTTP,private platform: Platform, private device_service: DeviceIdService) {
+     
      
     }
   
     findAll(params:any): Observable<any> {
+      console.log("from ala:", this.device_service.uuid )
+      
      
       
       if (this.platform.is('capacitor')) {
@@ -39,7 +48,8 @@ export class HttpClientService {
         return from(
           this.httpNative.get(`${this.getUrl()}${params}`,{},{
             "Content-Type": "application/json",
-            "accept": "application/json"
+            "accept": "application/json",
+            "uuid": this.device_service.uuid
           }
 )
         ).pipe(
@@ -62,7 +72,7 @@ export class HttpClientService {
       if (this.platform.is('capacitor')) {
         this.httpNative.setServerTrustMode("nocheck");
         return from(
-          this.httpNative.get(`${this.getUrl()}/${id}`,{},this.headers)
+          this.httpNative.get(`${this.getUrl()}/${id}`,{},this.headersMobile)
         ).pipe(
           map(data=>{
             return JSON.parse(data.data) 
@@ -78,7 +88,7 @@ export class HttpClientService {
         this.httpNative.setServerTrustMode("nocheck");
         return from(
           this.httpNative.sendRequest(this.getUrl(),{method: "post"
-         ,data:object ,serializer:"json"})
+         ,data:object ,serializer:"json",headers:this.headersMobile})
         ).pipe(
           map(data=>{
             return data
@@ -100,7 +110,9 @@ export class HttpClientService {
           this.httpNative.delete(`${this.getUrl()}/${id}` ,  {},
           {
             "Content-Type": "application/json",
-            "accept": "application/json"
+            "accept": "application/json",
+            "uuid": this.device_service.uuid
+            
           }  )
   
         )
@@ -122,7 +134,7 @@ export class HttpClientService {
   
         this.httpNative.sendRequest(`${this.getUrl()}/${id}`,{method: "put",data:
         object
-        ,serializer:"json"})
+        ,serializer:"json",headers:this.headersMobile})
   
       ).pipe(
         map(data=>{

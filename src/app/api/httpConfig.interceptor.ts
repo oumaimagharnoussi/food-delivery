@@ -9,24 +9,26 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { AuthService } from '../front/_services/auth.service';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
   
-  constructor() { }
+  constructor(private auth_service :AuthService) { }
 
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    
 
-    const token = "my-token-string-from-server";
+   
 
     //Authentication by setting header with token value
-    if (token) {
-      request = request.clone({
-        setHeaders: {
-          'Authorization': token
-        }
-      });
+    if (this.auth_service.token) {
+      request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + this.auth_service.token ) });
+    }
+    if (this.auth_service.uuid) {
+      console.log(this.auth_service.uuid)
+      request = request.clone({ headers: request.headers.set('uuid', this.auth_service.uuid ) });
     }
 
     if (!request.headers.has('Content-Type')) {
@@ -40,6 +42,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
     request = request.clone({
       headers: request.headers.set('Accept', 'application/json')
     });
+
 
     return next.handle(request).pipe(
       map((event: HttpEvent<any>) => {

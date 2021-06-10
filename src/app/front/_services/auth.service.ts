@@ -4,7 +4,8 @@ import {Storage} from '@ionic/storage-angular'
 import { Platform } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { HttpClientService } from "src/app/api/http-client.service";
-
+import { v4 as uuidv4 } from 'uuid';
+import { DeviceIdService } from "src/app/api/device-id.service";
 
 
 
@@ -20,6 +21,7 @@ export class AuthService {
     authState: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
    
     token:any;
+    uuid: any;
 
 
 
@@ -32,6 +34,7 @@ export class AuthService {
    private  storage:Storage,
    private router: Router,
    private platform: Platform,
+   private device_service: DeviceIdService
 
   ) {
     this.setEndpoint()
@@ -50,13 +53,41 @@ export class AuthService {
 
 
   this.platform.ready().then(async() => {
-    await  this.storage.get("access_token").then((response) => {
+    await  this.storage.get("access_token").then(async(response) => {
 
      
       if (response) {
         console.log(response)
+        this.token=response.token
+        await  this.storage.get("uuid").then(async(response) => {
+          if(response){
+            this.uuid=response;
+            this.device_service.uuid=this.uuid;
+            
+          }else{
+            this.uuid=uuidv4();
+            await this.set('uuid',this.uuid)
+            this.device_service.uuid=this.uuid;
+
+          }
+          
+          console.log(response)
+        });
         this.authState.next(true);
       }else{
+        await  this.storage.get("uuid").then((response) => {
+          if(response){
+            this.uuid=response;
+            this.device_service.uuid=response;
+          }else{
+            this.uuid=uuidv4();
+            this.set('uuid',this.uuid)
+            this.device_service.uuid=this.uuid;
+
+          }
+          
+          console.log(response)
+        });
         this.router.navigate(['/login'])
       }
     });
@@ -71,10 +102,22 @@ export class AuthService {
 
 
     this.platform.ready().then(async() => {
-      await  this.storage.get("access_token").then((response) => {
+      await  this.storage.get("access_token").then(async(response) => {
   
        
         if (!response) {
+          await  this.storage.get("uuid").then(async(response) => {
+            if(response){
+              this.uuid=response;
+              this.device_service.uuid=response;
+            }else{
+              this.uuid=uuidv4();
+              await this.set('uuid',this.uuid)
+              this.device_service.uuid=this.uuid;
+            }
+            
+            console.log(response)
+          });
           console.log(response)
           this.authState.next(false);
         }else{
@@ -147,6 +190,17 @@ export class AuthService {
       }).subscribe(
         ()=>{
           this._storage.remove("access_token");
+          this._storage.remove("uuid");
+          this._storage.remove("acceptedList");
+          this._storage.remove("comissionList");
+          this._storage.remove("deliveryInfo");
+          this._storage.remove("dark").then(
+            ()=>{window.location.href = "/login";}
+          );;
+        },
+        ()=>{
+          this._storage.remove("access_token");
+          this._storage.remove("uuid");
           this._storage.remove("acceptedList");
           this._storage.remove("comissionList");
           this._storage.remove("deliveryInfo");
