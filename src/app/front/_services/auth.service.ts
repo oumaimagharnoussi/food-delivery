@@ -116,7 +116,7 @@ export class AuthService {
               this.device_service.uuid=this.uuid;
             }
             
-            console.log(response)
+            console.log(response) 
           });
           console.log(response)
           this.authState.next(false);

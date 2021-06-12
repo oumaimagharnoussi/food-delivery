@@ -40,11 +40,11 @@ export class LoginComponent implements OnInit {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private messagingService: MessagingService, 
-    private authService:AuthService,
+    private auth_service:AuthService,
     private router: Router,
     private platform: Platform,
     private delivery_serv: DeliveryService) { 
-      this.authService.ifNotLoggedIn()
+      this.auth_service.ifNotLoggedIn()
 
       }
 
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
   }
   async ngOnInit() {
     
-    await this.authService.getDark().then((test)=>{
+    await this.auth_service.getDark().then((test)=>{
       if (test) {document.body.setAttribute('data-theme', 'dark');	
     this.dark=true}
       else {document.body.setAttribute('data-theme', 'light');
@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
     username:  this.loginForm.username.toString(),
     password: this.loginForm.password.toString()
   }
-  this.authService.login(data)
+  this.auth_service.login(data)
   .subscribe((token: any) => {
     //initialise form control
     this.pressed=true;
@@ -107,12 +107,15 @@ export class LoginComponent implements OnInit {
     console.log("save token this : ",token)
     if(this.platform.is('capacitor')){
       let data=JSON.parse(token.data)
-      this.authService.set('access_token',data)  
+      this.auth_service.set('access_token',data)  
+      this.auth_service.token=data;
     }else{
-      this.authService.set('access_token',token)  
+      this.auth_service.set('access_token',token)  
+      this.auth_service.token=token; 
     }
     
   })
+  
  }
 
  async requestMessaginToken(user:any){
@@ -170,7 +173,10 @@ export class LoginComponent implements OnInit {
       async tokenF => {
         this.listenForMessages();
         this.token=tokenF;
-        this.updateTokenDevice(user,tokenF)
+        this.platform.ready().then(async() => {
+          this.updateTokenDevice(user,tokenF)
+        });
+       
         
       },
       async (err) => {
@@ -207,11 +213,11 @@ async updateTokenDevice(user,FCM_token){
   systemDark.addListener(this.colorTest);
   if(event.detail.checked){
     document.body.setAttribute('data-theme', 'dark');
-    this.authService.set("dark",true)
+    this.auth_service.set("dark",true)
   }
   else{
     document.body.setAttribute('data-theme', 'light');
-    this.authService.set("dark",false)
+    this.auth_service.set("dark",false)
   }
 }
 
