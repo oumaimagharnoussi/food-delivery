@@ -109,6 +109,7 @@ export class LoginComponent implements OnInit {
       let data=JSON.parse(token.data)
       this.auth_service.set('access_token',data)  
       this.auth_service.token=data;
+      
     }else{
       this.auth_service.set('access_token',token)  
       this.auth_service.token=token; 
@@ -135,9 +136,12 @@ export class LoginComponent implements OnInit {
           // On success, we should be able to receive notifications
           PushNotifications.addListener('registration',
             (tokenF: PushNotificationToken) => {
+              this.auth_service.set('fcm',tokenF)  
+              this.auth_service.setFcmToken(tokenF);
             //  alert('Push registration success, token: ' + tokenF.value);
             let info=JSON.parse(user.data)
-            this.updateTokenDevice(info,tokenF.value)
+            window.location.href = "/app/orders";
+         //   this.updateTokenDevice(info,tokenF.value)
 
             }
           );
@@ -171,10 +175,14 @@ export class LoginComponent implements OnInit {
    }else{
     this.messagingService.requestPermission().subscribe(
       async tokenF => {
+        this.auth_service.set('fcm',tokenF)  
+        this.auth_service.setFcmToken(tokenF);
+     
         this.listenForMessages();
         this.token=tokenF;
         this.platform.ready().then(async() => {
-          this.updateTokenDevice(user,tokenF)
+         // this.updateTokenDevice(user,tokenF)
+         window.location.href = "/app/orders";
         });
        
         

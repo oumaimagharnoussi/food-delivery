@@ -22,6 +22,7 @@ export class AuthService {
    
     token:any;
     uuid: any;
+    fcm_token :any;
 
 
 
@@ -43,6 +44,9 @@ export class AuthService {
      
   }
 
+  setFcmToken(token){
+    this.fcm_token=token;
+  }
 
   isAuthenticated() {
   
@@ -155,6 +159,14 @@ export class AuthService {
         });
        return user
       }
+
+      async  getFcmToken():Promise<any> {
+        var fcm;
+        await  this.storage.get("fcm").then((response) => {
+          fcm =response;
+          });
+         return fcm
+        }
 
 
   async init() {

@@ -19,6 +19,7 @@ import {
 import { Router } from '@angular/router';
 import { ModalMapComponent } from '../modal-map/modal-map.component';
 import { NearbyOrdersService } from '../../_services/nearby-orders.service';
+import { DeliveryService } from 'src/app/back/settings/_services/delivery.service';
 
 const { PushNotifications } = Plugins;
 const {Network} =Plugins;
@@ -42,13 +43,33 @@ export class OrderListComponent implements OnInit {
     private changeRef: ChangeDetectorRef,
     private sse:SseService,
     private platform: Platform,
-    private storage: AuthService,
+    private auth_service: AuthService,
     private order_service:OrderService, 
     private geolocation: Geolocation,
     private messagin:MessagingService,
     private menu: MenuController,
     public modalController: ModalController,
-    private nearby_service: NearbyOrdersService) { 
+    private nearby_service: NearbyOrdersService,
+    private delivery_serv: DeliveryService) { 
+      this.platform.ready().then(async() => {
+        await  this.auth_service.getUser().then(async(response) => {
+          if (response) { 
+            await  this.auth_service.getFcmToken().then((tokenFcm) => {
+              if (tokenFcm) { 
+                this.updateTokenDevice(response.data,tokenFcm)
+            
+              }})
+          
+       
+
+          }})
+        });
+        
+     
+       
+      
+
+     
 
     let handler=Network.addListener('networkStatusChange',async(status)=>{
       if (status.connected){
@@ -63,6 +84,22 @@ export class OrderListComponent implements OnInit {
      })
     this.messagin.getMessages()
      
+  }
+
+  async updateTokenDevice(user,FCM_token){
+    let data={
+     deviceToken: FCM_token
+    }
+    console.log(user)
+    
+  return this.delivery_serv.updateDelivery(user,data).subscribe(
+    ()=>{
+     
+     //window.location.href = "/app/orders";
+    }
+ 
+  )
+ 
   }
   openFirst() {
     this.menu.enable(true, 'first');
@@ -227,7 +264,7 @@ async  getOrders(user) {
   this.sse.returnAsObservable().subscribe(data=>
     {
       this.platform.ready().then(async() => {
-        await  this.storage.getUser().then((response) => {
+        await  this.auth_service.getUser().then((response) => {
           if (response) { 
             this.getOrders(response);
 
@@ -239,7 +276,7 @@ async  getOrders(user) {
  
 
   this.platform.ready().then(async() => {
-    await  this.storage.getUser().then((response) => {
+    await  this.auth_service.getUser().then((response) => {
 
      
       if (response) { 
@@ -258,7 +295,7 @@ async  getOrders(user) {
   this.geolocation.getCurrentPosition().then(async (resp) => {
 
     if(!this.platform.is('desktop')&&!this.platform.is('mobileweb')){
-      await  this.storage.getUser().then((response) => {
+      await  this.auth_service.getUser().then((response) => {
         let data=JSON.parse(response.data);
         this.http.setServerTrustMode("nocheck");
         this.http.sendRequest(environment.BACK_API_MOBILE+"/api/deliveries/"+data.data.id,{method:"put"
@@ -291,7 +328,7 @@ async  getOrders(user) {
     if(!this.platform.is('desktop')&&!this.platform.is('mobileweb')){
     this.platform.ready().then(async() => {
 
-      await  this.storage.getUser().then((response) => {
+      await  this.auth_service.getUser().then((response) => {
         let data=JSON.parse(response.data);
         this.http.setServerTrustMode("nocheck");
         this.http.sendRequest(environment.BACK_API_MOBILE+"/api/deliveries/"+data.data.id,{method:"put"
@@ -312,7 +349,7 @@ async  getOrders(user) {
 
 
 
-    await this.storage.getDark().then((test)=>{
+    await this.auth_service.getDark().then((test)=>{
       if (test) {document.body.setAttribute('data-theme', 'dark');	
     this.dark=true}
       else {document.body.setAttribute('data-theme', 'light');
@@ -326,11 +363,11 @@ async  getOrders(user) {
     systemDark.addListener(this.colorTest);
     if(event.detail.checked){
       document.body.setAttribute('data-theme', 'dark');
-      this.storage.set("dark",true)
+      this.auth_service.set("dark",true)
     }
     else{
       document.body.setAttribute('data-theme', 'light');
-      this.storage.set("dark",false)
+      this.auth_service.set("dark",false)
     }
   }
   
