@@ -1,31 +1,41 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {environment} from 'src/environments/environment'
-const host = environment.BACK_API_WPA;
-const httpOptions = { 
-  headers: new HttpHeaders({
-    'Content-Type':  'application/json',
-    'accept': 'application/json'
-  })
-};
+import {  Observable } from 'rxjs';
+import { HttpClientService } from 'src/app/api/http-client.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class PayoutService {
 
-  constructor(private http: HttpClient) {
+
+  constructor(
+    private http:HttpClientService
+    
+    ) {
+      this.http.endpoint='payment_methods';
+
 
   }
-  private extractData(res: Response) {
-    let body = res;
-    return body || {
-     };
+
+  addNewPayoutMethod(data,user): Observable<any> {
+    this.setEndpoint()
+    
+    data.delivery="api/deliveries/"+user.id;
+    return this.http.save(data);
+
   }
 
-  addMethod(data): Observable<any> {
-    return this.http.post(host+'/api/payment_methods', data, httpOptions);
+  deletePayoutMethod(id){
+    this.setEndpoint()
+    return this.http.delete(id);
+
+  }
+
+
+
+  setEndpoint(){
+    this.http.endpoint='payment_methods';
   }
 
 

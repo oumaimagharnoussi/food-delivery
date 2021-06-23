@@ -1,26 +1,16 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, from, of, throwError } from "rxjs";
-import { map } from "rxjs/operators";
+import { BehaviorSubject, Observable } from "rxjs";
 import {Storage} from '@ionic/storage-angular'
-import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
-import { Platform, ToastController } from "@ionic/angular";
+import { Platform } from "@ionic/angular";
 import { Router } from "@angular/router";
-import { TestBed } from "@angular/core/testing";
-import {environment} from 'src/environments/environment'
+import { HttpClientService } from "src/app/api/http-client.service";
+import { v4 as uuidv4 } from 'uuid';
+import { DeviceIdService } from "src/app/api/device-id.service";
 
 
 
 
 
-var AUTH_API = environment.BACK_API_WPA+'/api/';
-const httpOptions = {
-  headers: new HttpHeaders({
-    
-    'Content-Type':  'application/json',
-    'accept': 'application/json'
- 
-  })
-};
 const TOKEN_KEY = 'my-token';
 @Injectable({
   providedIn: 'root'
@@ -30,7 +20,9 @@ export class AuthService {
     // Init with null to filter out the first value in a guard!
     authState: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
    
-    token = '';
+    token:any;
+    uuid: any;
+    fcm_token :any;
 
 
 
@@ -39,19 +31,21 @@ export class AuthService {
   
  
   constructor(
-   private  storage:Storage,private http: HttpClient, private router: Router,  private platform: Platform,  public toastController: ToastController
+   private http: HttpClientService,
+   private  storage:Storage,
+   private router: Router,
+   private platform: Platform,
+   private device_service: DeviceIdService
+
   ) {
+    this.setEndpoint()
     this.init()
- 
-  /*  this.platform.ready().then(() => {
-      this.ifLoggedIn();
-    });*/
     
+     
   }
-  private extractData(res: Response) {
-    let body = res;
-    return body || {
-     };
+
+  setFcmToken(token){
+    this.fcm_token=token;
   }
 
   isAuthenticated() {
@@ -63,13 +57,41 @@ export class AuthService {
 
 
   this.platform.ready().then(async() => {
-    await  this.storage.get("access_token").then((response) => {
+    await  this.storage.get("access_token").then(async(response) => {
 
      
       if (response) {
         console.log(response)
+        this.token=response.token
+        await  this.storage.get("uuid").then(async(response) => {
+          if(response){
+            this.uuid=response;
+            this.device_service.uuid=this.uuid;
+            
+          }else{
+            this.uuid=uuidv4();
+            await this.set('uuid',this.uuid)
+            this.device_service.uuid=this.uuid;
+
+          }
+          
+          console.log(response)
+        });
         this.authState.next(true);
       }else{
+        await  this.storage.get("uuid").then((response) => {
+          if(response){
+            this.uuid=response;
+            this.device_service.uuid=response;
+          }else{
+            this.uuid=uuidv4();
+            this.set('uuid',this.uuid)
+            this.device_service.uuid=this.uuid;
+
+          }
+          
+          console.log(response)
+        });
         this.router.navigate(['/login'])
       }
     });
@@ -84,14 +106,27 @@ export class AuthService {
 
 
     this.platform.ready().then(async() => {
-      await  this.storage.get("access_token").then((response) => {
+      await  this.storage.get("access_token").then(async(response) => {
   
        
         if (!response) {
+          await  this.storage.get("uuid").then(async(response) => {
+            if(response){
+              this.uuid=response;
+              this.device_service.uuid=response;
+            }else{
+              this.uuid=uuidv4();
+              await this.set('uuid',this.uuid)
+              this.device_service.uuid=this.uuid;
+            }
+            
+            console.log(response) 
+          });
           console.log(response)
           this.authState.next(false);
         }else{
-          this.router.navigate(['/app/orders'])
+          this.token=response.data
+          window.location.href = "/app/orders";
         }
       });
     });
@@ -99,50 +134,39 @@ export class AuthService {
   
   
     }
-    id;
-      getUserInfo() {
-
-
-   
-          this.storage.get("access_token").then((response) => {
-    
-         
-         console.log(response)
-          return response
-
-      });
-    
- 
-    
-      }
+  
 
   async  getDark():Promise<boolean> {
-    var test;
+    var darkState;
     await  this.storage.get("dark").then((response) => {
-  
-        test =response;
-        
-        
-         
-       
+      darkState =response;
       });
-      return test;
-    
+      return darkState;
     }
 
-    async  getUser():Promise<any> {
-      var test;
-      await  this.storage.get("access_token").then((response) => {
-    
-          test =response;
-          
-          
-           
-         
+    async  get(key):Promise<any> {
+      var value;
+      await  this.storage.get(key).then((response) => {    
+          value =response;
         });
-        return test;
-      
+        return value;
       }
+
+    async  getUser():Promise<any> {
+      var user;
+      await  this.storage.get("access_token").then((response) => {
+          user =response;
+        });
+       return user
+      }
+
+      async  getFcmToken():Promise<any> {
+        var fcm;
+        await  this.storage.get("fcm").then((response) => {
+          fcm =response;
+          });
+         return fcm
+        }
 
 
   async init() {
@@ -162,23 +186,56 @@ export class AuthService {
 
 
   login(credentials): Observable<any>  {
-
- 
-
-    return this.http.post(AUTH_API+'login_check', credentials,httpOptions)
+    this.setEndpoint()
+    return this.http.save(credentials);
      
   }
 
 
-  logout(): Promise<void> {
+ async logout(): Promise<void> {
     this.authState.next(false);
-    return this._storage.remove("access_token");
-    this.router.navigate(['/index'])
+
+    await  this.storage.get("access_token").then((response) => {
+      this.http.endpoint='deliveries';
+      this.http.update(response.data.id,{
+        deviceToken: ""
+      }).subscribe(
+        ()=>{
+          this._storage.remove("access_token");
+          this._storage.remove("uuid");
+          this._storage.remove("acceptedList");
+          this._storage.remove("comissionList");
+          this._storage.remove("deliveryInfo");
+          this._storage.remove("dark").then(
+            ()=>{window.location.href = "/login";}
+          );;
+        },
+        ()=>{
+          this._storage.remove("access_token");
+          this._storage.remove("uuid");
+          this._storage.remove("acceptedList");
+          this._storage.remove("comissionList");
+          this._storage.remove("deliveryInfo");
+          this._storage.remove("dark").then(
+            ()=>{window.location.href = "/login";}
+          );;
+        }
+
+      )
+    })
+    
+       
+           
+          
+        
+
+      
+    
+    return;
   }
 
-
-
-
-
+  setEndpoint(){
+    this.http.endpoint='login_check';
+  }
 
 }

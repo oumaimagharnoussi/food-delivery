@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../_services/auth.service';
-import {environment} from 'src/environments/environment'
+
 import {
   Plugins,
   PushNotification,
@@ -10,8 +10,10 @@ import {
   PushNotificationActionPerformed,
 } from '@capacitor/core';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
-import { HTTP } from '@ionic-native/http/ngx';
+
 import { MessagingService } from '../../_services/messaging.service';
+import { DeliveryService } from 'src/app/back/settings/_services/delivery.service';
+
 
 const { PushNotifications } = Plugins;
 
@@ -34,8 +36,17 @@ export class LoginComponent implements OnInit {
   };
 
 
-  constructor(    private alertCtrl: AlertController,
-    private toastCtrl: ToastController,private messagingService: MessagingService, private http: HTTP,private authService:AuthService, private router: Router,private platform: Platform) { }
+  constructor(    
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    private messagingService: MessagingService, 
+    private auth_service:AuthService,
+    private router: Router,
+    private platform: Platform,
+    private delivery_serv: DeliveryService) { 
+      this.auth_service.ifNotLoggedIn()
+
+      }
 
 
   listenForMessages() {
@@ -45,17 +56,15 @@ export class LoginComponent implements OnInit {
         subHeader: msg.notification.body,
         message: msg.data.info,
         buttons: [ 'OK',   
-      
         ],
-        
       });
  
       await alert.present();
     });
   }
   async ngOnInit() {
-    this.authService.ifNotLoggedIn()
-    await this.authService.getDark().then((test)=>{
+    
+    await this.auth_service.getDark().then((test)=>{
       if (test) {document.body.setAttribute('data-theme', 'dark');	
     this.dark=true}
       else {document.body.setAttribute('data-theme', 'light');
@@ -64,79 +73,54 @@ export class LoginComponent implements OnInit {
    });
 
   }
-  login(){
 
-    if(this.platform.is('desktop') || this.platform.is('mobileweb')){
 
-    this.authService.login(this.loginForm)
-    .subscribe((token: any) => {
-      this.pressed=true;
-      this.err=false
-      this.router.navigate(['/app/orders'])
-      this.messagingService.requestPermission().subscribe(
-        async tokenF => {
-          this.listenForMessages();
-          this.token=tokenF;
-          this.router.navigate(['/app/orders'])
-          const toast = await this.toastCtrl.create({
-            message: 'Got your token',
-            duration: 2000
-          });
-          toast.present();
-        },
-        async (err) => {
-          const alert = await this.alertCtrl.create({
-            header: 'Error',
-            message: err,
-            buttons: ['OK'],
-          });
-   
-          await alert.present();
-        }
-      );
-   
-      this.platform.ready().then(async() => {
-
-        this.listenForMessages();
-     //   this.router.navigate(['/app/orders'])
-        this.authService.set('access_token',token)
-        window.location.href = "/app/orders";
-        //
-      
+ authenticate(){
+   //call auth service
+   let data=   {
+    username:  this.loginForm.username.toString(),
+    password: this.loginForm.password.toString()
+  }
+  this.auth_service.login(data)
+  .subscribe((token: any) => {
+    //initialise form control
+    this.pressed=true;
+    this.err=false
+    //request FCM token
+    this.saveToken(token).then(
+      ()=>{
+        this.requestMessaginToken(token)
       }
-      );
-    
+    )
+
+  },err=>{
+    this.pressed=true;
+    this.err=true;
+    this.errMsg="Verify your credentials!"
+
+  });
+
+ }
+
+ async saveToken(token){
+  this.platform.ready().then(async() => {
+    console.log("save token this : ",token)
+    if(this.platform.is('capacitor')){
+      let data=JSON.parse(token.data)
+      this.auth_service.set('access_token',data)  
+      this.auth_service.token=data;
       
-    console.log(token)
-    },error=>{
-      this.pressed=true;
-      this.err=true;
-      this.errMsg="Verify your credentials!"
-
-    }
-    );
-
-
     }else{
-      this.http.setServerTrustMode("nocheck");
-
-      this.http.sendRequest(environment.BACK_API_MOBILE+'/api/login_check',{method: "post",data:
-      {
-  
-  
-        
-        "username":  this.loginForm.username.toString(),
-        "password": this.loginForm.password.toString()
-      
-      
-      }
-      ,serializer:"json"}).then((token: any) => {
-        this.pressed=true;
-        this.err=false
-        if(this.platform.is('android'))
-        {
-          console.log('Initializing HomePage');
+      this.auth_service.set('access_token',token)  
+      this.auth_service.token=token; 
+    }
     
+  })
+  
+ }
+
+ async requestMessaginToken(user:any){
+   if(this.platform.is('capacitor')){
           // Request permission to use push notifications
           // iOS will prompt user and return if they granted permission or not
           // Android will just grant without prompting
@@ -152,20 +136,13 @@ export class LoginComponent implements OnInit {
           // On success, we should be able to receive notifications
           PushNotifications.addListener('registration',
             (tokenF: PushNotificationToken) => {
+              this.auth_service.set('fcm',tokenF)  
+              this.auth_service.setFcmToken(tokenF);
             //  alert('Push registration success, token: ' + tokenF.value);
-              this.token=tokenF.value;
-              this.authService.set("tokenDevice",this.token)
-              
-              let info=JSON.parse(token.data)
-              this.http.sendRequest(environment.BACK_API_MOBILE+'/api/deliveries/'+info.data.id,{method: "put",data:
-              {
-          
-                "deviceToken":  this.token,
-                           
-              
-              }
-              ,serializer:"json"})
-      
+            let info=JSON.parse(user.data)
+            window.location.href = "/app/orders";
+         //   this.updateTokenDevice(info,tokenF.value)
+
             }
           );
       
@@ -189,32 +166,54 @@ export class LoginComponent implements OnInit {
               let id=JSON.stringify(notification.notification.data);
               this.router.navigate(['/orders/details/'+id.toString().substring(1,id.toString().length-1)])
               console.log(id)
-          //   alert('Push action performed: ' + JSON.stringify(notification.notification.data));
+         
             }
           );
-      
-      
-        }
+
+          
+
+   }else{
+    this.messagingService.requestPermission().subscribe(
+      async tokenF => {
+        this.auth_service.set('fcm',tokenF)  
+        this.auth_service.setFcmToken(tokenF);
+     
+        this.listenForMessages();
+        this.token=tokenF;
         this.platform.ready().then(async() => {
-          this.authService.set('access_token',token)
-          window.location.href = "/app/orders";
-       //   location.reload();
-        }
-        );
-      
+         // this.updateTokenDevice(user,tokenF)
+         window.location.href = "/app/orders";
+        });
+       
         
-      console.log(token)
-      },error=>{
-        this.pressed=true;
-        this.err=true;
-        this.errMsg="Verify your credentials!"
-  
+      },
+      async (err) => {
+        const alert = await this.alertCtrl.create({
+          header: 'Error',
+          message: err,
+          buttons: ['OK'],
+        });
+ 
+        await alert.present();
       }
-      );
-    }
-    
+    );
+
+   }
+ }
+
+async updateTokenDevice(user,FCM_token){
+   let data={
+    deviceToken: FCM_token
+   }
    
-  
+ return this.delivery_serv.updateDelivery(user.data,data).subscribe(
+   ()=>{
+    
+    window.location.href = "/app/orders";
+   }
+
+ )
+
  }
 
  onClick(event){
@@ -222,11 +221,11 @@ export class LoginComponent implements OnInit {
   systemDark.addListener(this.colorTest);
   if(event.detail.checked){
     document.body.setAttribute('data-theme', 'dark');
-    this.authService.set("dark",true)
+    this.auth_service.set("dark",true)
   }
   else{
     document.body.setAttribute('data-theme', 'light');
-    this.authService.set("dark",false)
+    this.auth_service.set("dark",false)
   }
 }
 
@@ -237,5 +236,10 @@ export class LoginComponent implements OnInit {
     document.body.setAttribute('data-theme', 'light');
   }
 }
+
+redirect(route){
+  this.router.navigate([route])
+}
+
 
 }

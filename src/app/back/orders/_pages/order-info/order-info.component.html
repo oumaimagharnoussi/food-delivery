@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" class="ion-no-border" mode="ios">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/orders"></ion-back-button>
+    <ion-buttons  slot="start">
+      <ion-back-button color="light"  defaultHref="/orders"></ion-back-button>
     </ion-buttons>
 
     <ion-title>
@@ -11,80 +11,92 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-card>
-    <ion-item>
-      <ion-icon name="cart-outline" slot="start"></ion-icon>
-      <ion-label>Order details</ion-label>
-      <ion-button slot="end" (click)="presentModal()"><ion-icon size="large" name="navigate-circle-outline"></ion-icon></ion-button>
-    
-     
-    </ion-item>
+<ion-content  [fullscreen]="true">
+
+<div class="p-3">
+  <ion-item class="mb-3">
+    <ion-icon name="cart-outline" slot="start"></ion-icon>
+    <ion-label>Order details</ion-label>
+    <ion-button slot="end" color="tertiary" (click)="presentModal()"><ion-icon size="medium" name="navigate-outline"></ion-icon></ion-button>
   
-    <ion-card-content>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <h2>ID</h2>
-        </div>
-        <div>
-          <h3>#{{order?.id}}</h3>
-        </div>
-
-        <div>
-          <h2>Total price</h2>
-        </div>
-        <div>
-          <h3>{{order?.totalPrice}} € </h3>
-        </div>
-        <div>
-          <h2>Payment</h2>
-        </div>
-        <div>
-          <h3>cash on delivery</h3>
-        </div>
-        <div>
-          <h2>Client address</h2>
-        </div>
-        <div>
-          <h3>{{order?.adresseLivraison}}</h3>
-        </div>
-        <div>
-          <h2>Distance to resturant</h2>
-        </div>
-        <div>
-          <h3>0.8KM</h3>
-        </div>
-        <div>
-          <h2>Distance to client</h2>
-        </div>
-        <div>
-          <h3>0.4KM</h3>
-        </div>
-
-        <div>
-
-        </div>
-        <div>
-          
-          <ion-button *ngIf="order?.status=='INDELIVERY'" color="tertiary" expand="block" ><b class="text-white"> Finish order</b></ion-button>
-  
-          <ion-button *ngIf="order?.status!='INDELIVERY'" color="success" expand="block"  (click)="accept()"><b class="text-white"> ACCEPT</b>
-          </ion-button>
-        </div>
+   
+  </ion-item>
 
 
-      
-        
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <h2>ID</h2>
       </div>
- 
-    </ion-card-content>
+      <div>
+        <h3>#{{order?.id}}</h3>
+      </div>
+      <div  *ngIf="order?.status=='INDELIVERY'" >
+        <h2>Accepted date</h2>
+      </div>
+      <div  *ngIf="order?.status=='INDELIVERY'" >
+        <h3>{{order?.acceptedDeliveryAt | date : 'short' }}</h3>
+      </div>
 
-  </ion-card>
+      <div>
+        <h2>Total price</h2>
+      </div>
+      <div>
+        <h3>{{order?.totalPrice}} € </h3>
+      </div>
+      <div>
+        <h2>Comission</h2>
+      </div>
+      <div>
+        <h3>{{order?.totalPrice*0.2|number}} € </h3>
+      </div>
+      <div>
+        <h2>Payment</h2>
+      </div>
+      <div>
+        <h3>cash on delivery</h3>
+      </div>
+      <div>
+        <h2>Restaurant address</h2>
+      </div>
+      <div>
+        <h3>{{order?.restaurant.route}} {{order?.restaurant.streetNumber}}, {{order?.restaurant.locality}}</h3>
+      </div>
+      <div>
+        <h2>Client address</h2>
+      </div>
+      <div>
+        <h3>{{order?.adresseLivraison}}</h3>
+      </div>
+      <div>
+        <h2>Distance to resturant</h2>
+      </div>
+      <div>
+        <h3> {{distances?.deliveryToRestaurant/1000| number : '1.1-1'}} KM  </h3>
+      </div>
+      <div>
+        <h2>Distance to client</h2>
+      </div>
+      <div>
+        <h3> {{distances?.totalDistance/1000| number : '1.1-1'}} KM  </h3>
+      </div>
+
+      <div>
+
+      </div>
+     
+   
+
+
+    
+      
+    </div>
+    <ion-button  *ngIf="order?.status=='INDELIVERY'" color="tertiary" expand="full" (click)="finish()" ><b class="text-white"> Finish order</b></ion-button>
+
+    <ion-button  *ngIf="order?.status!='INDELIVERY'" color="tertiary" expand="full"  (click)="accept()"><b class="text-white"> ACCEPT</b>
+    </ion-button>
+
+</div>
+   
   
 
 

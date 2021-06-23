@@ -13,6 +13,7 @@ const routes: Routes = [
 
   {
     path: 'app',
+    
     loadChildren: () => import('./back/back.module').then( m => m.BackModule),
     canActivate:[AuthGuardService]
   }

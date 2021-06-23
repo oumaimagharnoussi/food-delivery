@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class OfflineManagerService {
+export class DeviceIdService {
 
-  constructor() { }
+  uuid: any;
+  constructor() {
+
+  }
+
 }

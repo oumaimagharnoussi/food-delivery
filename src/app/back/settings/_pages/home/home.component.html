@@ -1,99 +1,123 @@
 <ion-header [translucent]="true"  class="ion-no-border" mode="ios">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/orders"></ion-back-button>
+      <ion-back-button color="light"  defaultHref="/orders"></ion-back-button>
     </ion-buttons>
 
     <ion-title>
        Settings
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="moon-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
 <!-- component -->
 <!-- This is an example component -->
 <div class="my-1">
-  <div class=" rounded overflow-hidden shadow-lg">
-    <div class="text-center p-6  border-b">
+  <div class=" rounded overflow-hidden ">
+    <div class="text-center p-2 border-b">
       <img
         class="h-24 w-24 rounded-full mx-auto"
-        src="https://randomuser.me/api/portraits/men/24.jpg"
+        src="assets/imgs/delivery-man.png"
         alt="Randy Robertson"
       />
-      <p class="pt-2 text-lg font-semibold">Randy Robertson</p>
-      <p class="text-sm ">randy.robertson@example.com</p>
+      <p class="pt-2 text-lg font-semibold">{{delivery?.firstName}} {{delivery?.lastName}}</p>
+      <p class="text-sm ">{{delivery?.email}}</p>
       <div class="mt-5">
-        <a
-          href="#"
-          class="border rounded-full py-2 px-4 text-xs font-semibold"
-        >
-          Manage your Account
-        </a>
+    
       </div>
     </div>
-    <div class="border-b">
+    <div>
+      <ion-list>
+      
 
-      <a (click)="payoutPage()" class="px-4 py-2 hover:bg-gray-100 flex">
+        <ion-item>
+         
+            <ion-avatar  slot="start">
+              <ion-icon size="large" name="card-outline"></ion-icon>
+  
+            </ion-avatar>
+       
+       
+            <div>
+              <p class="text-sm font-bold leading-none mb-2">Payout settings</p>
+              <p class="text-xs ">Manage payment methods</p>
+            </div>
+        
+      
+            <ion-icon (click)="payoutPage()"slot="end"  size="medium" name="chevron-forward"></ion-icon>
+        
+               
+        </ion-item>
+
+        <ion-item>
+         
+          <ion-avatar  slot="start">
+            <ion-icon size="large" name="person-outline"></ion-icon>
+
+          </ion-avatar>
+     
+     
+          <div>
+            <p class="text-sm font-bold leading-none mb-2">Personal settings</p>
+            <p class="text-xs ">Manage profile info</p>
+          </div>
+      
+    
+          <ion-icon (click)="profilePage()" slot="end"  size="medium" name="chevron-forward"></ion-icon>
+      
+             
+      </ion-item>
+
+      <ion-item>
+         
+        <ion-avatar  slot="start">
+          <ion-icon size="large" name="color-palette-outline"></ion-icon>
+
+        </ion-avatar>
+   
+   
         <div>
-          <svg
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1"
-            viewBox="0 0 24 24"
-            class="w-5 h-5"
-          >
-            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
+          <p class="text-sm font-bold leading-none mb-2">Apparence</p>
+          <p class="text-xs ">Theme, dark mode </p>
         </div>
-        <div class="pl-3">
-          <p class="text-sm font-medium leading-none">Payout settings</p>
-          <p class="text-xs ">Add, update payment method</p>
-        </div>
-      </a>
-      <a (click)="profilePage()" class="px-4 py-2 hover:bg-gray-100 flex">
-        <div >
-          <svg
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1"
-            viewBox="0 0 24 24"
-            class="w-5 h-5"
-          >
-            <path d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <div class="pl-3">
-          <p class="text-sm font-medium leading-none">Personal settings</p>
-          <p class="text-xs">Profile, notifications</p>
-        </div>
-      </a>
+    
+  
+        <ion-icon (click)="presentActionSheet()" slot="end"  size="medium" name="chevron-forward"></ion-icon>
+    
+           
+    </ion-item>
+
+    <ion-item>
+         
+      <ion-avatar  slot="start">
+        <ion-icon size="large" name="help-circle-outline"></ion-icon>
+
+      </ion-avatar>
+ 
+ 
+      <div>
+        <p class="text-sm font-bold leading-none mb-2">Support FAQ</p>
+        <p class="text-xs ">Help and support </p>
+      </div>
+  
+
+      <ion-icon slot="end"  size="medium" name="chevron-forward"></ion-icon>
+  
+         
+  </ion-item>
+      
+      
+      </ion-list>
+
+    
+   
    
     </div>
 
-    <div class="my-10">
-      <a href="#" class="px-4 py-2 pb-4   hover:bg-gray-100 flex">
-        <p class="text-sm font-medium  leading-none">Support FAQ</p>
-      </a>
-      <a href="#" class="px-4 py-2 pb-4  hover:bg-gray-100 flex">
-        <p class=" font-medium   leading-none"> <ion-icon size="large" name="log-in-sharp"></ion-icon> Logout</p>
-      </a>
-    </div>
+    
   </div>
 </div>
  

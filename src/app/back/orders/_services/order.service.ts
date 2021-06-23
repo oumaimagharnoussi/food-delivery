@@ -1,83 +1,63 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
-import {environment} from 'src/environments/environment'
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-const host = environment.BACK_API_WPA;
-const httpOptions = { 
-  headers: new HttpHeaders({
-    'Content-Type':  'application/json',
-    'accept': 'application/json'
-  })
-};
+import {  Observable } from 'rxjs';
+import { HttpClientService } from 'src/app/api/http-client.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
 
-  constructor(private http: HttpClient) { 
+  constructor(
+    private http: HttpClientService) { 
+      this.setEndpoint()
+
 
   }
 
-  private extractData(res: Response) {
-    let body = res;
-    return body || {
-     };
+ 
+  getAcceptedOrders(user,page): Observable<any> {
+    this.setEndpoint()
+    return this.http.findAll('?status=INDELIVERY&delivery.id='+user.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc')
   }
 
-  getOrders(id): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'accept': 'application/json'
-    });
+  getOrderInfo(id): Observable<any>{
+    this.setEndpoint()
+    this.http.endpoint='orders';
+    return this.http.findOne(id)
 
-    const options = { headers: headers };
-    return this.http.get(host+'/api/nearby_orders/'+id , options).pipe(
-      map(this.extractData));
   }
-getAcceptedOrders(id,page){
 
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    'accept': 'application/json'
-  });
 
-  const options = { headers: headers };
-  return this.http.get(host+'/api/orders?status=INDELIVERY&delivery.id='+id+'&page='+page , options).pipe(
-    map(this.extractData));
+acceptOrder(id,user): Observable<any>{
+  this.setEndpoint()
+  let order= {
+    delivery:"api/deliveries/"+user.id,
+    status: "INDELIVERY",
+    acceptedDeliveryAt: new Date()
+  }
+  return this.http.update(id,order);
+}
+
+finishOrder(id): Observable<any>{
+  this.setEndpoint()
+  let order= {
+    status: "DELIVERED",
+    deliveredAt: new Date()
+  }
+  return this.http.update(id,order);
+}
+
+getDistances(orderID: number,deliveryID: number){
+  this.http.endpoint='distances';
+  return this.http.findAll('/'+deliveryID+'/'+orderID)
 
 
 }
 
-  getOrder(id): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'accept': 'application/json'
-    });
 
-    const options = { headers: headers };
-    return this.http.get(host+'/api/orders/'+id , options).pipe(
-      map(this.extractData));
+
+  setEndpoint(){
+    this.http.endpoint='orders';
   }
-
-  getDelivery(id): Observable<any> { 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'accept': 'application/json'
-    });
-
-    const options = { headers: headers };
-    return this.http.get(host+'/api/deliveries/'+id , options).pipe(
-      map(this.extractData));
-  }
-
-
-  accept(order_id,delivery_id): Observable<any> {
-    return this.http.put(host+'/api/orders/'+order_id, {
-      delivery:"api/deliveries/"+delivery_id,
-      status: "INDELIVERY"
-    }, httpOptions);
-  }
-
 
 }

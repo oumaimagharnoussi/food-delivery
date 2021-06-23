@@ -5,7 +5,7 @@ import { BackRoutingModule } from './back-routing.module';
 import { IonicModule } from '@ionic/angular';
 import { TabsPageModule } from './tabs/tabs.module';
 import { OrdersModule } from './orders/orders.module';
-import { ChatModule } from './chat/chat.module';
+
 import { PaymentsModule } from './payments/payments.module';
 import { SettingsModule } from './settings/settings.module';
 
@@ -17,7 +17,6 @@ import { SettingsModule } from './settings/settings.module';
     BackRoutingModule,
     TabsPageModule,
     OrdersModule,
-    ChatModule,
     PaymentsModule,
     SettingsModule
   ]

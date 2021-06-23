@@ -3,14 +3,9 @@ import {HttpClient, HttpHeaders,HttpRequest} from '@angular/common/http';
 import DeliveryBoy from '../_models/DeliveryBoy';
 import { Observable } from 'rxjs';
 import {environment} from 'src/environments/environment'
-const host = environment.BACK_API_WPA;
+import { HttpClientService } from 'src/app/api/http-client.service';
 
-const httpOptions = { 
-  headers: new HttpHeaders({
-    'Content-Type':  'application/json',
-    'accept': 'application/json'
-  })
-};
+
 
 @Injectable({ 
   providedIn: 'root'
@@ -18,25 +13,17 @@ const httpOptions = {
 export class RegisterService {
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClientService) {
+    this.http.endpoint='deliveries'
 
   }
-  private extractData(res: Response) {
-    let body = res;
-    return body || {
-     };
-  }
-
-
 
   register(user :DeliveryBoy): Observable<any> {
-    return this.http.post(host+'/api/deliveries', user, httpOptions);
+    this.http.endpoint='deliveries'
+    return this.http.save(user);
   }
 
-  login(credentials): Observable<any>  {
-    return this.http.post(host+'/api/login_check', credentials,httpOptions)
-     
-  }
+
 
 
 

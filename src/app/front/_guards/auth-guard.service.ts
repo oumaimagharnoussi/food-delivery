@@ -16,7 +16,7 @@ export class AuthGuardService implements CanActivate {
  
     canActivate(): Observable<boolean> {   
       this.authService.ifLoggedIn(); 
-     const test= this.authService.authState.pipe(
+     const state= this.authService.authState.pipe(
         filter(val => val !== null), // Filter out initial Behaviour subject value
         take(1), // Otherwise the Observable doesn't complete!
         map(isAuthenticated => {
@@ -31,7 +31,9 @@ export class AuthGuardService implements CanActivate {
         })
       );
 
-      console.log(test)
-      return test
+    
+      return state
     }
+
+    
 }

@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { OrderService } from '../../_services/order.service';
 import { ModalMapComponent } from '../modal-map/modal-map.component';
-import {environment} from 'src/environments/environment'
 import { Router } from '@angular/router';
+import { DeliveryService } from 'src/app/back/settings/_services/delivery.service';
 @Component({
   selector: 'app-order-info',
   templateUrl: './order-info.component.html',
@@ -23,13 +22,15 @@ export class OrderInfoComponent implements OnInit {
     lng: 8.902773358214844
   };
   delivery: any;
+  distances: any;
 
   constructor(private platform:Platform,
-     private http: HTTP,
+
       private order_service:OrderService,
       public alertController: AlertController,
       public modalController: ModalController,
       private auth:AuthService,
+      private delivery_serv: DeliveryService,
       private router:Router) { 
     this.orderId=this.getUrl()
    
@@ -42,7 +43,7 @@ export class OrderInfoComponent implements OnInit {
      
       await  this.auth.getUser().then((response) => {
         if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-        this.getInfo(response.data.id);
+        this.getInfo(response.data);
         }else{
 
           let data=JSON.parse(response.data)
@@ -68,52 +69,30 @@ export class OrderInfoComponent implements OnInit {
   }
 
   getOrder(id) {
-    if(!this.platform.is("desktop")&&!this.platform.is("mobileweb")){
-
-      this.http.setServerTrustMode("nocheck");
-      this.http.sendRequest(environment.BACK_API_MOBILE+'/api/orders/'+id ,{method: "get"
-      ,serializer:"json",responseType:"json"}).then((data) => {
-           this.order=data.data;
-           this.destination.lat=data.data.restaurant.currentLatitude;
-           this.destination.lng=data.data.restaurant.currentLongitude;
-         })
-    }else
-    {
-      this.order_service.getOrder(id).subscribe((data) => { 
+  
+ 
+      this.order_service.getOrderInfo(id).subscribe((data) => { 
         this.order=data;
         this.destination.lat=data.restaurant.currentLatitude;
         this.destination.lng=data.restaurant.currentLongitude;
 
       })
-    }
+    
    }
 
    getInfo(id) {
-    if(!this.platform.is("desktop")&&!this.platform.is("mobileweb")){
-
-     this.http.setServerTrustMode("nocheck");
-
-     this.http.sendRequest(environment.BACK_API_MOBILE+'/api/deliveries/'+id ,{method: "get"
-     ,serializer:"json",responseType:"json"}).then((data) => {
-       
-        this.source.lat=data.data.currentLatitude;
-        this.source.lng=data.data.currentLongitude;
-        this.delivery=data.data;
-        
-        })
-    }else{
-
-     this.order_service.getDelivery(id).subscribe((data) => {
+   
+     this.delivery_serv.getDelivery(id).subscribe((data) => {
       this.delivery=data;
       this.source.lat=data.currentLatitude;
       this.source.lng=data.currentLongitude;
+      this.order_service.getDistances(this.orderId,data.id).subscribe(
+        (data)=>{
+          this.distances=data;
+        }
+      )
       })
 
-    }
-
-   
-      
-  
   }
 
    async accept(){ 
@@ -141,6 +120,31 @@ export class OrderInfoComponent implements OnInit {
   
     await alert.present();
   }
+  async finish(){ 
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirm delivery completed',
+      message: '',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.finishOrder(this.order.id)
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
 
   async presentModal() {
     const modal = await this.modalController.create({
@@ -157,10 +161,10 @@ export class OrderInfoComponent implements OnInit {
 
   acceptOrder(id){
 
-    if(this.platform.is('mobileweb') || this.platform.is('desktop')){
+  
       this.platform.ready().then(async() => {
         await  this.auth.getUser().then((response) => {
-          this.order_service.accept(id,response.data.id).subscribe(
+          this.order_service.acceptOrder(id,response.data).subscribe(
             data=>{
               this.router.navigate(['/orders'])
             },err=>{
@@ -169,27 +173,19 @@ export class OrderInfoComponent implements OnInit {
         })
   
   })
-    }else{
-      this.platform.ready().then(async() => {
-      await  this.auth.getUser().then((response) => {
-        let data=JSON.parse(response.data);
-        this.http.sendRequest(environment.BACK_API_MOBILE+'/api/orders/'+id,{method: "put",data:
-        {
     
-          status:  "INDELIVERY",
-          delivery: "api/deliveries/"+data.data.id
-  
-                    
-        }
-        ,serializer:"json"})
-
-      })
-    })
 
 
-    }
 
+  }
 
+  finishOrder(id){
+      this.order_service.finishOrder(id).subscribe(
+            data=>{
+              window.location.href = "/app/payments";
+          
+            }
+          )
 
   }
 

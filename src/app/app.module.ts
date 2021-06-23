@@ -22,10 +22,21 @@ import { MessagingService } from './front/_services/messaging.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { TextAvatarModule } from './text-avatar/text-avatar.module';
+import { IonIntlTelInputModule } from 'ion-intl-tel-input';
+import { ApiModule } from './api/api.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpConfigInterceptor } from './api/httpConfig.interceptor';
+
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule,FormsModule, ReactiveFormsModule, IonicModule.forRoot(), AppRoutingModule,FrontModule,BackModule,
+  imports: [BrowserModule,FormsModule,
+    IonIntlTelInputModule,
+    
+     ReactiveFormsModule, IonicModule.forRoot(), AppRoutingModule,FrontModule,BackModule,ApiModule,
     IonicStorageModule.forRoot({
       name: '__mydb',
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
@@ -34,16 +45,22 @@ import { Network } from '@ionic-native/network/ngx';
       enabled: true
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
-  //    registrationStrategy: 'registerWhenStable:30000'
+    
     }),
 
   AngularFireModule.initializeApp(environment.firebase),
   AngularFireMessagingModule,
+  TextAvatarModule
 /* ServiceWorkerModule.register('ngsw-worker.js', {
     enabled: environment.production
   })*/
 ],
-  providers: [Network, AuthService ,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [Network, AuthService ,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpConfigInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

@@ -1,10 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HTTP } from '@ionic-native/http/ngx';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { ComissionService } from 'src/app/back/payments/_services/comission.service';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import {environment} from 'src/environments/environment'
+import { PayoutService } from '../../_services/payout.service';
+import { 
+  Plugins
+} from '@capacitor/core';
+import { DeliveryService } from '../../_services/delivery.service';
+
+
+const {Network} =Plugins;
 @Component({
   selector: 'app-payout-list',
   templateUrl: './payout-list.component.html',
@@ -12,71 +20,152 @@ import {environment} from 'src/environments/environment'
 })
 export class PayoutListComponent implements OnInit {
   delivery: any;
+  offline: boolean;
+  userID: any;
 
-  constructor(private comisson_service:ComissionService,
+  constructor(private delivery_serv: DeliveryService,
     private platform:Platform,private auth:AuthService,
-    private http: HTTP,
+   
     private router:Router,
-    public alertController: AlertController) { }
+    public alertController: AlertController,
+    private  payout_service : PayoutService,
+    private changeRef: ChangeDetectorRef,
+    private toastController: ToastController,
 
-    addPage(){
-      this.router.navigate(['/app/settings/add'])
+   ) { 
+    
+    
     }
 
-    async deletetConfirm() {
-      const alert = await this.alertController.create({
-        cssClass: 'my-custom-class',
-        header: 'Confirm!',
-        message: 'Message <strong>text</strong>!!!',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            cssClass: 'secondary',
-            handler: (blah) => {
-              console.log('Confirm Cancel: blah');
-            }
-          }, {
-            text: 'Okay',
-            handler: () => {
-              console.log('Confirm Okay');
-            }
-          }
-        ]
-      });
   
-      await alert.present();
+ 
+  
+  async  offlineMode(){
+      let status=await Network.getStatus();
+      if(status.connected){
+        
+        this.getInfo()
+        this.offline=false;
+        this.changeRef.detectChanges();
+      }else{
+        
+        this.offline=true;
+        this.auth.get("deliveryInfo").then(
+          test=>{
+            this.delivery=test;
+          }
+         )
+        this.changeRef.detectChanges();
+        
+      }
+  
+      let handler=Network.addListener('networkStatusChange',async(status)=>{
+        if (status.connected){
+          
+     
+          this.getInfo()
+  
+          this.offline=false;
+          this.changeRef.detectChanges();
+        }else{
+          
+          this.offline=true;
+          this.auth.get("deliveryInfo").then(
+            test=>{
+              this.delivery=test;
+            }
+           )
+          this.changeRef.detectChanges();
+        }
+       })
+    }
+    async  ngOnInit() { 
+     this.offlineMode();
+
+  
+     // this.getInfo()
+    }
+  
+
+    getInfo(){
+      this.platform.ready().then(async() => {
+    
+          await  this.auth.getUser().then((response) => {
+      
+           
+            this.delivery_serv.getDelivery(response.data).subscribe(
+              data=>{
+                this.delivery=data
+                this.auth.set('deliveryInfo',this.delivery)
+              }
+            )
+       
+        })
+      })
     }
 
-  ngOnInit() {
 
-    this.platform.ready().then(async() => {
+    delete(id){
 
      
-      await  this.auth.getUser().then((response) => {
-        if(this.platform.is("desktop")||this.platform.is("mobileweb")){
-          this.comisson_service.getDelivery(response.data.id).subscribe(
-            data=>{
-              this.delivery=data
-              console.log(this.delivery)
-            }
-          )
+        this.payout_service.deletePayoutMethod(id).subscribe(
+          data => this.getInfo()   
+        )
+     
 
-        }else{
-          let data=JSON.parse(response.data)
-          this.http.setServerTrustMode("nocheck");
-          this.http.get(environment.BACK_API_MOBILE+'/api/deliveries/'+data.data.id ,  {},
-          {
-            "Content-Type": "application/json",
-            "accept": "application/json"
-          }  ).then((data ) => {
-            console.log(data)
-            
-               this.delivery= JSON.parse( data.data)
-          })
-        }
-      })
-    })
+    }
+
+    async deletetConfirm(id) {
+      let status=await Network.getStatus();
+      if(status.connected==false){
+        this.notify("please connect to internet","warning")
+        
+      }else{
+        const alert = await this.alertController.create({
+          cssClass: 'my-custom-class',
+          header: 'Confirm!',
+          message: 'Are you sure <strong>delete</strong> payment method?',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              cssClass: 'secondary',
+              handler: (blah) => {
+               
+              }
+            }, {
+              text: 'Okay',
+              handler: () => {
+                this.delete(id)
+               
+              }
+            }
+          ]
+        });
+    
+        await alert.present();
+      }
+    
+    }
+
+
+  async addPage(){
+    let status=await Network.getStatus();
+    if(status.connected){
+      this.router.navigate(['/app/settings/add'])
+    }else{
+      this.notify("please connect to internet","warning")
+    }
+
+  }
+  async  notify(message,color){
+    const toast1 = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color:color
+    });
+    toast1.present();
+
   }
 
 }
