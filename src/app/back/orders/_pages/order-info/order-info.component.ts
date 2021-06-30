@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController, Platform } from '@ionic/angular';
+import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { OrderService } from '../../_services/order.service';
 import { ModalMapComponent } from '../modal-map/modal-map.component';
@@ -31,11 +31,21 @@ export class OrderInfoComponent implements OnInit {
       public modalController: ModalController,
       private auth:AuthService,
       private delivery_serv: DeliveryService,
-      private router:Router) { 
+      private router:Router,
+      public toastController: ToastController) { 
     this.orderId=this.getUrl()
    
   }
-
+  async showMessage(message,color){
+    
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color: color,
+      position: 'bottom'
+    });
+    toast.present();
+}
   ngOnInit() {
     this.getOrder(this.orderId)
 
@@ -166,8 +176,10 @@ export class OrderInfoComponent implements OnInit {
         await  this.auth.getUser().then((response) => {
           this.order_service.acceptOrder(id,response.data).subscribe(
             data=>{
+              this.showMessage("Order accepted","success")
               this.router.navigate(['/orders'])
             },err=>{
+
             }
           )
         })
@@ -182,6 +194,7 @@ export class OrderInfoComponent implements OnInit {
   finishOrder(id){
       this.order_service.finishOrder(id).subscribe(
             data=>{
+              this.showMessage("Order finished","success")
               window.location.href = "/app/payments";
           
             }

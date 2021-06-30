@@ -11,8 +11,7 @@ export class HomeComponent implements OnInit {
   dark=false;
   pushes: any = [];
   token="";
-  public  url = 'https://food.dev.confledis.fr';
-  public greetingsData: any;
+  
 
 
   constructor(private router: Router, private auth_service: AuthService
@@ -55,19 +54,11 @@ export class HomeComponent implements OnInit {
 
    });
 
-   this.greetings(this.url).subscribe(
-    (data) => {this.greetingsData = data;
-    console.log(data);
-    }
-  );
+ 
 
 
 }
-greetings(url: string) {
-  return this.http.get(`${url}/greetings`, 
-    {headers:{"accept": "application/json"}
-    });
-}
+
 
 
 }

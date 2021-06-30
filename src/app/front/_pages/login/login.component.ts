@@ -48,6 +48,17 @@ export class LoginComponent implements OnInit {
 
       }
 
+      async showMessage(message,color){
+    
+        const toast = await this.toastCtrl.create({
+          message: message,
+          duration: 2000,
+          color: color,
+          position: 'bottom'
+        });
+        toast.present();
+    }
+
 
   listenForMessages() {
     this.messagingService.getMessages().subscribe(async (msg: any) => {
@@ -73,13 +84,37 @@ export class LoginComponent implements OnInit {
    });
 
   }
-
+   ValidateEmail(mail) 
+  {
+   if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
+    {
+      return (true)
+    }
+      
+      return (false)
+  }
+  
 
  authenticate(){
    //call auth service
    let data=   {
     username:  this.loginForm.username.toString(),
     password: this.loginForm.password.toString()
+  }
+  if(data.username == "" ){
+    this.pressed=true;
+
+    this.showMessage("Username is required !","danger")
+    return;
+  }
+
+
+  
+  if(data.password == "" ){
+    this.pressed=true;
+
+    this.showMessage("Password is required !","danger")
+    return;
   }
   this.auth_service.login(data)
   .subscribe((token: any) => {
@@ -91,12 +126,13 @@ export class LoginComponent implements OnInit {
       ()=>{
         this.requestMessaginToken(token)
       }
-    )
+    ) 
 
   },err=>{
     this.pressed=true;
     this.err=true;
-    this.errMsg="Verify your credentials!"
+    
+    this.showMessage(err.statusText,"danger")
 
   });
 
@@ -201,20 +237,7 @@ export class LoginComponent implements OnInit {
    }
  }
 
-async updateTokenDevice(user,FCM_token){
-   let data={
-    deviceToken: FCM_token
-   }
-   
- return this.delivery_serv.updateDelivery(user.data,data).subscribe(
-   ()=>{
-    
-    window.location.href = "/app/orders";
-   }
 
- )
-
- }
 
  onClick(event){
   let systemDark = window.matchMedia("(prefers-color-scheme: dark)");

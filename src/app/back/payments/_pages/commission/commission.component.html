@@ -125,7 +125,7 @@
           </ion-item>
       
 
-          <ion-item  *ngFor="let comission of comissions">
+          <ion-item  *ngFor="let comission of comissions" (click)="presentModal(comission)">
            
             <ion-avatar slot="start">
           
@@ -151,7 +151,7 @@
        
            
           
-              <ion-icon (click)="presentModal(comission)" slot="end"  size="medium" name="chevron-forward"></ion-icon>
+              <ion-icon  slot="end"  size="medium" name="chevron-forward"></ion-icon>
              
             
           </ion-item>

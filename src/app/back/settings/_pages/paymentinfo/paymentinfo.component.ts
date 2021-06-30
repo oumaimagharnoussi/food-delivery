@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTP } from '@ionic-native/http/ngx';
-import { Platform } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import {environment} from 'src/environments/environment'
 import { PayoutService } from '../../_services/payout.service';
@@ -26,11 +26,23 @@ export class PaymentinfoComponent implements OnInit {
 
   constructor(private platform:Platform,
     private auth:AuthService,
-    private payout_service:PayoutService
+    private payout_service:PayoutService,
+    public toastController: ToastController
     ) {
 
     this.radioSelected = "card";
    }
+
+   async showMessage(message,color){
+    
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color: color,
+      position: 'bottom'
+    });
+    toast.present();
+} 
    show(){
      console.log(this.phoneNumber)
    }
@@ -53,8 +65,11 @@ export class PaymentinfoComponent implements OnInit {
         
             this.payout_service.addNewPayoutMethod(data,response.data).subscribe(
               data=>{
-            
+                this.showMessage("Payment method added","success")
                 window.location.href = "/app/settings/payout";
+              },err=>{
+                this.showMessage(err.statusText,"danger")
+
               }
             )
 
@@ -73,6 +88,8 @@ export class PaymentinfoComponent implements OnInit {
               data=>{
              
                 window.location.href = "/app/settings/payout";
+              },err=>{
+                this.showMessage(err.statusText,"danger")
               }
             )
           
@@ -91,6 +108,8 @@ export class PaymentinfoComponent implements OnInit {
               data=>{
                
                 window.location.href = "/app/settings/payout";
+              },err=>{
+                this.showMessage(err.statusText,"danger")
               }
             )
           
