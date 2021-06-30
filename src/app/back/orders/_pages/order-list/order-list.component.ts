@@ -38,8 +38,10 @@ export class OrderListComponent implements OnInit {
   offline:boolean;
   attempts=0;
   primaryColor="#bdd0da"
+  token: string;
   constructor(public alertController: AlertController,
     private router: Router,
+    private alertCtrl: AlertController,
     private changeRef: ChangeDetectorRef,
     private sse:SseService,
     private platform: Platform,
@@ -52,16 +54,13 @@ export class OrderListComponent implements OnInit {
     private nearby_service: NearbyOrdersService,
     private delivery_serv: DeliveryService) { 
       this.platform.ready().then(async() => {
+         this.requestMessaginToken();
         await  this.auth_service.getUser().then(async(response) => {
           if (response) { 
             await  this.auth_service.getFcmToken().then((tokenFcm) => {
               if (tokenFcm) { 
                 this.updateTokenDevice(response.data,tokenFcm)
-            
               }})
-          
-       
-
           }})
         });
         
@@ -389,4 +388,109 @@ async  getOrders(user) {
     }
 }
 
+async requestMessaginToken(){
+  if(this.platform.is('capacitor')){
+         // Request permission to use push notifications
+         // iOS will prompt user and return if they granted permission or not
+         // Android will just grant without prompting
+         PushNotifications.requestPermission().then( result => {
+           if (result.granted) {
+             // Register with Apple / Google to receive push via APNS/FCM
+             PushNotifications.register();
+           } else {
+             // Show some error
+            
+           }
+         });
+     
+         // On success, we should be able to receive notifications
+         PushNotifications.addListener('registration',
+         async    (tokenF: PushNotificationToken) => {
+             this.auth_service.set('fcm',tokenF)  
+             this.auth_service.setFcmToken(tokenF);
+
+             await  this.auth_service.getUser().then(async(response) => {
+              if (response) { 
+                
+                    this.updateTokenDevice(response.data,tokenF)
+                  
+              }})
+
+           }
+         );
+     
+         // Some issue with our setup and push will not work
+         PushNotifications.addListener('registrationError',
+           (error: any) => {
+             alert('Error on registration: ' + JSON.stringify(error));
+           }
+         );
+     
+         // Show us the notification payload if the app is open on our device
+         PushNotifications.addListener('pushNotificationReceived',
+           (notification: PushNotification) => {
+             //alert('Push received: ' + JSON.stringify(notification));
+           }
+         );
+     
+         // Method called when tapping on a notification
+         PushNotifications.addListener('pushNotificationActionPerformed',
+           (notification: PushNotificationActionPerformed) => {
+             let id=JSON.stringify(notification.notification.data);
+             this.router.navigate(['/orders/details/'+id.toString().substring(1,id.toString().length-1)])
+             console.log(id)
+        
+           }
+         );
+
+         
+
+  }else{
+   this.messagin.requestPermission().subscribe(
+     async tokenF => {
+       this.auth_service.set('fcm',tokenF)  
+       this.auth_service.setFcmToken(tokenF);
+
+       await  this.auth_service.getUser().then(async(response) => {
+        if (response) { 
+          
+              this.updateTokenDevice(response.data,tokenF)
+            
+        }})
+    
+       this.listenForMessages();
+       
+
+      
+       
+     },
+     async (err) => {
+       const alert = await this.alertCtrl.create({
+         header: 'Error',
+         message: err,
+         buttons: ['OK'],
+       });
+       
+       await alert.present();
+     }
+   );
+
+  }
+
+  
+}
+
+listenForMessages() {
+  this.messagin.getMessages().subscribe(async (msg: any) => {
+    const alert = await this.alertCtrl.create({
+      header: msg.notification.title ,
+      subHeader: msg.notification.body,
+      message: msg.data.info,
+      buttons: [ 'OK',   
+      ],
+    });
+
+    await alert.present();
+  });
+}
 }

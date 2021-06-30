@@ -202,7 +202,7 @@ export class RegisterComponent implements OnInit {
         ,serializer:"json"}).then(response => {
           // prints 200
           console.log(response);
-          this.router.navigate(['/login'])
+          //this.router.navigate(['/login'])
         })
         .catch(async response => {
           // prints 403
@@ -264,11 +264,8 @@ export class RegisterComponent implements OnInit {
      //initialise form control
      
      //request FCM token
-     this.saveToken(token).then(
-       ()=>{
-         this.requestMessaginToken(token)
-       }
-     ) 
+     this.saveToken(token);
+     window.location.href = "/app/orders";
  
    },async err=>{  
     await this.loading.dismiss();
@@ -298,101 +295,7 @@ export class RegisterComponent implements OnInit {
     
    }
   
-   async requestMessaginToken(user:any){
-     if(this.platform.is('capacitor')){
-            // Request permission to use push notifications
-            // iOS will prompt user and return if they granted permission or not
-            // Android will just grant without prompting
-            PushNotifications.requestPermission().then( result => {
-              if (result.granted) {
-                // Register with Apple / Google to receive push via APNS/FCM
-                PushNotifications.register();
-              } else {
-                // Show some error
-              }
-            });
-        
-            // On success, we should be able to receive notifications
-            PushNotifications.addListener('registration',
-              (tokenF: PushNotificationToken) => {
-                this.authService.set('fcm',tokenF)  
-                this.authService.setFcmToken(tokenF);
-              //  alert('Push registration success, token: ' + tokenF.value);
-              let info=JSON.parse(user.data)
-              window.location.href = "/app/orders";
-           //   this.updateTokenDevice(info,tokenF.value)
-  
-              }
-            );
-        
-            // Some issue with our setup and push will not work
-            PushNotifications.addListener('registrationError',
-              (error: any) => {
-                alert('Error on registration: ' + JSON.stringify(error));
-              }
-            );
-        
-            // Show us the notification payload if the app is open on our device
-            PushNotifications.addListener('pushNotificationReceived',
-              (notification: PushNotification) => {
-                //alert('Push received: ' + JSON.stringify(notification));
-              }
-            );
-        
-            // Method called when tapping on a notification
-            PushNotifications.addListener('pushNotificationActionPerformed',
-              (notification: PushNotificationActionPerformed) => {
-                let id=JSON.stringify(notification.notification.data);
-                this.router.navigate(['/orders/details/'+id.toString().substring(1,id.toString().length-1)])
-                console.log(id)
-           
-              }
-            );
-  
-            
-  
-     }else{
-      this.messagingService.requestPermission().subscribe(
-        async tokenF => {
-          this.authService.set('fcm',tokenF)  
-          this.authService.setFcmToken(tokenF);
-       
-          this.listenForMessages();
-          this.token=tokenF;
-          this.platform.ready().then(async() => {
-           // this.updateTokenDevice(user,tokenF)
-           window.location.href = "/app/orders";
-          });
-         
-          
-        },
-        async (err) => {
-          const alert = await this.alertCtrl.create({
-            header: 'Error',
-            message: err,
-            buttons: ['OK'],
-          });
-   
-          await alert.present();
-        }
-      );
-  
-     }
-   }
-  
-   listenForMessages() {
-    this.messagingService.getMessages().subscribe(async (msg: any) => {
-      const alert = await this.alertCtrl.create({
-        header: msg.notification.title ,
-        subHeader: msg.notification.body,
-        message: msg.data.info,
-        buttons: [ 'OK',   
-        ],
-      });
- 
-      await alert.present();
-    });
-  }
+
 
   
 }
