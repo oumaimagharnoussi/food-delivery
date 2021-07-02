@@ -24,7 +24,7 @@
         alt="Randy Robertson"
       />
       <p class="pt-2 text-lg font-semibold">{{delivery?.firstName}} {{delivery?.lastName}}</p>
-      <p class="text-sm ">{{delivery?.email}}</p>
+      <p class="text-sm ">{{delivery?.email}} <label *ngIf="delivery?.isVerified==false">(verify)</label></p>
       <div class="mt-5">
     
       </div>

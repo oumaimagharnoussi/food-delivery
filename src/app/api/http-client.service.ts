@@ -39,7 +39,7 @@ export class HttpClientService {
     }
   
     findAll(params:any): Observable<any> {
-      console.log("from ala:", this.device_service.uuid )
+      //console.log("from ala:", this.device_service.uuid )
       
      
       
@@ -68,7 +68,7 @@ export class HttpClientService {
       }      
     }
   
-    findOne(id: number): Observable<any> {
+    findOne(id: any): Observable<any> {
       if (this.platform.is('capacitor')) {
         this.httpNative.setServerTrustMode("nocheck");
         return from(

@@ -8,10 +8,11 @@ import { LoginComponent } from './_pages/login/login.component';
 import { HomeComponent } from './_pages/home/home.component';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { IonicModule } from '@ionic/angular';
+import { ForgetPasswordComponent } from './_pages/forget-password/forget-password.component';
 
 
 @NgModule({
-  declarations: [RegisterComponent,LoginComponent,HomeComponent],
+  declarations: [RegisterComponent,LoginComponent,HomeComponent,ForgetPasswordComponent],
   imports: [
     CommonModule,
     IonicModule,

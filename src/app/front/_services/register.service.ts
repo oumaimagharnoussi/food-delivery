@@ -23,8 +23,4 @@ export class RegisterService {
     return this.http.save(user);
   }
 
-
-
-
-
 }

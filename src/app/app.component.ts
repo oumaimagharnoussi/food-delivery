@@ -33,7 +33,7 @@ export class AppComponent {
         let a=window.location.pathname.toString();
       
         this.router.events.subscribe((event: Event) => {
-          if(a=="/"||a=="/index"||a=="/login"||a=="/register"){
+          if(a=="/"||a=="/index"||a=="/login"||a=="/register"||a=="/forget"){
             this.side=false
             this.changeRef.detectChanges();
           }else{

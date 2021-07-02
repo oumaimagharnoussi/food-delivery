@@ -115,8 +115,8 @@ export class LoginComponent implements OnInit {
   },err=>{
     this.pressed=true;
     this.err=true;
-    
-    this.showMessage(err.statusText,"danger")
+    console.log(err)
+    this.showMessage(err.error.message,"danger")
 
   });
 
