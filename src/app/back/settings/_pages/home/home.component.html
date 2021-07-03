@@ -24,7 +24,9 @@
         alt="Randy Robertson"
       />
       <p class="pt-2 text-lg font-semibold">{{delivery?.firstName}} {{delivery?.lastName}}</p>
-      <p class="text-sm ">{{delivery?.email}}</p>
+      <p class="text-sm ">{{delivery?.email}} <ion-label color="danger" *ngIf="delivery?.isVerified==false">(not verified)</ion-label>
+        <ion-label color="success" *ngIf="delivery?.isVerified==true">(verified)</ion-label>
+      </p>
       <div class="mt-5">
     
       </div>

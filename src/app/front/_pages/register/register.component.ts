@@ -179,7 +179,7 @@ export class RegisterComponent implements OnInit {
             this.pressed=true;
             await this.loading.dismiss();
             console.log('Loading dismissed!');
-            this.showMessage("Mail or phone already exists","danger")
+            this.showMessage(error.error.detail,"danger")
   
           }
           

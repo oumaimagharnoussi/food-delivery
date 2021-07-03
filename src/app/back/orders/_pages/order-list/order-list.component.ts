@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
-import { AlertController, IonContent, MenuController, ModalController, Platform } from '@ionic/angular';
+import { AlertController, IonContent, MenuController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { MessagingService } from 'src/app/front/_services/messaging.service';
 import { OrderService } from '../../_services/order.service';
@@ -20,6 +20,7 @@ import { Router } from '@angular/router';
 import { ModalMapComponent } from '../modal-map/modal-map.component';
 import { NearbyOrdersService } from '../../_services/nearby-orders.service';
 import { DeliveryService } from 'src/app/back/settings/_services/delivery.service';
+import { MailConfirmService } from 'src/app/front/_services/mail-confirm.service';
 
 const { PushNotifications } = Plugins;
 const {Network} =Plugins;
@@ -39,6 +40,7 @@ export class OrderListComponent implements OnInit {
   attempts=0;
   primaryColor="#bdd0da"
   token: string;
+  error: any=[];
   constructor(public alertController: AlertController,
     private router: Router,
     private alertCtrl: AlertController,
@@ -52,7 +54,9 @@ export class OrderListComponent implements OnInit {
     private menu: MenuController,
     public modalController: ModalController,
     private nearby_service: NearbyOrdersService,
-    private delivery_serv: DeliveryService) { 
+    private delivery_serv: DeliveryService,
+    private mailConfirm_serv: MailConfirmService,
+    private toastCtrl: ToastController) { 
       this.platform.ready().then(async() => {
          this.requestMessaginToken();
         await  this.auth_service.getUser().then(async(response) => {
@@ -89,6 +93,7 @@ export class OrderListComponent implements OnInit {
     let data={
      deviceToken: FCM_token
     }
+    this.user=user
     console.log(user)
     
   return this.delivery_serv.updateDelivery(user,data).subscribe(
@@ -177,6 +182,16 @@ export class OrderListComponent implements OnInit {
     this.router.navigate(['/orders/info/'+id])
   }
 
+  async showMessage(message,color){
+    
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 2000,
+      color: color,
+      position: 'bottom'
+    });
+    toast.present();
+}
   listen(){
              // On success, we should be able to receive notifications
              PushNotifications.addListener('registration',
@@ -212,16 +227,32 @@ export class OrderListComponent implements OnInit {
              }
            );
   }
+
+  sendMailConfirm(){
+    this.mailConfirm_serv.sendConfirmation(this.user.id).subscribe(
+      res=>{ 
+        this.showMessage("check your inbox","success")
+        
+
+      }
+      
+    )
+
+  }
 async  getOrders(user) {
  
       this.nearby_service.getNearbyOrders(user).subscribe((data) => {
-       
-          this.orders=data;
+          if(data.errors){
+            this.error=data.errors;
+          }else{
+            this.attempts=0
+            this.changeRef.detectChanges();
+            this.orders=data;
+          }
+         
         
     
-       
-        this.attempts=0
-        this.changeRef.detectChanges();
+   
      //   console.log(this.orders)
        
       },err=>{
@@ -276,10 +307,11 @@ async  getOrders(user) {
 
   this.platform.ready().then(async() => {
     await  this.auth_service.getUser().then((response) => {
+      
 
      
       if (response) { 
-
+        console.log(response,"eeeeeeeeeee")
      
           this.sse.GetExchangeData(environment.server+'/.well-known/mercure?topic='+environment.api_url+'orders/{id}');
         
