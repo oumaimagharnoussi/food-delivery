@@ -33,6 +33,11 @@ const routes: Routes = [
     path: 'forget',
     pathMatch: 'full',
     component: ForgetPasswordComponent,
+  },
+  {
+    path: 'verify-email',
+    pathMatch: 'full',
+    component: ForgetPasswordComponent,
   }
 
 ];

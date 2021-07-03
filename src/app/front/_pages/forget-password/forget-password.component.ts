@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { ResetPasswordService } from '../../_services/reset-password.service';
 
@@ -18,15 +18,46 @@ export class ForgetPasswordComponent implements OnInit {
 
   constructor(private pwd_reset: ResetPasswordService,
     private toastCtrl: ToastController,
-    private router: Router) {
-    this.step1=true;
-    this.step2=false;
-    this.step3=false;
+    private router: Router, private activatedRoute: ActivatedRoute) {
+      this.activatedRoute.queryParams.subscribe(params => {
+        
+        this.token = params['token'];
+        console.log(this.token)
+        if(this.token==""||this.token==null){
+          this.step1=true;
+          this.step2=false;
+          this.step3=false;
+        }else{
+          
+          this.pwd_reset.verifyToken(this.token).subscribe(
+            (response)=>{
+              console.log(response)
+              this.step1=false;
+            this.step2=false;
+            this.step3=true;
+            },err=>{
+              this.step1=true;
+              this.step2=false;
+              this.step3=false;
+              this.token=""
+              this.showMessage(err.error,"danger")
+            }
+          )
+    
+        }
+    
+    });
+
+
 
    }
 
   ngOnInit() {
 
+  }
+
+  verifyEmail(){
+    
   }
 
   async showMessage(message,color){
