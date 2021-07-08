@@ -11,6 +11,13 @@
       </ion-button>
 
     </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button color="light">
+        <ion-icon name="notifications-sharp"></ion-icon>
+      </ion-button>
+
+    </ion-buttons>
   
     <ion-toggle style="display: none;" checked={{dark}} class="bg-green-100  bg-opacity-0" (ionChange)="onClick($event)" slot="end"></ion-toggle>
   </ion-toolbar>
@@ -59,39 +66,29 @@
     </ion-card>
    </div>
    <div *ngIf="!offline">
+    
+
      <div *ngFor="let er of error" class="text-center text justify">
+
+      <div *ngIf="er=='inverified account'" class=" mt-5 bg-yellow-100 border-l-4 border-green-500 text-yellow-700 p-4" role="alert">
+        <p class="font-bold">Email needs verification</p>
+        <p (click)="sendMailConfirm()"> click <label style="text-decoration: underline;">here</label>, to verify it</p>
+      </div>
+  
+      <div  *ngIf="er=='invalid account'" class=" mt-5 bg-yellow-100 border-l-4 border-green-500 text-yellow-700 p-4" role="alert">
+        <p class="font-bold">Account needs verification</p>
+        <p (click)="sendMailConfirm()"> wait 1-3 business days to confirm your account</p>
+      </div>
+  
+      <div *ngIf="er=='offline mode' && error.length ==1" class="mt-5 bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+        <p class="font-bold">You're offline</p>
+        <p (click)="sendMailConfirm()"> to receive orders go online</p>
+      </div>
+     
      
 
-        <ion-card class="mt-5 mb-5"  *ngIf="er=='inverified account'">
-          <ion-card-content class="p-1">
-            <ion-label >
-              You're email is inverified, please click below to get confirmation link
-            </ion-label>
-            <br>
-            <ion-button (click)="sendMailConfirm()" class="mt-2" color="tertiary">
-              Get link
-            </ion-button>
-          </ion-card-content>
-        </ion-card>
-        <ion-card class="mt-5"  *ngIf="er=='invalid account'">
-        <ion-card-content class="p-1">
-          <ion-label  >
-            You're account is invalid, please wait 1-3 business days to confirm your account
-          </ion-label>
-        </ion-card-content>
-      </ion-card>
+      
 
-      <ion-card class="mt-5 mb-5"  *ngIf="er=='offline mode' && error.length ==1">
-        <ion-card-content class="p-1">
-          <ion-label>
-            You're offline, to receive orders go online
-          </ion-label>
-          <br>
-          <ion-button color="success">
-            GO ONLINE
-          </ion-button>
-        </ion-card-content>
-      </ion-card>
 
       
 

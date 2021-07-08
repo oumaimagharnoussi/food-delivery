@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './_pages/home/home.component';
+import { PasswordResetComponent } from './_pages/password-reset/password-reset.component';
 import { PaymentinfoComponent } from './_pages/paymentinfo/paymentinfo.component';
 import { PayoutListComponent } from './_pages/payout-list/payout-list.component';
 import { ProfileComponent } from './_pages/profile/profile.component';
@@ -14,6 +15,10 @@ const routes: Routes = [
   {
     path:'profile',
     component:ProfileComponent
+  },
+  {
+    path:'password-reset',
+    component:PasswordResetComponent
   },
   {
     path:'payout',

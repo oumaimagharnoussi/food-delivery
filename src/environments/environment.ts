@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
 
-  server: 'http://192.168.1.9:8000',
-  api_url:'http://192.168.1.9:8000/api/',
+  server: 'http://192.168.1.7:8000',
+  api_url:'http://192.168.1.7:8000/api/',
 
   firebase :{
     apiKey: "AIzaSyC9Y1XY7jFJCvB5Wt3_EEUc-BETpOWbQXc",

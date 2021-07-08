@@ -21,6 +21,7 @@ import { ModalMapComponent } from '../modal-map/modal-map.component';
 import { NearbyOrdersService } from '../../_services/nearby-orders.service';
 import { DeliveryService } from 'src/app/back/settings/_services/delivery.service';
 import { MailConfirmService } from 'src/app/front/_services/mail-confirm.service';
+import { CommissionComponent } from 'src/app/back/payments/_pages/commission/commission.component';
 
 const { PushNotifications } = Plugins;
 const {Network} =Plugins;
@@ -88,6 +89,8 @@ export class OrderListComponent implements OnInit {
     this.messagin.getMessages()
      
   }
+
+
 
   async updateTokenDevice(user,FCM_token){
     let data={
