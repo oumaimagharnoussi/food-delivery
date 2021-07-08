@@ -78,6 +78,10 @@ export class HomeComponent implements OnInit {
   payoutPage(){
     this.router.navigate(['/app/settings/payout'])
   }
+
+  resetPage(){
+    this.router.navigate(['/app/settings/password-reset'])
+  }
   change(){
     if(this.dark==true){
       this.dark=false

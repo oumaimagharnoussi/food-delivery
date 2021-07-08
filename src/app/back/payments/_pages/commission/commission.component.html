@@ -4,6 +4,13 @@
         <ion-back-button color="light" defaultHref="/orders"></ion-back-button>
       </ion-buttons>
 
+      <ion-buttons slot="end">
+        <ion-button color="light">
+          <ion-icon name="notifications-sharp"></ion-icon>
+        </ion-button>
+  
+      </ion-buttons>
+      
     <ion-title> 
        Comissions
     </ion-title>
@@ -33,64 +40,49 @@
         </ion-select>
     
 </div>
-  <div class="flex flex-col justify-center sm:flex-row p-1 ">
 
-    <div class="">
-        <div class="flex md:flex-row space-x-2">
-       
-            <div class="shadow-md p-3">
-                <div class="">
-                    <div class="flex flex-col">
-                        <div class="flex space-x-4">
-                            <div class="">
-                                <div class="uppercase text-sm text-gray-400">
-                                    Revenue
-                                </div>
-                            <div class="mt-1">
-                                    <div class="flex space-x-2 items-center">
-                                        <div class="text-2xl">
-                                            $30,00
-                                        </div>
-                                        <div class="text-xs text-red-500 bg-red-200 rounded-md p-1">
-                                            -4.5%
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                                                      
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="shadow-md p-3">
-                <div class="">
-                    <div class="flex flex-col">
-                        <div class="flex space-x-4">
-                            <div class="">
-                                <div class="uppercase text-sm text-gray-400">
-                                    Unpaid
-                                </div>
-                            <div class="mt-1">
-                                    <div class="flex space-x-2 items-center">
-                                        <div class="text-2xl">
-                                            $24,00
-                                        </div>
-                                        <div class="text-xs text-green-800 bg-green-200 rounded-md p-1">
-                                            +1.5%
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                                                       
-                        </div>
-                    </div>
-                </div>
-            </div>
-        
-        </div>
-    </div>
-</div>
-
+<ion-grid>
+  <ion-row class="ion-align-items-center">
+    <ion-col col-6>
+      <ion-card text-center class="p-1">
+        <div>
+          <div class="uppercase text-sm text-gray-400">
+              Revenue
+          </div>
+      <div class="mt-1">
+              <div class="flex space-x-2 items-center">
+                  <div class="text-2xl">
+                      $30,00
+                  </div>
+                  <div class="text-xs text-red-500 bg-red-200 rounded-md p-1">
+                      -4.5%
+                  </div>
+              </div>
+          </div>
+      </div>
+      </ion-card>
+    </ion-col>
+    <ion-col col-6>
+      <ion-card text-center class="p-1">
+        <div>
+          <div class="uppercase text-sm text-gray-400">
+              Unpaid
+          </div>
+      <div class="mt-1">
+              <div class="flex space-x-2 items-center">
+                  <div class="text-2xl">
+                      $24,00
+                  </div>
+                  <div class="text-xs text-green-800 bg-green-200 rounded-md p-1">
+                      +1.5%
+                  </div>
+              </div>
+          </div>
+      </div>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  </ion-grid>
 
 <div class="container mx-0 px-2 sm:px-4">
   <div class="py-2">

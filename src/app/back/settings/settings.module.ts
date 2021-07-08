@@ -10,9 +10,10 @@ import { PaymentinfoComponent } from './_pages/paymentinfo/paymentinfo.component
 import { ProfileComponent } from './_pages/profile/profile.component';
 import { PayoutListComponent } from './_pages/payout-list/payout-list.component';
 import { IonIntlTelInputModule } from 'ion-intl-tel-input';
+import { PasswordResetComponent } from './_pages/password-reset/password-reset.component';
 
 @NgModule({
-  declarations: [HomeComponent,PaymentinfoComponent,ProfileComponent,PayoutListComponent],
+  declarations: [HomeComponent,PaymentinfoComponent,ProfileComponent,PayoutListComponent,PasswordResetComponent],
   imports: [
     CommonModule,
     SettingsRoutingModule,
