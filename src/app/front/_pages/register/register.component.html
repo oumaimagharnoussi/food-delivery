@@ -7,8 +7,8 @@
           <img class="mx-auto h-5 w-auto" src="../../../assets/front/Logo_icon.png" alt="Workflow">
         </a>
   
-        <h2 class="mt-6 text-center text-3xl font-extrabold ">
-          Let's create your account
+        <h2 class="mt-6 mb-2 text-center text-3xl font-extrabold ">
+          Register
         </h2>
   
   
@@ -56,10 +56,21 @@
         </div>
           </div>
           <div>
-            <label for="tel-number" class="sr-only">Phone number</label>
-            <ion-input #phone="ngModel" id="tel-number" name="phone" type="tel" autocomplete="tel" [(ngModel)]="form.telephone"  required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm mb-2" placeholder="Phone number">
-            
-            </ion-input>  <div *ngIf="phone.invalid && (phone.dirty || phone.touched)"
+           
+
+            <label for="phone-number" class="sr-only">Phone number</label>
+           
+            <ion-intl-tel-input 
+            #phone="ngModel" id="tel-number"
+            name="phone"
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm mb-2"
+            [(ngModel)]="form.telephone"
+            #phoneNumberControl="ngModel"
+            defaultCountryiso="fr"
+            ionIntlTelInputValid >
+          </ion-intl-tel-input>
+
+            <div *ngIf="phone.invalid && (phone.dirty || phone.touched)"
             class="bg-orange-100 border border-orange-400 text-red-400 rounded relative">
         
          

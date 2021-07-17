@@ -22,6 +22,7 @@ import { NearbyOrdersService } from '../../_services/nearby-orders.service';
 import { DeliveryService } from 'src/app/back/settings/_services/delivery.service';
 import { MailConfirmService } from 'src/app/front/_services/mail-confirm.service';
 import { CommissionComponent } from 'src/app/back/payments/_pages/commission/commission.component';
+import { PhoneVerifyComponent } from 'src/app/front/_pages/phone-verify/phone-verify.component';
 
 const { PushNotifications } = Plugins;
 const {Network} =Plugins;
@@ -42,6 +43,7 @@ export class OrderListComponent implements OnInit {
   primaryColor="#bdd0da"
   token: string;
   error: any=[];
+  delivery: any;
   constructor(public alertController: AlertController,
     private router: Router,
     private alertCtrl: AlertController,
@@ -57,7 +59,9 @@ export class OrderListComponent implements OnInit {
     private nearby_service: NearbyOrdersService,
     private delivery_serv: DeliveryService,
     private mailConfirm_serv: MailConfirmService,
-    private toastCtrl: ToastController) { 
+    private toastCtrl: ToastController,
+    
+    ) { 
       this.platform.ready().then(async() => {
          this.requestMessaginToken();
         await  this.auth_service.getUser().then(async(response) => {
@@ -111,6 +115,20 @@ export class OrderListComponent implements OnInit {
   openFirst() {
     this.menu.enable(true, 'first');
     this.menu.open('first');
+  }
+
+  async presentVerificationModal(phone_number) {
+    const modal = await this.modalController.create({
+      component: PhoneVerifyComponent,
+      cssClass: 'my-custom-class',
+      componentProps: {
+        'telephone': {
+          number: phone_number
+          
+        }
+      }
+    });
+    return await modal.present();
   }
 
   async presentModal(order) {
@@ -251,6 +269,7 @@ async  getOrders(user) {
             this.attempts=0
             this.changeRef.detectChanges();
             this.orders=data;
+            
           }
          
         
@@ -278,6 +297,7 @@ async  getOrders(user) {
    }
 
  async ngOnInit() {
+   
   let status=await Network.getStatus();
   if(status.connected){
   
@@ -310,13 +330,23 @@ async  getOrders(user) {
 
   this.platform.ready().then(async() => {
     await  this.auth_service.getUser().then((response) => {
+      this.delivery_serv.getDelivery(response.data).subscribe(
+        data=>{
+          this.delivery=data
+          if(data.isPhoneVerified==false || data.isPhoneVerified==null){
+            this.presentVerificationModal(data.telephone);
+          }
+
+         
+        }
+      )
       
 
      
       if (response) { 
         console.log(response,"eeeeeeeeeee")
      
-          this.sse.GetExchangeData(environment.server+'/.well-known/mercure?topic='+environment.api_url+'orders/{id}');
+          this.sse.GetExchangeData('http://food.dev.confledis.fr:3000/.well-known/mercure?topic='+environment.api_url+'orders/{id}');
         
             this.getOrders(response);
 
@@ -527,5 +557,25 @@ listenForMessages() {
 
     await alert.present();
   });
+}
+
+goOnline(){
+  this.delivery_serv.updateDelivery(this.delivery,{status:'FREE'}).subscribe(
+    (data)=>{
+      this.delivery=data;
+      
+    }
+ 
+  )
+}
+
+goOffline(){
+  this.delivery_serv.updateDelivery(this.delivery,{status:'OFFLINE'}).subscribe(
+    (data)=>{
+      this.delivery=data;
+      
+    }
+ 
+  )
 }
 }

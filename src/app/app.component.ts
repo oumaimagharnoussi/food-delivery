@@ -33,7 +33,7 @@ export class AppComponent {
         let a=window.location.pathname.toString();
       
         this.router.events.subscribe((event: Event) => {
-          if(a=="/"||a=="/index"||a=="/login"||a=="/register"||a=="/forget"){
+          if(a=="/"||a=="/index"||a=="/login"||a=="/register"||a=="/forget"||a=="/phone-verify"){
             this.side=false
             this.changeRef.detectChanges();
           }else{
@@ -77,13 +77,8 @@ export class AppComponent {
   ()=>{
    // window.location.href = "/login";
   } 
- );
+ ); 
  
-  
-
-  
-
-
 }
 
  async  ngOnInit() {
