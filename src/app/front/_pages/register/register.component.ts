@@ -33,11 +33,11 @@ export class RegisterComponent implements OnInit {
   pressed=false;
   errMsg="";
 
-  form:  DeliveryBoy ={
+  form ={
     firstName: "",
     lastName: "",
     email: "",
-    telephone: "",
+    telephone: null,
     address: "",
     password:"",
    
@@ -110,15 +110,16 @@ export class RegisterComponent implements OnInit {
     }
   }
   async onSubmit(){
+    
     const deliveryBoyInfo = new DeliveryBoy();
     deliveryBoyInfo.address=""
-    deliveryBoyInfo.telephone=this.form.telephone
+    deliveryBoyInfo.telephone= this.form.telephone.internationalNumber.split(" ").join(""); 
     deliveryBoyInfo.email=this.form.email;
     deliveryBoyInfo.password=this.form.password;
     deliveryBoyInfo.firstName=this.form.firstName;
     deliveryBoyInfo.lastName=this.form.lastName;
   
-
+    console.log(deliveryBoyInfo.telephone)
     if(this.form.firstName == "" || this.form.lastName==""){
       this.pressed=true;
  
@@ -216,12 +217,6 @@ export class RegisterComponent implements OnInit {
 
 
       }
-
-      
-
-      
-     
-
 
     }
     else{

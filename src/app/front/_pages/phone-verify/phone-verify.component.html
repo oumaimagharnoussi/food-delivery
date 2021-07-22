@@ -1,0 +1,94 @@
+<ion-header [translucent]="true"  class="ion-no-border" mode="ios">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button color="danger" size="large" (click)="logout()">
+        <ion-icon  size="large" name="log-out-sharp"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content >
+
+  
+
+
+  <div class="min-h-screen flex items-center justify-center   px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full">
+  
+      <div>
+    
+     
+      
+        
+        <h2 class="mb-6 text-center text-3xl font-extrabold ">
+          Mobile number verification
+        </h2>
+  
+        <img class="mx-auto h-32 w-auto" src="https://telqtele.com/wp-content/uploads/2019/04/TelQ-SMS-testing-platform-features-low-cost-routing.png" alt="Workflow">
+   
+      </div>
+      <div class="mt-8 space-y-6">
+        <input type="hidden" name="remember" value="true">
+        <div class="rounded-md shadow-sm -space-y-px">
+
+          <ion-grid>
+            <ion-row>
+              <ion-col size-lg>
+                <ion-input  [(ngModel)]="digitOne"  maxlength="1"  placeholder="X" inputmode="numeric"></ion-input>
+              </ion-col>
+              <ion-col size-lg>
+                <ion-input  [(ngModel)]="digitTwo"  maxlength="1" placeholder="X" inputmode="numeric"></ion-input>
+              </ion-col>
+              <ion-col size-lg>
+                <ion-input  [(ngModel)]="digitThree"  maxlength="1" placeholder="X" inputmode="numeric"></ion-input>
+              </ion-col>
+              <ion-col size-lg>
+                <ion-input  [(ngModel)]="digitFour"   maxlength="1" placeholder="X" inputmode="numeric"></ion-input>
+              </ion-col>
+              <ion-col size-lg>
+                <ion-input  [(ngModel)]="digitFive"   maxlength="1" placeholder="X" inputmode="numeric"></ion-input>
+              </ion-col>
+              <ion-col size-lg>
+                <ion-input  [(ngModel)]="digitSix"   maxlength="1" placeholder="X" inputmode="numeric"></ion-input>
+              </ion-col>
+            </ion-row>
+            </ion-grid>
+        
+        </div>
+  
+       
+       
+  
+  
+  
+        <div class="flex items-center justify-center">
+  
+  
+          <div class="text-sm">
+            <ion-label class="align-center justify-center">
+              A code was sent to:  {{telephone.number}}
+            </ion-label> <br>
+
+            <a (click)="sendCode()"   class="font-medium text-green-600 hover:text-green-500">
+              Didn't receive code, resend?
+            </a>
+          </div>
+        </div>
+  
+        <div>
+        
+          <ion-button color="tertiary" (click)="verify()" class="group relative w-full flex justify-center  border border-transparent text-sm font-extrabold rounded-md text-white hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            VERIFY
+          </ion-button>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+           
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
