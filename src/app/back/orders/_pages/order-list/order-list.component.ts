@@ -346,7 +346,7 @@ async  getOrders(user) {
       if (response) { 
         console.log(response,"eeeeeeeeeee")
      
-          this.sse.GetExchangeData('http://food.dev.confledis.fr:3000/.well-known/mercure?topic=http://food.dev.confledis.fr/api/orders/{id}');
+          this.sse.GetExchangeData('https://food.dev.confledis.fr:3000/.well-known/mercure?topic=https://food.dev.confledis.fr/api/orders/{id}');
         
             this.getOrders(response);
 
