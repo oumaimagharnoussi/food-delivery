@@ -563,6 +563,15 @@ goOnline(){
   this.delivery_serv.updateDelivery(this.delivery,{status:'FREE'}).subscribe(
     (data)=>{
       this.delivery=data;
+
+      this.platform.ready().then(async() => {
+        await  this.auth_service.getUser().then((response) => {
+          if (response) { 
+            this.getOrders(response);
+
+          }
+        });
+      });
       
     }
  
@@ -573,6 +582,7 @@ goOffline(){
   this.delivery_serv.updateDelivery(this.delivery,{status:'OFFLINE'}).subscribe(
     (data)=>{
       this.delivery=data;
+      this.orders.length=0;
       
     }
  
