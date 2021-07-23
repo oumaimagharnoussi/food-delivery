@@ -75,7 +75,7 @@ export class OrderInfoComponent implements OnInit {
       if(a[i]=='/') {b=i
         break;}
     }
-    return Number (a.slice(b+1,a.length));
+    return a.slice(b+1,a.length);
   }
 
   getOrder(id) {
