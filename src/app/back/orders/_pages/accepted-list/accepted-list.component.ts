@@ -52,7 +52,7 @@ export class AcceptedListComponent implements OnInit {
     async  notify(message,color){
       const toast1 = await this.toastController.create({
         message: message,
-        duration: 2000,
+        duration: 4000,
         color:color
       });
       toast1.present();

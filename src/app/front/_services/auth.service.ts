@@ -63,6 +63,7 @@ export class AuthService {
       if (response) {
         console.log(response)
         this.token=response.token
+        this.http.token=response.token
         await  this.storage.get("uuid").then(async(response) => {
           if(response){
             this.uuid=response;
@@ -126,6 +127,7 @@ export class AuthService {
           this.authState.next(false);
         }else{
           this.token=response.data
+          this.http.token=response.token
           window.location.href = "/app/orders";
         }
       });

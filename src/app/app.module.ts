@@ -27,7 +27,7 @@ import { IonIntlTelInputModule } from 'ion-intl-tel-input';
 import { ApiModule } from './api/api.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpConfigInterceptor } from './api/httpConfig.interceptor';
-
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
 
 
 @NgModule({
@@ -55,7 +55,7 @@ import { HttpConfigInterceptor } from './api/httpConfig.interceptor';
     enabled: environment.production
   })*/
 ],
-  providers: [Network, AuthService ,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+  providers: [Network, AuthService ,BackgroundGeolocation,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpConfigInterceptor,

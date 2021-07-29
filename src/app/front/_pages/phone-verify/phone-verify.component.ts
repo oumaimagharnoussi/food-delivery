@@ -24,8 +24,7 @@ export class PhoneVerifyComponent implements OnInit {
 
   constructor(private router: Router,
     public modalController: ModalController,
-    private verify_serv: PhoneVerifService,
-    private auth:AuthService,private message:MessagingService) {
+    private verify_serv: PhoneVerifService) {
 
    }
 
@@ -33,15 +32,14 @@ export class PhoneVerifyComponent implements OnInit {
  
   }
 
-  async logout() {
-    await this.message.deleteToken();
-    await this.auth.logout().then(
-     ()=>{
-      // window.location.href = "/login";
-     } 
-    );
-    
-   }
+  dismiss() {
+    // using the injected ModalController this page
+    // can "dismiss" itself and optionally pass back data
+    this.modalController.dismiss({
+      'dismissed': true
+    });
+  }
+
 
    
   verify(){

@@ -24,18 +24,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true"  [scrollEvents]="true" >
-  <ion-fab  *ngIf="delivery?.status=='FREE'"  vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="goOffline()" color="success">
-      
-      <ion-icon name="cloud-upload-sharp"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-    <ion-fab  *ngIf="delivery?.status=='OFFLINE'"   vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button (click)="goOnline()" color="danger">
-        <ion-icon name="cloud-offline-sharp"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+ 
   
  
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

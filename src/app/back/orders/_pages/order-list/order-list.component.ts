@@ -23,6 +23,7 @@ import { DeliveryService } from 'src/app/back/settings/_services/delivery.servic
 import { MailConfirmService } from 'src/app/front/_services/mail-confirm.service';
 import { CommissionComponent } from 'src/app/back/payments/_pages/commission/commission.component';
 import { PhoneVerifyComponent } from 'src/app/front/_pages/phone-verify/phone-verify.component';
+import { AvailabilityService } from 'src/app/back/_services/availability.service';
 
 const { PushNotifications } = Plugins;
 const {Network} =Plugins;
@@ -60,6 +61,7 @@ export class OrderListComponent implements OnInit {
     private delivery_serv: DeliveryService,
     private mailConfirm_serv: MailConfirmService,
     private toastCtrl: ToastController,
+    private availability_serv :AvailabilityService
     
     ) { 
       this.platform.ready().then(async() => {
@@ -207,7 +209,7 @@ export class OrderListComponent implements OnInit {
     
     const toast = await this.toastCtrl.create({
       message: message,
-      duration: 2000,
+      duration: 4000,
       color: color,
       position: 'bottom'
     });
@@ -297,6 +299,20 @@ async  getOrders(user) {
    }
 
  async ngOnInit() {
+   this.availability_serv.change.subscribe(isOnline=>{
+
+     if(isOnline==true){
+       this.goOnline();
+     }
+
+     if(isOnline==false){
+      this.goOffline();
+    }
+
+
+
+   });
+
    
   let status=await Network.getStatus();
   if(status.connected){
@@ -344,9 +360,9 @@ async  getOrders(user) {
 
      
       if (response) { 
-        console.log(response,"eeeeeeeeeee")
+        console.log(response,"eeeeeeeeeee") 
      
-          this.sse.GetExchangeData('https://food.dev.confledis.fr:3000/.well-known/mercure?topic=https://food.dev.confledis.fr/api/orders/{id}');
+ //         this.sse.GetExchangeData('https://food.dev.confledis.fr:3000/.well-known/mercure?topic=https://food.dev.confledis.fr/api/orders/{id}');
         
             this.getOrders(response);
 
@@ -578,7 +594,7 @@ goOnline(){
   )
 }
 
-goOffline(){
+goOffline(){ 
   this.delivery_serv.updateDelivery(this.delivery,{status:'OFFLINE'}).subscribe(
     (data)=>{
       this.delivery=data;
