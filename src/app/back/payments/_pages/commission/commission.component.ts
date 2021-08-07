@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { IonContent, IonInfiniteScroll, ModalController, Platform } from '@ionic/angular';
+import { IonContent, IonInfiniteScroll, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 
 import { ComissionDetailsComponent } from './comission-details/comission-details.component';
@@ -34,6 +34,7 @@ export class CommissionComponent implements OnInit {
     
     private platform:Platform,private auth:AuthService,
     public modalController: ModalController,
+    public loadingController: LoadingController,
     
     private changeRef: ChangeDetectorRef) { }
 
@@ -101,12 +102,20 @@ gotToTop() {
 }
  async getComissions(page){
     this.platform.ready().then(async() => {
-      await  this.auth.getUser().then((response) => {
+      await  this.auth.getUser().then(async (response) => {
+      
+          const loading = await this.loadingController.create({
+            cssClass: 'my-custom-class',
+            message: 'Please wait...',
+            mode: 'ios',
+            translucent: true
+          });
+          await loading.present();
   
-        
-
         this.comisson_service.getDeliveryComissions(response.data ,page).subscribe(
           data=>{
+            loading.dismiss();
+            console.log('Loading dismissed!');
            
               if(page==1){
                 this.auth.set('comissionList',data)
@@ -119,6 +128,9 @@ gotToTop() {
          
           
           },err=>{
+            loading.dismiss();
+            console.log('Loading dismissed!');
+
             if(this.attempts<10){
               this.getComissions(page)
               this.attempts++

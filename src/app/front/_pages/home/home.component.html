@@ -1,75 +1,44 @@
-<ion-content [fullscreen]="true">
-  <div
-    class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
-  >
-    <div class="max-w-md w-full space-y-8">
-      <div>
-        
 
-        <img
-          class="mx-auto h-10 w-auto mb-5"
+  <img
+          class="mx-auto h-10 w-auto mb-5 mt-6"
           src="../../../assets/front/Logo_icon.png"
           alt="Workflow"
         />
-
-        <img
-          class="mx-auto h-15 w-auto"
-          src="../../../assets/front/Image.png"
-          alt="Workflow"
-        />
-        <h2 class="mt-6 text-center text-3xl font-extrabold mb-18">
-          Delivery boy
+        
+        <h2 class="mt-4 text-center text-3xl font-extrabold mb-18">
+          CongoFood Delivery
         </h2>
+
+  
+      <ul *ngIf="login" class='flex cursor-pointer justify-center'>
+          <li (click)="showRegisterPage()" style="background-color: rgb(235, 235, 235);" class='py-2 px-6 w-screen m-4  rounded-t-lg '>Register</li>
+          <li (click)="showLoginPage()" style="background-color: #48CA89; color:white;" class='py-2 px-6 m-4 w-screen  rounded-t-lg  '>Login</li>
+  
+      </ul>
+
+      <ul *ngIf="!login" class='flex cursor-pointer justify-center'>
+        <li (click)="showRegisterPage()" style="background-color: #48CA89; color:white;" class='py-2 px-6 m-4 w-screen  rounded-t-lg  '>Register</li>
+        <li (click)="showLoginPage()" style="background-color: rgb(235, 235, 235);" class='py-2 px-6 w-screen m-4  rounded-t-lg '>Login</li>
+
+
+    </ul>
+      
+  <div
+    class="min-h-screen mt-1 flex  justify-center px-4 sm:px-6 lg:px-8"
+  >
+    <div class="max-w-md w-full space-y-8">
+     
+      <div>
+   
+
+      <app-login *ngIf="login">
+        
+      </app-login>
+      <app-register *ngIf="!login">
+
+      </app-register>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
-        <div>
-          <ion-button
-            color="tertiary"
-            (click)="redirect('/login')"
-            class="
-              group
-              relative
-              w-full
-              flex
-              justify-center
-              border border-transparent
-              text-sm
-              font-extrabold
-              rounded-md
-              text-white
-              hover:bg-green-400
-              focus:outline-none
-              focus:ring-2 focus:ring-offset-2 focus:ring-green-500
-            "
-          >
-            Sign in
-          </ion-button>
-        </div>
-        <div>
-          <ion-button
-            color="tertiary"
-            (click)="redirect('/register')"
-            class="
-              group
-              relative
-              w-full
-              flex
-              justify-center
-              border border-transparent
-              text-sm
-              font-extrabold
-              rounded-md
-              text-white
-              hover:bg-green-400
-              focus:outline-none
-              focus:ring-2 focus:ring-offset-2 focus:ring-green-500
-            "
-          >
-            Sign up
-          </ion-button>
-        </div>
-      </form>
+     
     
     </div>
   </div>
-</ion-content>

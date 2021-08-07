@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AddressInfoComponent } from './_pages/address-info/address-info.component';
 import { HomeComponent } from './_pages/home/home.component';
 import { PasswordResetComponent } from './_pages/password-reset/password-reset.component';
 import { PaymentinfoComponent } from './_pages/paymentinfo/paymentinfo.component';
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path:'add',
     component:PaymentinfoComponent
+  },
+  {
+    path:'address',
+    component: AddressInfoComponent
   }
 ];
 

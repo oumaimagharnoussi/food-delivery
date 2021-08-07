@@ -26,22 +26,21 @@ export class AppComponent {
   //background tracking config
   config: BackgroundGeolocationConfig = {
     desiredAccuracy: 100,
-    stationaryRadius: 10,
-    distanceFilter: 2,
+    stationaryRadius: 300,
+    distanceFilter: 100,
     
     debug: true, //  enable this hear sounds for background-geolocation life-cycle.
     stopOnTerminate: false, // enable this to clear background location settings when the app terminates
   };
+  delivery=null;
 
   
   constructor(private toastController: ToastController,private backgroundGeolocation: BackgroundGeolocation,private geolocation: Geolocation,
     private changeRef: ChangeDetectorRef, private availability_serv :AvailabilityService,
-     private auth:AuthService,private message:MessagingService,private router: Router,
+     private auth_service:AuthService,private message:MessagingService,private router: Router,
      private platform: Platform,private delivery_serv: DeliveryService
      ) {
-
-
-
+       this.auth_service.getToken();
 
       //this.initializeApp()
       let handler=Network.addListener('networkStatusChange',async(status)=>{
@@ -62,10 +61,11 @@ export class AppComponent {
             this.changeRef.detectChanges();
             this.platform.ready().then(async() => {
               this.backgroundGeolocation.configure(this.config).then(() => {
-                this.backgroundGeolocation.on(BackgroundGeolocationEvents.location).subscribe((location: BackgroundGeolocationResponse) => {
-                console.log('Locations', location);
+                this.backgroundGeolocation.on(BackgroundGeolocationEvents.location).subscribe(async (location: BackgroundGeolocationResponse) => {
+               /* console.log('Locations', location);
                 this.notify(location.speed+"speed","warning")
-                this.notify("New location ! "+location.latitude+"/"+location.longitude,"danger")
+                this.notify("New location ! "+location.latitude+"/"+location.longitude,"danger")*/
+                await this.updateLocation(location.longitude,location.latitude);
                 console.log('Speed', location.speed); // Tracks the speed of user
         
                 // IMPORTANT:  You must execute the finish method here to inform the native plugin that you're finished,
@@ -75,45 +75,72 @@ export class AppComponent {
            });
         });
         
-        this.geolocation.getCurrentPosition().then((resp) => {
+        this.geolocation.getCurrentPosition().then(async (resp) => {
           // resp.coords.latitude
           // resp.coords.longitude
-          this.notify(resp.coords.latitude+"/"+resp.coords.longitude,"success")
+          /*this.notify(resp.coords.latitude+"/"+resp.coords.longitude,"success")
           this.long=resp.coords.longitude
-          this.lat=resp.coords.latitude
+          this.lat=resp.coords.latitude*/
+          await this.updateLocation(resp.coords.longitude,resp.coords.latitude)
          }).catch((error) => {
            console.log('Error getting location', error);
          });
          
          let watch = this.geolocation.watchPosition();
-         watch.subscribe((data:any) => {
+         watch.subscribe(async (data:any) => {
           // data can be a set of coordinates, or an error (if an error occurred).
           // data.coords.latitude
           // data.coords.longitude
-          if((this.lat!=data.coords.latitude || this.long!=data.coords.longitude)&&
-          this.calcCrow(data.coords.latitude,data.coords.longitude,this.lat,this.long)>0.5){
-            this.notify(data.coords.latitude+"/"+data.coords.longitude,"success")
+          if(this.delivery){
+
+            if((this.lat!=data.coords.latitude || this.long!=data.coords.longitude)
+            && this.calcCrow(data.coords.latitude,data.coords.longitude,this.lat,this.long)>1
+            && this.delivery.status=='AVAILABLE'){ 
+             // this.notify(data.coords.latitude+"/"+data.coords.longitude,"success")
+             await this.updateLocation(data.coords.longitude,data.coords.latitude)
+            }
+
+            if((this.lat!=data.coords.latitude || this.long!=data.coords.longitude)
+            && this.calcCrow(data.coords.latitude,data.coords.longitude,this.lat,this.long)>0.3
+            && this.delivery.status=='BUSY'){ 
+             // this.notify(data.coords.latitude+"/"+data.coords.longitude,"success")
+             await this.updateLocation(data.coords.longitude,data.coords.latitude)
+            }
+
+
           }
+
          
          });
-              await  this.auth.getUser().then((response) => {
-                this.delivery_serv.getDelivery(response.data).subscribe(
-                  data=>{
-                    if(data.status=="FREE"){
-                      this.isOnline=true
-                      this.start();
+         if(this.delivery==null){
+          await  this.auth_service.getUser().then((response) => {
+            this.delivery_serv.getDelivery(response.data).subscribe(
+              data=>{
+                this.delivery=data;
+                if(this.delivery.status=="AVAILABLE"){
+                  this.isOnline=true
+                  this.start();
+    
+                }else{
+                  this.isOnline=false
+                  this.stop()
+    
+                }  
+              })
+            })
+            }else{
+              if(this.delivery.status=="AVAILABLE"){
+                this.isOnline=true
+                this.start();
+  
+              }else{
+                this.isOnline=false
+                this.stop()
+  
+              }  
 
-                    }else{
-                      this.isOnline=false
-                      this.stop()
+            }
 
-                    }
-                  }
-                )
-                     
-               
-             
-              });
             });
           }
         })
@@ -151,10 +178,6 @@ export class AppComponent {
          return Value * Math.PI / 180;
      }
 
-   
-
-
-  
 
     setOnline(){
       this.availability_serv.setOnline();
@@ -196,12 +219,16 @@ export class AppComponent {
   
   
 
- async logout() {
+  async logout() {
   this.stop();
-  this.setOffline();
+  this.delivery_serv.updateDelivery(this.delivery,{status:'OFFLINE'}).subscribe(
+    (data)=>{
+      this.delivery=data;       
+    }
+  )
   await this.message.deleteToken();
  
-  await this.auth.logout().then(
+  await this.auth_service.logout().then(
   ()=>{
    // window.location.href = "/login";
   } 
@@ -224,6 +251,26 @@ export class AppComponent {
     
   }
  
+}
+
+
+async updateLocation(lng,lat){
+
+  if(this.delivery==null){
+    await  this.auth_service.getUser().then((response) => {
+      this.delivery_serv.getDelivery(response.data).subscribe(
+        data=>{
+          this.delivery=data
+        }
+      );
+     })
+  }
+
+  this.delivery_serv.updateDelivery(this.delivery,{currentLongitude:lng, currentLatitude:lat}).subscribe(
+    (data)=>{
+      this.delivery=data;       
+    }
+  )
 }
 
   

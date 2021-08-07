@@ -55,7 +55,14 @@ import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx'
     enabled: environment.production
   })*/
 ],
-  providers: [Network, AuthService ,BackgroundGeolocation,HTTP,MessagingService, AuthGuardService,Geolocation, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+  providers: [Network,
+     AuthService ,
+     BackgroundGeolocation,
+     HTTP,
+     MessagingService, 
+     AuthGuardService,
+     Geolocation
+     , { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpConfigInterceptor,

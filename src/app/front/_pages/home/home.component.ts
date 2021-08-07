@@ -11,6 +11,7 @@ export class HomeComponent implements OnInit {
   dark=false;
   pushes: any = [];
   token="";
+  login:boolean=true
   
 
 
@@ -27,7 +28,15 @@ export class HomeComponent implements OnInit {
     this.router.navigate([route])
   }
 
- 
+ showLoginPage(){
+   this.login=true;
+
+ }
+
+ showRegisterPage(){
+   this.login=false
+
+ }
  
   change(){
     if(this.dark==true){
