@@ -53,6 +53,21 @@ export class AuthService {
     return this.authState.value;
 
   }
+
+  async getToken(){
+    this.platform.ready().then(async() => {
+      await  this.storage.get("access_token").then(async(response) => {
+        if (response) {
+          this.token=response.token
+        this.http.token=response.token
+
+        }
+      })
+    })
+
+  }
+
+
  async  ifLoggedIn() {
 
 
@@ -63,6 +78,7 @@ export class AuthService {
       if (response) {
         console.log(response)
         this.token=response.token
+        this.http.token=response.token
         await  this.storage.get("uuid").then(async(response) => {
           if(response){
             this.uuid=response;
@@ -126,6 +142,19 @@ export class AuthService {
           this.authState.next(false);
         }else{
           this.token=response.data
+          this.http.token=response.token
+          await  this.storage.get("uuid").then(async(response) => {
+            if(response){
+              this.uuid=response;
+              this.device_service.uuid=response;
+            }else{
+              this.uuid=uuidv4();
+              await this.set('uuid',this.uuid)
+              this.device_service.uuid=this.uuid;
+            }
+            
+            console.log(response) 
+          });
           window.location.href = "/app/orders";
         }
       });
@@ -207,7 +236,7 @@ export class AuthService {
           this._storage.remove("comissionList");
           this._storage.remove("deliveryInfo");
           this._storage.remove("dark").then(
-            ()=>{window.location.href = "/login";}
+            ()=>{window.location.href = "/index";}
           );;
         },
         ()=>{

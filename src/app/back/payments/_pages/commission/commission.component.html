@@ -121,10 +121,12 @@
            
             <ion-avatar slot="start">
           
-              <ion-badge *ngIf="comission.status=='PAYED'" color="success"><ion-icon name="checkmark-done-outline"></ion-icon></ion-badge>
+              <ion-badge *ngIf="comission.status=='PAYED'" color="success">
+                <ion-icon name="checkmark-done-outline"></ion-icon>
+              </ion-badge>
   
               <ion-badge *ngIf="comission.status=='PENDING'" color="warning">
-              <ion-icon name="time-outline"></ion-icon>
+              <ion-icon  name="time-outline"></ion-icon>
             </ion-badge>
           </ion-avatar>
             <div class="grid grid-cols-2 gap-4">

@@ -27,9 +27,10 @@
           <ion-label>
            
             
-            <h2 style="font-weight: bold;" class="mb-2">
+            <h2 style="font-weight: bold;" class="mb-2" (click)="showDetails(order)">
            
-              {{order.restaurant.name}}   <ion-badge mode="ios" size="small" color="primary">ON WAY</ion-badge>  
+              {{order.restaurant.name}}   <ion-badge *ngIf="order.status=='INDELIVERY'" mode="ios" size="small" color="primary">ON WAY</ion-badge>  
+              <ion-badge mode="ios" *ngIf="order.status=='DELIVERED'" size="small" color="success">FINISHED</ion-badge>  
              
             </h2> 
        
@@ -62,7 +63,7 @@
      
          
         
-            <ion-icon (click)="detail(order.id)" slot="end"  size="medium" name="chevron-forward"></ion-icon>
+            <ion-icon (click)="showDetails(order)" slot="end"  size="medium" name="chevron-forward"></ion-icon>
            
           
         </ion-item>

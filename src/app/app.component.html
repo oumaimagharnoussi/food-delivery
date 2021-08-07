@@ -14,10 +14,12 @@
                     src="https://randomuser.me/api/portraits/women/27.jpg"
                     class="mx-auto w-20 h-20 rounded-full"
                   />
-                </div>
+                </div> 
                 <div class="w-1/2">
                   <span class="font-semibold  m-2">Ava Harper</span>
                   <br>
+                  <ion-toggle *ngIf="isOnline==false" (click)="setOnline()"  checked="false"  class="m-5" mode="ios" color="success"></ion-toggle>
+                  <ion-toggle *ngIf="isOnline==true" (click)="setOffline()" checked= "true" class="m-5" mode="ios" color="success"></ion-toggle>
                
                 </div>
               </div>

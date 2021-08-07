@@ -26,10 +26,9 @@ export class HttpConfigInterceptor implements HttpInterceptor {
     if (this.auth_service.token) {
       request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + this.auth_service.token ) });
     }
-    if (this.auth_service.uuid) {
-      console.log(this.auth_service.uuid)
-      request = request.clone({ headers: request.headers.set('uuid', this.auth_service.uuid ) });
-    }
+    
+      request = request.clone({ headers: request.headers.set('uuid', '12345678' ) });
+    
 
     if (!request.headers.has('Content-Type')) {
       request = request.clone({

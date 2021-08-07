@@ -7,6 +7,11 @@ ion-toggle {
     --handle-background-checked: rgb(255, 255, 255);
   }
 
+  .my-custom-class {
+    color: green;
+    --backdrop-opacity: 0%;
+  }
+
   .back-to-top-btn {
     background: #bdd0da;
     position: fixed;

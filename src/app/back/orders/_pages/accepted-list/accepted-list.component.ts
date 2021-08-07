@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { IonContent, ModalController, Platform, ToastController } from '@ionic/angular';
+import { IonContent, LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { OrderService } from '../../_services/order.service';
 import { SseService } from '../../_services/sse.service';
@@ -10,6 +10,7 @@ import { StorageService } from 'src/app/front/_services/storage.service';
 import { 
   Plugins
 } from '@capacitor/core';
+import { OrderDetailsComponent } from '../order-details/order-details.component';
 const {Network} =Plugins;
 @Component({
   selector: 'app-accepted-list',
@@ -36,6 +37,7 @@ export class AcceptedListComponent implements OnInit {
   customPopoverOptions: any = {
     
   };
+  delivery: any;
  
 
   constructor(private order_service: OrderService, 
@@ -46,31 +48,24 @@ export class AcceptedListComponent implements OnInit {
     private router:Router,
     private offline_storage:StorageService,
     private changeRef: ChangeDetectorRef,
-    private toastController: ToastController) { 
+    private toastController: ToastController,
+    public loadingController: LoadingController) { 
 
     }
     async  notify(message,color){
       const toast1 = await this.toastController.create({
         message: message,
-        duration: 2000,
+        duration: 4000,
         color:color
       });
       toast1.present();
 
     }
- async   detail(id){
-      let status=await Network.getStatus();
-      if(status.connected==false){
-        this.notify("please connect to internet","warning")
 
-      }else{
-        this.router.navigate(['/orders/info/'+id])
-      }
-     
-    }
  async ngOnInit() {
     let status=await Network.getStatus();
     if(status.connected){
+      this.orders.length=0;
       this.getAcceptedOrders(1)
       this.offline=false;
       this.changeRef.detectChanges();
@@ -86,7 +81,7 @@ export class AcceptedListComponent implements OnInit {
 
     let handler=Network.addListener('networkStatusChange',async(status)=>{
       if (status.connected){
-   
+        this.orders.length=0;
         this.getAcceptedOrders(1)
         this.changeRef.detectChanges();
       }else{
@@ -155,9 +150,20 @@ export class AcceptedListComponent implements OnInit {
     
   
       this.platform.ready().then(async() => {
+        const loading = await this.loadingController.create({
+          cssClass: 'my-custom-class',
+          message: 'Please wait...',
+          mode: 'ios',
+          translucent: true
+        });
+        await loading.present();
         await  this.storage.getUser().then((response) => {
+          this.delivery=response.data;
           this.order_service.getAcceptedOrders(response.data,page).subscribe(
              (data )=>{
+              
+              loading.dismiss();
+              console.log('Loading dismissed!');
 
              
                 if(page==1){
@@ -171,6 +177,9 @@ export class AcceptedListComponent implements OnInit {
               
               this.test=data
               this.loading=false
+            },err=>{
+              loading.dismiss();
+              console.log('Loading dismissed!');
             }
           )
         })
@@ -191,4 +200,38 @@ export class AcceptedListComponent implements OnInit {
     return await modal.present();
   }
 
+
+  async showDetails(order) {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...',
+      mode: 'ios',
+      translucent: true
+    });
+    await loading.present();
+
+    const modal = await this.modalController.create({
+      component: OrderDetailsComponent,
+      cssClass: 'my-custom-class',
+      componentProps: {
+        'order': {
+          order: order
+        },
+        'delivery': this.delivery
+      }
+    });
+    modal.onWillDismiss().then(()=>{
+      this.ngOnInit().then(
+        ()=> {
+          
+        }
+      )
+    })
+    return await modal.present().then(()=>{
+      loading.dismiss();
+      console.log('Loading dismissed!');
+
+    });
+  }
+  
 }

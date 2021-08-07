@@ -1,13 +1,3 @@
-<ion-header [translucent]="true"  class="ion-no-border" mode="ios">
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-button color="danger" size="large" (click)="logout()">
-        <ion-icon  size="large" name="log-out-sharp"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
-  </ion-toolbar>
-</ion-header>
 <ion-content >
 
   
@@ -82,8 +72,11 @@
             VERIFY
           </ion-button>
         </div>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
+        <div class="flex float-right justify-between">
+          <div class="flex float-right">
+            <a (click)="dismiss()"   class="font-medium text-green-600 hover:text-green-500">
+              Do it later 
+            </a>
            
           </div>
   
@@ -92,3 +85,4 @@
     </div>
   </div>
 </ion-content>
+ 

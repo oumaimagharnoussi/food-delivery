@@ -32,6 +32,18 @@ export class ResetPasswordService {
     return this.http.findOne('valid/'+token)
   }
 
+  verifyCode(tel_number,code){
+    this.setEndpoint();
+    return this.http.findOne('valid/'+tel_number+'/'+code);
+
+  }
+
+  resetPasswordWithPhone(token,password){
+    this.setEndpoint();
+    return this.http.findOne('resetbyphone/'+token+'/'+password)
+
+  }
+
   resetPassword(token,password){
     this.setEndpoint();
     return this.http.findOne('reset/'+token+'/'+password)

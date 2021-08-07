@@ -4,9 +4,10 @@ import { from, Observable } from 'rxjs';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Platform } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
-
+import {Storage} from '@ionic/storage-angular'
 import { map } from 'rxjs/operators';
 import { DeviceIdService } from './device-id.service';
+
 
 const httpOptions = { 
   headers: new HttpHeaders({
@@ -24,18 +25,16 @@ export class HttpClientService {
     "Content-Type": "application/json",
     "accept": "application/json"
   }
-   headersMobile={
-    "Content-Type": "application/json",
-    "accept": "application/json",
-    "uuid": this.device_service.uuid
-  }
+  headersMobile:any
+  token:any
 
    
 
   constructor(private http: HttpClient,
-    private httpNative: HTTP,private platform: Platform, private device_service: DeviceIdService) {
-     
-     
+    private httpNative: HTTP,private platform: Platform, private device_service: DeviceIdService,
+    private  storage:Storage
+   ) {
+    this.getToken();
     }
   
     findAll(params:any): Observable<any> {
@@ -44,13 +43,10 @@ export class HttpClientService {
      
       
       if (this.platform.is('capacitor')) {
+        this.getToken();
         this.httpNative.setServerTrustMode("nocheck");
         return from(
-          this.httpNative.get(`${this.getUrl()}${params}`,{},{
-            "Content-Type": "application/json",
-            "accept": "application/json",
-            "uuid": this.device_service.uuid
-          }
+          this.httpNative.get(`${this.getUrl()}${params}`,{},this.headersMobile
 )
         ).pipe(
           map(data=>{
@@ -70,6 +66,7 @@ export class HttpClientService {
   
     findOne(id: any): Observable<any> {
       if (this.platform.is('capacitor')) {
+        this.getToken();
         this.httpNative.setServerTrustMode("nocheck");
         return from(
           this.httpNative.get(`${this.getUrl()}/${id}`,{},this.headersMobile)
@@ -85,6 +82,8 @@ export class HttpClientService {
   
     save(object: any): Observable<any> {
       if (this.platform.is('capacitor')) {
+        
+        this.getToken();
         this.httpNative.setServerTrustMode("nocheck");
         return from(
           this.httpNative.sendRequest(this.getUrl(),{method: "post"
@@ -104,16 +103,12 @@ export class HttpClientService {
   
     delete(id: number): Observable<any> {
       if (this.platform.is('capacitor')) {
+        this.getToken();
         this.httpNative.setServerTrustMode("nocheck");
         return from(
          
           this.httpNative.delete(`${this.getUrl()}/${id}` ,  {},
-          {
-            "Content-Type": "application/json",
-            "accept": "application/json",
-            "uuid": this.device_service.uuid
-            
-          }  )
+         this.headersMobile )
   
         )
 
@@ -128,6 +123,7 @@ export class HttpClientService {
         return this.http.put(`${this.getUrl()}/${id}`, object, httpOptions);
       }
       else{
+        this.getToken();
         this.httpNative.setServerTrustMode("nocheck");
                
         return from(
@@ -143,6 +139,30 @@ export class HttpClientService {
       )
       }
       
+    }
+
+    private getToken(){
+      if(this.token){
+        this.headersMobile={
+          "Content-Type": "application/json",
+          "accept": "application/json",
+          "uuid": /*this.device_service.uuid*/"12345678",
+          "Authorization": "Bearer "+this.token
+        }
+      }else{
+        this.headersMobile={
+          "Content-Type": "application/json",
+          "accept": "application/json",
+          "uuid": /*this.device_service.uuid*/"12345678"
+        }
+
+      }
+
+   
+          
+
+
+        
     }
 
     private getUrl(): string {

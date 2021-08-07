@@ -59,7 +59,7 @@ export class RegisterComponent implements OnInit {
     
       const toast = await this.toastController.create({
         message: message,
-        duration: 2000,
+        duration: 4000,
         color: color,
         position: 'bottom'
       });
@@ -165,7 +165,7 @@ export class RegisterComponent implements OnInit {
         message: 'Wait we\'re creating your account',
       });
       await this.loading.present();
-      if (this.platform.is("mobileweb")|| this.platform.is("desktop")){
+ 
         this.register_service.register(deliveryBoyInfo).subscribe(
           livreur=>{
             console.log(livreur)
@@ -186,37 +186,7 @@ export class RegisterComponent implements OnInit {
           
         );
 
-      }else{
-        this.http.setServerTrustMode("nocheck");
-
-        this.http.sendRequest(environment.api_url+'/api/deliveries',{method: "post",data:
-        {
-  
-  
-          "firstName": deliveryBoyInfo.firstName.toString(),
-          "lastName": deliveryBoyInfo.lastName.toString(),
-          "email":  deliveryBoyInfo.email.toString(),
-          "telephone": deliveryBoyInfo.telephone.toString()
-        
-        
-        }
-        ,serializer:"json"}).then(response => {
-          // prints 200
-          console.log(response);
-          //this.router.navigate(['/login'])
-        })
-        .catch(async response => {
-          // prints 403
-          console.log(response.status);
-          
-          // prints Permission denied
-          console.log(response.error);
-          await this.loading.dismiss();
-          console.log('Loading dismissed!');
-        });
-
-
-      }
+      
 
     }
     else{

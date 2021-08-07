@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionSheetController, Platform } from '@ionic/angular';
+import { ActionSheetController, LoadingController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { DeliveryService } from '../../_services/delivery.service';
 
@@ -17,7 +17,8 @@ export class HomeComponent implements OnInit {
     public actionSheetController: ActionSheetController,
     private storage: AuthService,
     private delivery_service: DeliveryService,
-    private platform: Platform) { }
+    private platform: Platform,
+    public loadingController: LoadingController) { }
 
   ngOnInit() {
     this.getInfo();
@@ -25,15 +26,26 @@ export class HomeComponent implements OnInit {
 
   getInfo(){
     this.platform.ready().then(async() => {
-
+      const loading = await this.loadingController.create({
+        cssClass: 'my-custom-class',
+        message: 'Please wait...',
+        mode: 'ios',
+        translucent: true
+      });
+      await loading.present();
      
       await  this.storage.getUser().then((response) => {
      
           this.delivery_service.getDelivery(response.data).subscribe(
             data=>{
+              loading.dismiss();
+              console.log('Loading dismissed!');
               this.delivery=data
               this.storage.set('deliveryInfo',this.delivery)
               
+            },err=>{
+              loading.dismiss();
+              console.log('Loading dismissed!');
             }
           )
 
@@ -77,6 +89,10 @@ export class HomeComponent implements OnInit {
   }
   payoutPage(){
     this.router.navigate(['/app/settings/payout'])
+  }
+
+  addressPage(){
+    this.router.navigate(['/app/settings/address'])
   }
 
   resetPage(){

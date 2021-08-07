@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
-import { AlertController, IonContent, MenuController, ModalController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, IonContent, LoadingController, MenuController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/front/_services/auth.service';
 import { MessagingService } from 'src/app/front/_services/messaging.service';
 import { OrderService } from '../../_services/order.service';
@@ -23,6 +23,9 @@ import { DeliveryService } from 'src/app/back/settings/_services/delivery.servic
 import { MailConfirmService } from 'src/app/front/_services/mail-confirm.service';
 import { CommissionComponent } from 'src/app/back/payments/_pages/commission/commission.component';
 import { PhoneVerifyComponent } from 'src/app/front/_pages/phone-verify/phone-verify.component';
+import { AvailabilityService } from 'src/app/back/_services/availability.service';
+
+import { OrderDetailsComponent } from '../order-details/order-details.component';
 
 const { PushNotifications } = Plugins;
 const {Network} =Plugins;
@@ -44,6 +47,7 @@ export class OrderListComponent implements OnInit {
   token: string;
   error: any=[];
   delivery: any;
+  loading: HTMLIonLoadingElement;
   constructor(public alertController: AlertController,
     private router: Router,
     private alertCtrl: AlertController,
@@ -51,8 +55,6 @@ export class OrderListComponent implements OnInit {
     private sse:SseService,
     private platform: Platform,
     private auth_service: AuthService,
-    private order_service:OrderService, 
-    private geolocation: Geolocation,
     private messagin:MessagingService,
     private menu: MenuController,
     public modalController: ModalController,
@@ -60,17 +62,15 @@ export class OrderListComponent implements OnInit {
     private delivery_serv: DeliveryService,
     private mailConfirm_serv: MailConfirmService,
     private toastCtrl: ToastController,
+    private availability_serv :AvailabilityService,
+    public loadingController: LoadingController
     
     ) { 
+      
+
       this.platform.ready().then(async() => {
          this.requestMessaginToken();
-        await  this.auth_service.getUser().then(async(response) => {
-          if (response) { 
-            await  this.auth_service.getFcmToken().then((tokenFcm) => {
-              if (tokenFcm) { 
-                this.updateTokenDevice(response.data,tokenFcm)
-              }})
-          }})
+       
         });
         
      
@@ -97,13 +97,11 @@ export class OrderListComponent implements OnInit {
 
 
   async updateTokenDevice(user,FCM_token){
-    let data={
-     deviceToken: FCM_token
-    }
+
     this.user=user
     console.log(user)
     
-  return this.delivery_serv.updateDelivery(user,data).subscribe(
+  return this.delivery_serv.updateDelivery(user,{deviceToken: FCM_token}).subscribe(
     ()=>{
      
      //window.location.href = "/app/orders";
@@ -198,16 +196,49 @@ export class OrderListComponent implements OnInit {
   }
   showNewOrders(){
     this.new=true;
+    this.ngOnInit().then(()=>{
+
+    })
+    
   }
-  detail(id){
-    this.router.navigate(['/orders/info/'+id])
+  async showDetails(order) {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...',
+      mode: 'ios',
+      translucent: true
+    });
+    await loading.present();
+
+    const modal = await this.modalController.create({
+      component: OrderDetailsComponent,
+      cssClass: 'my-custom-class',
+      componentProps: {
+        'order': order,
+        'delivery': this.delivery
+      }
+    });
+    modal.onWillDismiss().then(()=>{
+      this.ngOnInit().then(
+        ()=> {
+
+        }
+      )
+    })
+    return await modal.present().then(()=>{
+      loading.dismiss();
+      console.log('Loading dismissed!');
+
+    });
   }
+
+
 
   async showMessage(message,color){
     
     const toast = await this.toastCtrl.create({
       message: message,
-      duration: 2000,
+      duration: 4000,
       color: color,
       position: 'bottom'
     });
@@ -261,8 +292,19 @@ export class OrderListComponent implements OnInit {
 
   }
 async  getOrders(user) {
+  const loading = await this.loadingController.create({
+    cssClass: 'my-custom-class',
+    message: 'Please wait...',
+    mode: 'ios',
+    translucent: true
+  });
+  await loading.present();
+
+  
  
-      this.nearby_service.getNearbyOrders(user).subscribe((data) => {
+      this.nearby_service.getNearbyOrders(user).subscribe(async(data) => {
+        loading.dismiss();
+        console.log('Loading dismissed!');
           if(data.errors){
             this.error=data.errors;
           }else{
@@ -277,7 +319,9 @@ async  getOrders(user) {
    
      //   console.log(this.orders)
        
-      },err=>{
+      },async (err)=>{
+        loading.dismiss();
+        console.log('Loading dismissed!');
         if(this.attempts<10){
           this.getOrders(user)
           this.attempts++;
@@ -297,6 +341,20 @@ async  getOrders(user) {
    }
 
  async ngOnInit() {
+   this.availability_serv.change.subscribe(isOnline=>{
+
+     if(isOnline==true){
+       this.goOnline();
+     }
+
+     if(isOnline==false){
+      this.goOffline();
+    }
+
+
+
+   });
+
    
   let status=await Network.getStatus();
   if(status.connected){
@@ -321,6 +379,17 @@ async  getOrders(user) {
           if (response) { 
             this.getOrders(response);
 
+            this.delivery_serv.getDelivery(response.data).subscribe(
+              data=>{
+                this.delivery=data
+                if(data.isPhoneVerified==false || data.isPhoneVerified==null){
+                  this.presentVerificationModal(data.telephone);
+                }
+      
+               
+              }
+            )
+
           }
         });
       });
@@ -330,23 +399,14 @@ async  getOrders(user) {
 
   this.platform.ready().then(async() => {
     await  this.auth_service.getUser().then((response) => {
-      this.delivery_serv.getDelivery(response.data).subscribe(
-        data=>{
-          this.delivery=data
-          if(data.isPhoneVerified==false || data.isPhoneVerified==null){
-            this.presentVerificationModal(data.telephone);
-          }
 
-         
-        }
-      )
       
 
      
       if (response) { 
-        console.log(response,"eeeeeeeeeee")
+        console.log(response,"eeeeeeeeeee") 
      
-          this.sse.GetExchangeData('https://food.dev.confledis.fr:3000/.well-known/mercure?topic=https://food.dev.confledis.fr/api/orders/{id}');
+ //         this.sse.GetExchangeData('https://food.dev.confledis.fr:3000/.well-known/mercure?topic=https://food.dev.confledis.fr/api/orders/{id}');
         
             this.getOrders(response);
 
@@ -354,65 +414,7 @@ async  getOrders(user) {
     });
   });
 
-  //TODO
-  /*
-  this.geolocation.getCurrentPosition().then(async (resp) => {
-
-    if(!this.platform.is('desktop')&&!this.platform.is('mobileweb')){
-      await  this.auth_service.getUser().then((response) => {
-        let data=JSON.parse(response.data);
-        this.http.setServerTrustMode("nocheck");
-        this.http.sendRequest(environment.BACK_API_MOBILE+"/api/deliveries/"+data.data.id,{method:"put"
-      ,data:{
-        currentLongitude: resp.coords.longitude,
-        currentLatitude: resp.coords.latitude
-      }, serializer:"json"})},
-        ).then(
-          ()=>{
-            console.log("location updated")
-          }
-        )
-      
-      
-
-    }
-
-    console.log(resp.coords.latitude)
-    console.log(resp.coords.longitude)
-   }).catch((error) => {
-     console.log('Error getting location', error);
-   });
-   
-   let watch = this.geolocation.watchPosition();
-   watch.subscribe((data) => {
-    // data can be a set of coordinates, or an error (if an error occurred).
-    // data.coords.latitude
-    // data.coords.longitude
-    console.log(data,"ddddddddddd")
-    if(!this.platform.is('desktop')&&!this.platform.is('mobileweb')){
-    this.platform.ready().then(async() => {
-
-      await  this.auth_service.getUser().then((response) => {
-        let data=JSON.parse(response.data);
-        this.http.setServerTrustMode("nocheck");
-        this.http.sendRequest(environment.BACK_API_MOBILE+"/api/deliveries/"+data.data.id,{method:"put"
-      ,data:{
-        currentLongitude: data.coords.longitude,
-        currentLatitude: data.coords.latitude
-      }, serializer:"json"})},
-        ).then(
-          ()=>{
-            console.log("location updated")
-          }
-        )
-
-    });
-  }
-    
-   });*/
-
-
-
+  
     await this.auth_service.getDark().then((test)=>{
       if (test) {document.body.setAttribute('data-theme', 'dark');	
     this.dark=true}
@@ -477,7 +479,7 @@ async requestMessaginToken(){
              await  this.auth_service.getUser().then(async(response) => {
               if (response) { 
                 
-                    this.updateTokenDevice(response.data,tokenF)
+                    this.updateTokenDevice(response.data,tokenF.value)
                   
               }})
 
@@ -560,7 +562,7 @@ listenForMessages() {
 }
 
 goOnline(){
-  this.delivery_serv.updateDelivery(this.delivery,{status:'FREE'}).subscribe(
+  this.delivery_serv.updateDelivery(this.delivery,{status:'AVAILABLE'}).subscribe(
     (data)=>{
       this.delivery=data;
 
@@ -578,8 +580,8 @@ goOnline(){
   )
 }
 
-goOffline(){
-  this.delivery_serv.updateDelivery(this.delivery,{status:'OFFLINE'}).subscribe(
+goOffline(){ 
+  this.delivery_serv.updateDelivery(this.delivery,{status:'DONT_DISTURB'}).subscribe(
     (data)=>{
       this.delivery=data;
       this.orders.length=0;
