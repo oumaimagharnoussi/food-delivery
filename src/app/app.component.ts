@@ -221,11 +221,12 @@ export class AppComponent {
 
   async logout() {
   this.stop();
-  this.delivery_serv.updateDelivery(this.delivery,{status:'OFFLINE'}).subscribe(
+  //disabled temporary
+  /*this.delivery_serv.updateDelivery(this.delivery,{status:'OFFLINE'}).subscribe(
     (data)=>{
       this.delivery=data;       
     }
-  )
+  )*/
   await this.message.deleteToken();
  
   await this.auth_service.logout().then(
