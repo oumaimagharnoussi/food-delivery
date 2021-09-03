@@ -23,7 +23,11 @@ export class PasswordChangeService {
   
   resetPassword(currentPassword,newPassword){
     this.setEndpoint();
-    return this.http.findOne(currentPassword+'/'+newPassword)
+    return this.http.save({
+      currentPassword:currentPassword,
+      newPassword:newPassword
+    })
+    //return this.http.findOne(currentPassword+'/'+newPassword)
   }
   
 

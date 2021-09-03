@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { AuthService } from 'src/app/front/_services/auth.service';
+import { MessagingService } from 'src/app/front/_services/messaging.service';
 import { PasswordChangeService } from '../../_services/password-change.service';
 
 @Component({
@@ -12,7 +14,8 @@ export class PasswordResetComponent implements OnInit {
   new:string = ""
   newConfirm:string =""
 
-  constructor( public toastController: ToastController, private password_serv: PasswordChangeService) { }
+  constructor( public toastController: ToastController, private password_serv: PasswordChangeService,
+    private auth_service:AuthService,private message:MessagingService) { }
 
   ngOnInit() {}
 
@@ -37,6 +40,7 @@ export class PasswordResetComponent implements OnInit {
         this.new=""
         this.newConfirm=""
         this.old=""
+        this.logout();
       },
       err=>{
         console.log(err)
@@ -48,9 +52,6 @@ export class PasswordResetComponent implements OnInit {
       }
     )
 
-    
-
-    
   }
 
   async showMessage(message,color){
@@ -64,4 +65,15 @@ export class PasswordResetComponent implements OnInit {
     toast.present();
 } 
 
+async logout() {
+  
+  await this.message.deleteToken();
+ 
+  await this.auth_service.logout().then(
+  ()=>{
+   // window.location.href = "/login";
+  } 
+ ); 
+ 
+}
 }
