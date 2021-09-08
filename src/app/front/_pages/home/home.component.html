@@ -1,44 +1,49 @@
-
+<ion-header mode="ios" class="ion-no-border">
   <img
-          class="mx-auto h-10 w-auto mb-5 mt-6"
-          src="../../../assets/front/Logo_icon.png"
-          alt="Workflow"
-        />
-        
-        <h2 class="mt-4 text-center text-3xl font-extrabold mb-18">
-          CongoFood Delivery
-        </h2>
-
-  
-      <ul *ngIf="login" class='flex cursor-pointer justify-center'>
-          <li (click)="showRegisterPage()" style="background-color: rgb(235, 235, 235);" class='py-2 px-6 w-screen m-4  rounded-t-lg '>Register</li>
-          <li (click)="showLoginPage()" style="background-color: #48CA89; color:white;" class='py-2 px-6 m-4 w-screen  rounded-t-lg  '>Login</li>
-  
-      </ul>
-
-      <ul *ngIf="!login" class='flex cursor-pointer justify-center'>
-        <li (click)="showRegisterPage()" style="background-color: #48CA89; color:white;" class='py-2 px-6 m-4 w-screen  rounded-t-lg  '>Register</li>
-        <li (click)="showLoginPage()" style="background-color: rgb(235, 235, 235);" class='py-2 px-6 w-screen m-4  rounded-t-lg '>Login</li>
+  class="mx-auto h-10 w-14 mt-2 "
+  src="../../../assets/front/Logo_icon.png"
+  alt="Workflow"
+/>
 
 
-    </ul>
-      
-  <div
-    class="min-h-screen mt-1 flex  justify-center px-4 sm:px-6 lg:px-8"
-  >
-    <div class="max-w-md w-full space-y-8">
-     
-      <div>
-   
 
-      <app-login *ngIf="login">
-        
-      </app-login>
-      <app-register *ngIf="!login">
 
-      </app-register>
-      </div>
-     
-    
-    </div>
-  </div>
+<ul *ngIf="login" class='flex cursor-pointer justify-center'>
+  <li (click)="showRegisterPage()"  class='py-2 px-6 w-screen m-4  bg-gray-500 hover:bg-gray-700 focus:bg-gray-700 text-white rounded-lg '>Register</li>
+  <li (click)="showLoginPage()"  class='py-2 px-6 m-4 w-screen  rounded-t-lg  bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg '>Login</li>
+
+</ul>
+
+<ul *ngIf="!login" class='flex cursor-pointer justify-center'>
+<li (click)="showRegisterPage()"  class='py-2 px-6 m-4 w-screen  rounded-t-lg bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg  '>Register</li>
+<li (click)="showLoginPage()"  class='py-2 px-6 w-screen m-4  rounded-t-lg bg-gray-500 hover:bg-gray-700 focus:bg-gray-700 text-white rounded-lg'>Login</li>
+
+
+</ul>
+</ion-header>
+
+
+
+
+
+<div
+class="min-h-screen mt-1 flex  justify-center px-4 sm:px-6 lg:px-8"
+>
+<div class="max-w-md w-full space-y-8">
+
+<div>
+
+
+<app-login *ngIf="login">
+
+</app-login>
+<app-register *ngIf="!login">
+
+</app-register>
+</div>
+
+
+</div>
+</div>
+
+ 

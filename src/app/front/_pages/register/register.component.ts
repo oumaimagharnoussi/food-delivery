@@ -244,21 +244,16 @@ export class RegisterComponent implements OnInit {
   
 
   async saveToken(token){
-    this.platform.ready().then(async() => {
-      console.log("save token this : ",token)
-      if(this.platform.is('capacitor')){
-        let data=JSON.parse(token.data)
-        this.authService.set('access_token',data)  
-        this.authService.token=data;
-        
-      }else{
-        this.authService.set('access_token',token)  
-        this.authService.token=token; 
-      }
-      
-    })
-    
-   }
+  
+      let tokenData= token.token
+      this.authService.set('access_token',tokenData)  
+      this.authService.token=tokenData;
+
+      let userData= token.data.id
+      this.authService.set('userData',userData)  
+      this.authService.userId=userData;
+
+ }
   
 
 

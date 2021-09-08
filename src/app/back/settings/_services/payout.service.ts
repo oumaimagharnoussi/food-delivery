@@ -7,6 +7,7 @@ import { HttpClientService } from 'src/app/api/http-client.service';
   providedIn: 'root'
 })
 export class PayoutService {
+  id: any;
 
 
   constructor(
@@ -14,14 +15,15 @@ export class PayoutService {
     
     ) {
       this.http.endpoint='payment_methods';
+      this.id= localStorage.getItem('userData')
 
 
   }
 
-  addNewPayoutMethod(data,user): Observable<any> {
+  addNewPayoutMethod(data): Observable<any> {
     this.setEndpoint()
     
-    data.delivery="api/deliveries/"+user.id;
+    data.delivery="api/deliveries/"+this.id;
     return this.http.save(data);
 
   }

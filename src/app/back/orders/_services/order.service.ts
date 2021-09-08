@@ -6,18 +6,20 @@ import { HttpClientService } from 'src/app/api/http-client.service';
   providedIn: 'root'
 })
 export class OrderService {
+  id: any;
 
   constructor(
     private http: HttpClientService) { 
+      this.id= localStorage.getItem('userData')
       this.setEndpoint()
 
 
   }
 
  
-  getAcceptedOrders(user,page): Observable<any> {
+  getAcceptedOrders(page): Observable<any> {
     this.setEndpoint()
-    return this.http.findAll('?status=INDELIVERY&delivery.id='+user.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc')
+    return this.http.findAll('?status=INDELIVERY&delivery.id='+this.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc')
   }
 
   getOrderInfo(id): Observable<any>{
@@ -28,10 +30,10 @@ export class OrderService {
   }
 
 
-acceptOrder(id,user): Observable<any>{
+acceptOrder(id): Observable<any>{
   this.setEndpoint()
   let order= {
-    delivery:"api/deliveries/"+user.id,
+    delivery:"api/deliveries/"+this.id,
     status: "INDELIVERY",
     acceptedDeliveryAt: new Date()
   }
@@ -47,9 +49,9 @@ finishOrder(id): Observable<any>{
   return this.http.update(id,order);
 }
 
-getDistances(orderID: number,deliveryID: number){
+getDistances(orderID: number){
   this.http.endpoint='distances';
-  return this.http.findAll('/'+deliveryID+'/'+orderID)
+  return this.http.findAll('/'+this.id+'/'+orderID)
 
 
 }

@@ -30,7 +30,7 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   getDistances(){
-    this.order_service.getDistances(this.order.order.id,this.delivery.id).subscribe(
+    this.order_service.getDistances(this.order.order.id).subscribe(
       (data)=>{
         this.distances=data;
         console.log(this.distances)
@@ -59,7 +59,7 @@ export class OrderDetailsComponent implements OnInit {
         });
         await loading.present();
 
-        this.order_service.acceptOrder(id,this.delivery).subscribe(
+        this.order_service.acceptOrder(id).subscribe(
           data=>{
             loading.dismiss();
 

@@ -53,7 +53,7 @@ export class AppComponent {
         let a=window.location.pathname.toString();
       
         this.router.events.subscribe((event: Event) => {
-          if(a=="/"||a=="/index"||a=="/login"||a=="/register"||a=="/forget"||a=="/phone-verify"){
+          if(a=="/"||a=="/index"||a=="/forget"||a=="/phone-verify"){
             this.side=false
             this.changeRef.detectChanges();
           }else{
@@ -113,8 +113,8 @@ export class AppComponent {
          
          });
          if(this.delivery==null){
-          await  this.auth_service.getUser().then((response) => {
-            this.delivery_serv.getDelivery(response.data).subscribe(
+        
+            this.delivery_serv.getDelivery().subscribe(
               data=>{
                 this.delivery=data;
                 if(this.delivery.status=="AVAILABLE"){
@@ -127,7 +127,7 @@ export class AppComponent {
     
                 }  
               })
-            })
+        
             }else{
               if(this.delivery.status=="AVAILABLE"){
                 this.isOnline=true
@@ -258,16 +258,16 @@ export class AppComponent {
 async updateLocation(lng,lat){
 
   if(this.delivery==null){
-    await  this.auth_service.getUser().then((response) => {
-      this.delivery_serv.getDelivery(response.data).subscribe(
+   
+      this.delivery_serv.getDelivery().subscribe(
         data=>{
           this.delivery=data
         }
       );
-     })
+   
   }
 
-  this.delivery_serv.updateDelivery(this.delivery,{currentLongitude:lng, currentLatitude:lat}).subscribe(
+  this.delivery_serv.updateDelivery({currentLongitude:lng, currentLatitude:lat}).subscribe(
     (data)=>{
       this.delivery=data;       
     }

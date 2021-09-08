@@ -34,9 +34,9 @@ export class HomeComponent implements OnInit {
       });
       await loading.present();
      
-      await  this.storage.getUser().then((response) => {
+      
      
-          this.delivery_service.getDelivery(response.data).subscribe(
+          this.delivery_service.getDelivery().subscribe(
             data=>{
               loading.dismiss();
               console.log('Loading dismissed!');
@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
 
         
       })
-    })
+  
   }
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({

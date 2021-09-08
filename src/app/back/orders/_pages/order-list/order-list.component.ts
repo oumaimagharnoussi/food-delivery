@@ -96,12 +96,11 @@ export class OrderListComponent implements OnInit {
 
 
 
-  async updateTokenDevice(user,FCM_token){
+  async updateTokenDevice(FCM_token){
 
-    this.user=user
-    console.log(user)
     
-  return this.delivery_serv.updateDelivery(user,{deviceToken: FCM_token}).subscribe(
+    
+  return this.delivery_serv.updateDelivery({deviceToken: FCM_token}).subscribe(
     ()=>{
      
      //window.location.href = "/app/orders";
@@ -291,7 +290,7 @@ export class OrderListComponent implements OnInit {
     )
 
   }
-async  getOrders(user) {
+async  getOrders() {
   const loading = await this.loadingController.create({
     cssClass: 'my-custom-class',
     message: 'Please wait...',
@@ -302,7 +301,7 @@ async  getOrders(user) {
 
   
  
-      this.nearby_service.getNearbyOrders(user).subscribe(async(data) => {
+      this.nearby_service.getNearbyOrders().subscribe(async(data) => {
         loading.dismiss();
         console.log('Loading dismissed!');
           if(data.errors){
@@ -323,7 +322,7 @@ async  getOrders(user) {
         loading.dismiss();
         console.log('Loading dismissed!');
         if(this.attempts<10){
-          this.getOrders(user)
+          this.getOrders()
           this.attempts++;
         }else{
           console.log("problem with your backend")
@@ -375,11 +374,10 @@ async  getOrders(user) {
   this.sse.returnAsObservable().subscribe(data=>
     {
       this.platform.ready().then(async() => {
-        await  this.auth_service.getUser().then((response) => {
-          if (response) { 
-            this.getOrders(response);
+        
+            this.getOrders();
 
-            this.delivery_serv.getDelivery(response.data).subscribe(
+            this.delivery_serv.getDelivery().subscribe(
               data=>{
                 this.delivery=data
                 if(data.isPhoneVerified==false || data.isPhoneVerified==null){
@@ -390,8 +388,7 @@ async  getOrders(user) {
               }
             )
 
-          }
-        });
+       
       });
     }
   );
@@ -408,7 +405,7 @@ async  getOrders(user) {
      
  //         this.sse.GetExchangeData('https://food.dev.confledis.fr:3000/.well-known/mercure?topic=https://food.dev.confledis.fr/api/orders/{id}');
         
-            this.getOrders(response);
+            this.getOrders();
 
       }
     });
@@ -476,12 +473,11 @@ async requestMessaginToken(){
              this.auth_service.set('fcm',tokenF)  
              this.auth_service.setFcmToken(tokenF);
 
-             await  this.auth_service.getUser().then(async(response) => {
-              if (response) { 
+         
                 
-                    this.updateTokenDevice(response.data,tokenF.value)
+                    this.updateTokenDevice(tokenF.value)
                   
-              }})
+           
 
            }
          );
@@ -518,12 +514,11 @@ async requestMessaginToken(){
        this.auth_service.set('fcm',tokenF)  
        this.auth_service.setFcmToken(tokenF);
 
-       await  this.auth_service.getUser().then(async(response) => {
-        if (response) { 
+   
           
-              this.updateTokenDevice(response.data,tokenF)
+              this.updateTokenDevice(tokenF)
             
-        }})
+       
     
        this.listenForMessages();
        
@@ -562,14 +557,14 @@ listenForMessages() {
 }
 
 goOnline(){
-  this.delivery_serv.updateDelivery(this.delivery,{status:'AVAILABLE'}).subscribe(
+  this.delivery_serv.updateDelivery({status:'AVAILABLE'}).subscribe(
     (data)=>{
       this.delivery=data;
 
       this.platform.ready().then(async() => {
         await  this.auth_service.getUser().then((response) => {
           if (response) { 
-            this.getOrders(response);
+            this.getOrders();
 
           }
         });
@@ -581,7 +576,7 @@ goOnline(){
 }
 
 goOffline(){ 
-  this.delivery_serv.updateDelivery(this.delivery,{status:'DONT_DISTURB'}).subscribe(
+  this.delivery_serv.updateDelivery({status:'DONT_DISTURB'}).subscribe(
     (data)=>{
       this.delivery=data;
       this.orders.length=0;

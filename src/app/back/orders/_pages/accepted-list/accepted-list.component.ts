@@ -159,7 +159,7 @@ export class AcceptedListComponent implements OnInit {
         await loading.present();
         await  this.storage.getUser().then((response) => {
           this.delivery=response.data;
-          this.order_service.getAcceptedOrders(response.data,page).subscribe(
+          this.order_service.getAcceptedOrders(page).subscribe(
              (data )=>{
               
               loading.dismiss();

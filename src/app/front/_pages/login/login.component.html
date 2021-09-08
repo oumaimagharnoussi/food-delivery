@@ -3,19 +3,31 @@
 
   
   
-      <div class="mt-8 space-y-8">
+      <div class="mt-2 space-y-8">
         <input type="hidden" name="remember" value="true">
         <div class="rounded-md shadow-sm -space-y-px">
-          <div>
-            <label for="email-address" class="sr-only">Email Or Phone </label>
-            <ion-input id="email-address" name="email" [(ngModel)]="loginForm.username" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 p-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm mb-1" placeholder="Email Or Phone">
-          </ion-input>
+          <div class="flex -mx-3">
+            <div class="w-full px-3 mb-2">
+                <label for="" class="text-xs font-semibold px-1">Email / Télephone</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
+                    <ion-input inputmode="text" [(ngModel)]="loginForm.username"   required type="email" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="johnsmith@example.com">
+                    </ion-input>
+                    </div>
             </div>
-          <div>
-            <label for="password" class="sr-only">Password</label>
-            <ion-input placeholder="Password"  required class="appearance-none rounded-none relative block w-full px-3 p-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm" [(ngModel)]="loginForm.password" type="password"></ion-input>
-         
+        </div>
+        <div class="flex -mx-3">
+          <div class="w-full px-3 mb-2">
+              <label for="" class="text-xs font-semibold px-1">Password</label>
+              <div class="flex">
+                  <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
+                  <ion-input  minlength="6" [(ngModel)]="loginForm.password"   placeholder="Enter your password " clearOnEdit="false" required  type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="************">
+              </ion-input>
+                  </div>
           </div>
+      </div> 
+
+
         </div>
   
        
@@ -35,11 +47,10 @@
   
         <div>
         
-          <ion-button color="tertiary" (click)="authenticate()" class="group relative w-full flex justify-center  border border-transparent text-sm font-extrabold rounded-md text-white hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-            LOGIN
+          <button color="tertiary" (click)="authenticate()" class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold">            LOGIN
     
   
-          </ion-button>
+          </button>
         </div>
     
       </div>

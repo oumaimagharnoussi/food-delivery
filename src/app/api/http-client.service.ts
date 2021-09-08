@@ -118,7 +118,7 @@ export class HttpClientService {
      
     }
 
-    update(id:Number, object: any): Observable<any> {
+    update(id:any, object: any): Observable<any> {
       if (this.platform.is('mobileweb') || this.platform.is('desktop')) {
         return this.http.put(`${this.getUrl()}/${id}`, object, httpOptions);
       }
