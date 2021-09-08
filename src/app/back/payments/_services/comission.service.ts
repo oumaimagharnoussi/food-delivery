@@ -8,19 +8,21 @@ import { HttpClientService } from 'src/app/api/http-client.service';
   providedIn: 'root'
 })
 export class ComissionService {
+  id: any;
   
 
   constructor(
     private http: HttpClientService
     ) { 
-     this.setEndpoint()
+      this.id= localStorage.getItem('userData')
+      this.setEndpoint()
    
 
   }
 
-  getDeliveryComissions(user,page): Observable<any>{
+  getDeliveryComissions(page): Observable<any>{
     this.setEndpoint()
-   return this.http.findAll('?page='+page+'&delivery.id='+user.id+'&order%5BcreatedAt%5D=desc');
+   return this.http.findAll('?page='+page+'&delivery.id='+this.id+'&order%5BcreatedAt%5D=desc');
   }
 
 

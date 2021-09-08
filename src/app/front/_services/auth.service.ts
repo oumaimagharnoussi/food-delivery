@@ -27,6 +27,7 @@ export class AuthService {
 
 
   private _storage: Storage | null = null;
+  userId: any;
 
   
  
@@ -55,63 +56,34 @@ export class AuthService {
   }
 
   async getToken(){
-    this.platform.ready().then(async() => {
-      await  this.storage.get("access_token").then(async(response) => {
-        if (response) {
-          this.token=response.token
-        this.http.token=response.token
+    
+    
+          this.token=localStorage.getItem("access_token")
+        this.http.token= localStorage.getItem("access_token")
 
-        }
-      })
-    })
+     
 
   }
 
 
  async  ifLoggedIn() {
 
-
-  this.platform.ready().then(async() => {
-    await  this.storage.get("access_token").then(async(response) => {
+   
+ 
 
      
-      if (response) {
-        console.log(response)
-        this.token=response.token
-        this.http.token=response.token
-        await  this.storage.get("uuid").then(async(response) => {
-          if(response){
-            this.uuid=response;
-            this.device_service.uuid=this.uuid;
-            
-          }else{
-            this.uuid=uuidv4();
-            await this.set('uuid',this.uuid)
-            this.device_service.uuid=this.uuid;
-
-          }
-          
-          console.log(response)
-        });
+      if (localStorage.getItem("access_token")) {
+       
+        this.token=localStorage.getItem("access_token")
+        this.http.token=localStorage.getItem("access_token")
+     
         this.authState.next(true);
       }else{
-        await  this.storage.get("uuid").then((response) => {
-          if(response){
-            this.uuid=response;
-            this.device_service.uuid=response;
-          }else{
-            this.uuid=uuidv4();
-            this.set('uuid',this.uuid)
-            this.device_service.uuid=this.uuid;
-
-          }
-          
-          console.log(response)
-        });
-        this.router.navigate(['/login'])
+  
+        this.router.navigate(['/index'])
       }
-    });
-  });
+ 
+
 
 
 
@@ -121,44 +93,9 @@ export class AuthService {
   async  ifNotLoggedIn() {
 
 
-    this.platform.ready().then(async() => {
-      await  this.storage.get("access_token").then(async(response) => {
+
+      !this.ifLoggedIn()
   
-       
-        if (!response) {
-          await  this.storage.get("uuid").then(async(response) => {
-            if(response){
-              this.uuid=response;
-              this.device_service.uuid=response;
-            }else{
-              this.uuid=uuidv4();
-              await this.set('uuid',this.uuid)
-              this.device_service.uuid=this.uuid;
-            }
-            
-            console.log(response) 
-          });
-          console.log(response)
-          this.authState.next(false);
-        }else{
-          this.token=response.data
-          this.http.token=response.token
-          await  this.storage.get("uuid").then(async(response) => {
-            if(response){
-              this.uuid=response;
-              this.device_service.uuid=response;
-            }else{
-              this.uuid=uuidv4();
-              await this.set('uuid',this.uuid)
-              this.device_service.uuid=this.uuid;
-            }
-            
-            console.log(response) 
-          });
-          window.location.href = "/app/orders";
-        }
-      });
-    });
   
   
   
@@ -174,19 +111,13 @@ export class AuthService {
     }
 
     async  get(key):Promise<any> {
-      var value;
-      await  this.storage.get(key).then((response) => {    
-          value =response;
-        });
-        return value;
+     
+      return  localStorage.getItem(key)
       }
 
     async  getUser():Promise<any> {
-      var user;
-      await  this.storage.get("access_token").then((response) => {
-          user =response;
-        });
-       return user
+      
+      return  localStorage.getItem("access_token")
       }
 
       async  getFcmToken():Promise<any> {
@@ -202,12 +133,13 @@ export class AuthService {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
     const storage = await this.storage.create();
     this._storage = storage;
+    
   }
 
   // Create and expose methods that users of this service can
   // call, for example:
   public set(key: string, value: any) {
-    this._storage?.set(key, value);
+    localStorage.setItem(key, value);
   }
 
 
@@ -226,12 +158,11 @@ export class AuthService {
 
     await  this.storage.get("access_token").then((response) => {
       this.http.endpoint='deliveries';
-      this.http.update(response.data.id,{
+      this.http.update(localStorage.getItem('userData'),{
         deviceToken: ""
       }).subscribe(
         ()=>{
-          this._storage.remove("access_token");
-          this._storage.remove("uuid");
+          localStorage.clear()
           this._storage.remove("acceptedList");
           this._storage.remove("comissionList");
           this._storage.remove("deliveryInfo");
@@ -240,17 +171,27 @@ export class AuthService {
           );;
         },
         ()=>{
-          this._storage.remove("access_token");
-          this._storage.remove("uuid");
+          localStorage.clear()
           this._storage.remove("acceptedList");
           this._storage.remove("comissionList");
           this._storage.remove("deliveryInfo");
           this._storage.remove("dark").then(
-            ()=>{window.location.href = "/login";}
+            ()=>{window.location.href = "/index";}
           );;
+        },()=>{
+          localStorage.clear()
+          this._storage.remove("acceptedList");
+          this._storage.remove("comissionList");
+          this._storage.remove("deliveryInfo");
+          this._storage.remove("dark").then(
+            ()=>window.location.href = "/index"
+          )
         }
 
+       
+
       )
+
     })
     
        

@@ -49,21 +49,18 @@ export class PaymentinfoComponent implements OnInit {
 
   ngOnInit() {}
   addPaymentMethod(){
-    this.platform.ready().then(async() => {
-
-     
-      await  this.auth.getUser().then((response) => {
+    
         if(this.card){
           let data={
             type: "CARD",
             cardNumber:this.cardNumber,
             cardExpMonth: Number(this.cardExpMonth),
             cardExpYear: Number( this.cardExpYear),
-            delivery: "api/deliveries/"+response.data.id
+            delivery: "api/deliveries/"+localStorage.getItem('userData')
           }
        
         
-            this.payout_service.addNewPayoutMethod(data,response.data).subscribe(
+            this.payout_service.addNewPayoutMethod(data).subscribe(
               data=>{
                 this.showMessage("Payment method added","success")
                 window.location.href = "/app/settings/payout";
@@ -84,7 +81,7 @@ export class PaymentinfoComponent implements OnInit {
           }
         
           
-            this.payout_service.addNewPayoutMethod(data,response.data).subscribe(
+            this.payout_service.addNewPayoutMethod(data).subscribe(
               data=>{
              
                 window.location.href = "/app/settings/payout";
@@ -100,11 +97,11 @@ export class PaymentinfoComponent implements OnInit {
           let data={
             type:"PAYPAL",
             email:this.email,
-            delivery: "api/deliveries/"+response.data.id
+            delivery: "api/deliveries/"+localStorage.getItem('userData')
           }
         
      
-            this.payout_service.addNewPayoutMethod(data,response.data).subscribe(
+            this.payout_service.addNewPayoutMethod(data).subscribe(
               data=>{
                
                 window.location.href = "/app/settings/payout";
@@ -116,8 +113,7 @@ export class PaymentinfoComponent implements OnInit {
     
         }
 
-      })
-    })
+   
 
   }
   onItemChange(){

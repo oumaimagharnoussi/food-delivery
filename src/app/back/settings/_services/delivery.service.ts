@@ -6,19 +6,21 @@ import { HttpClientService } from 'src/app/api/http-client.service';
   providedIn: 'root'
 })
 export class DeliveryService {
+  id:any
 
   constructor(private http: HttpClientService) {
     this.setEndpoint()
+    this.id= localStorage.getItem('userData')
    }
   
-   getDelivery(user:any): Observable<any>{
+   getDelivery(): Observable<any>{
     this.setEndpoint()
-     return this.http.findOne(user.id)
+     return this.http.findOne(this.id)
    }
 
-   updateDelivery(user,data): Observable<any>{
+   updateDelivery(data): Observable<any>{
      this.setEndpoint()
-     return this.http.update(user.id,data)
+     return this.http.update(this.id,data)
    }
 
    setEndpoint(){

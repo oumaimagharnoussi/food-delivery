@@ -123,19 +123,20 @@ export class LoginComponent implements OnInit {
  }
 
  async saveToken(token){
-  this.platform.ready().then(async() => {
+
     console.log("save token this : ",token)
-    if(this.platform.is('capacitor')){
-      let data=JSON.parse(token.data)
-      this.auth_service.set('access_token',data)  
-      this.auth_service.token=data;
-      
-    }else{
-      this.auth_service.set('access_token',token)  
-      this.auth_service.token=token; 
-    }
+   
+      let tokenData= token.token
+      this.auth_service.set('access_token',tokenData)  
+      this.auth_service.token=tokenData;
+
+      let userData= token.data.id
+      this.auth_service.set('userData',userData)  
+      this.auth_service.userId=userData;
+
+ 
     
-  })
+
   
  }
 

@@ -5,22 +5,24 @@ import { HttpClientService } from 'src/app/api/http-client.service';
   providedIn: 'root'
 })
 export class NearbyOrdersService {
+  id: any;
 
   constructor(
     private http: HttpClientService
   ) { 
+    this.id= localStorage.getItem('userData')
     this.setEndpoint()
     
   }
 
-  getNearbyOrders(user){
+  getNearbyOrders(){
     this.setEndpoint()
-    return this.http.findOne(user.data.id)
+    return this.http.findOne(this.id)
   }
 
-  getRecentNearbyOrders(user){
+  getRecentNearbyOrders(){
     this.setEndpoint()
-    return this.http.findOne(user.id)
+    return this.http.findOne(this.id)
   }
 
   setEndpoint(){

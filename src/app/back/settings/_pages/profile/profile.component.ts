@@ -66,12 +66,9 @@ export class ProfileComponent implements OnInit {
    
   }
   getInfo(){
-    this.platform.ready().then(async() => {
-
+   
      
-      await  this.auth.getUser().then((response) => {
-     
-          this.delivery_serv.getDelivery(response.data).subscribe(
+          this.delivery_serv.getDelivery().subscribe(
             data=>{
               this.delivery=data
               this.auth.set('deliveryInfo',this.delivery)
@@ -80,8 +77,7 @@ export class ProfileComponent implements OnInit {
           )
 
         
-      })
-    })
+    
   }
   
 

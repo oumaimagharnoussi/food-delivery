@@ -101,8 +101,7 @@ gotToTop() {
   this.content.scrollToTop(1000);
 }
  async getComissions(page){
-    this.platform.ready().then(async() => {
-      await  this.auth.getUser().then(async (response) => {
+  
       
           const loading = await this.loadingController.create({
             cssClass: 'my-custom-class',
@@ -112,7 +111,7 @@ gotToTop() {
           });
           await loading.present();
   
-        this.comisson_service.getDeliveryComissions(response.data ,page).subscribe(
+        this.comisson_service.getDeliveryComissions(page).subscribe(
           data=>{
             loading.dismiss();
             console.log('Loading dismissed!');
@@ -140,15 +139,6 @@ gotToTop() {
            
           }
         )
-
-      
-   
-
-
-    
-    })
-      
-    })
 
   }
   detail(){

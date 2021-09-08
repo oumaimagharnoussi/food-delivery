@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
 
-  server: 'http://192.168.1.10:8000',
-  api_url:'http://192.168.1.10:8000/api/',
+  server: 'https://food.dev.confledis.fr',
+  api_url:'https://food.dev.confledis.fr/api/',
 
   firebase :{
     apiKey: "AIzaSyC9Y1XY7jFJCvB5Wt3_EEUc-BETpOWbQXc",
