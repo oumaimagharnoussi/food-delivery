@@ -106,7 +106,9 @@
          
           <h2 style="font-weight: bold;" class="mb-2" (click)="showDetails(order)">
            
-            {{order.order.restaurant.name}}   <ion-badge mode="ios" size="small" color="primary">NEW</ion-badge>  
+            {{order.order.restaurant.name}}   
+            <ion-badge mode="ios" *ngIf="order.order.status=='ACCEPTED'" size="small" color="primary">UNPREPARED</ion-badge>  
+            <ion-badge mode="ios" *ngIf="order.order.status=='PREPARED'"  size="small" color="secondary">PREPARED</ion-badge>  
            
           </h2> 
           
