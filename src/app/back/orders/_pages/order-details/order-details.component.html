@@ -100,9 +100,11 @@
     </div>
   
 
-    <ion-button  *ngIf="order?.order.status=='INDELIVERY'" color="tertiary" expand="full" (click)="finish()" ><b class="text-white"> Finish order</b></ion-button>
+    <ion-button  *ngIf="order?.order.status=='PICKED'" color="tertiary" expand="full" (click)="finish()" ><b class="text-white"> Finish order</b></ion-button>
 
-    <ion-button  *ngIf="order?.order.status=='ACCEPTED'" color="tertiary" expand="full"  (click)="accept()"><b class="text-white"> ACCEPT</b>
+    <ion-button  *ngIf="(order?.order.status=='ACCEPTED' || order?.order.status=='PREPARED')&& order?.order.delivery==null" color="tertiary" expand="full"  (click)="accept()"><b class="text-white"> ACCEPT</b>
+    </ion-button>
+    <ion-button  *ngIf="order?.order.status=='PREPARED' && order?.order.delivery!=null" color="tertiary" expand="full"  (click)="accept()"><b class="text-white"> PICK</b>
     </ion-button>
 </div>
    

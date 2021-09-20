@@ -51,6 +51,14 @@ export class HttpConfigInterceptor implements HttpInterceptor {
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
+                        // Catch "401 Unauthorized" responses
+                        if ( error instanceof HttpErrorResponse && error.status === 401 )
+                        {
+                            // Sign out
+                            this.auth_service.logout();
+        
+        
+                        }
         console.error(error);
         return throwError(error);
       }));

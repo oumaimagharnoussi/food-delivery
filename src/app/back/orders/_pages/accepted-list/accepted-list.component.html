@@ -4,11 +4,13 @@
         
          
        
-            <ion-select class="mx-2" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="Filter" mode="ios" >
+            <ion-select class="mx-2 font-bold text-gray-700" value="all" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="Filter" mode="ios" >
           
-              <ion-select-option value="blonde">By restaurant</ion-select-option>
-              <ion-select-option value="black">PICKED</ion-select-option>
-              <ion-select-option value="red">INDELIVERY</ion-select-option>
+              <ion-select-option value="all">All</ion-select-option>
+              <ion-select-option value="unprepared">Unprepared</ion-select-option>
+              <ion-select-option value="prepared">Prepared</ion-select-option>
+              <ion-select-option value="picked">Picked</ion-select-option>
+              <ion-select-option value="delivered">Delivered</ion-select-option>
             </ion-select>
        
         
@@ -29,9 +31,12 @@
             
             <h2 style="font-weight: bold;" class="mb-2" (click)="showDetails(order)">
            
-              {{order.restaurant.name}}   <ion-badge *ngIf="order.status=='INDELIVERY'" mode="ios" size="small" color="primary">ON WAY</ion-badge>  
-              <ion-badge mode="ios" *ngIf="order.status=='DELIVERED'" size="small" color="success">FINISHED</ion-badge>  
-             
+              {{order.restaurant.name}}  
+              <ion-badge mode="ios" *ngIf="order.status=='DELIVERED'" size="small" color="success">FINISHED</ion-badge>
+              <ion-badge mode="ios" *ngIf="order.status=='ACCEPTED'" size="small" color="primary">UNPREPARED</ion-badge>
+              <ion-badge mode="ios" *ngIf="order.status=='PREPARED'" size="small" color="secondary">PREPARED</ion-badge>  
+              <ion-badge mode="ios" *ngIf="order.status=='PICKED'" size="small" color="warning">PICKED</ion-badge>
+           
             </h2> 
        
               <div>

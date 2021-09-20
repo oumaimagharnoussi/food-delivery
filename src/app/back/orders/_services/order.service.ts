@@ -19,8 +19,25 @@ export class OrderService {
  
   getAcceptedOrders(page): Observable<any> {
     this.setEndpoint()
-    return this.http.findAll('?status=INDELIVERY&delivery.id='+this.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc')
+    return this.http.findAll('?delivery.id='+this.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc')
   }
+
+  getPickedOrders(page): Observable<any> {
+    return this.http.findAll('?status=PICKED&delivery.id='+this.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc')
+  }
+
+  getPreparedOrders(page): Observable<any> {
+    return this.http.findAll('?status=PICKED&delivery.id='+this.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc')
+  }
+
+  getUnPreparedOrders(page): Observable<any> {
+    return this.http.findAll('?status=ACCEPTED&delivery.id='+this.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc')
+  }
+
+  getDeliveredOrders(page): Observable<any> {
+    return this.http.findAll('?status=DELIVERED&delivery.id='+this.id+'&page='+page+'&order%5BacceptedDeliveryAt%5D=desc')
+  }
+  
 
   getOrderInfo(id): Observable<any>{
     this.setEndpoint()
@@ -34,8 +51,15 @@ acceptOrder(id): Observable<any>{
   this.setEndpoint()
   let order= {
     delivery:"api/deliveries/"+this.id,
-    status: "INDELIVERY",
     acceptedDeliveryAt: new Date()
+  }
+  return this.http.update(id,order);
+}
+
+pickOrder(id): Observable<any>{
+  this.setEndpoint()
+  let order= {
+    status: "PICKED",
   }
   return this.http.update(id,order);
 }
