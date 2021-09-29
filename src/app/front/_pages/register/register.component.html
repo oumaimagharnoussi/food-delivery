@@ -1,101 +1,97 @@
+<form class="mt-2 space-y-2" action="#" method="POST">
+    <input type="hidden" name="remember" value="true">
+
+    <div class="flex -mx-3">
+        <div class="w-full px-3">
+            <label for="" class="text-xs font-semibold px-1">First name</label>
+            <div class="flex">
+                <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
+                <input #firstName="ngModel" id="firstName" name="firstName" type="text" [(ngModel)]="form.firstName" type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Jhonny">
+            </div>
+        </div>
+
+        <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="bg-orange-100 border border-orange-400 text-red-400 rounded relative">
+        </div>
+    </div>
 
 
-  
-      <form class="mt-2 space-y-2" action="#" method="POST">
-        <input type="hidden" name="remember" value="true">
-  
-        <div class="flex -mx-3">
-          <div class="w-full px-3">
-              <label for="" class="text-xs font-semibold px-1">First name</label>
-              <div class="flex">
-                  <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
-                  <input  #firstName="ngModel" id="firstName" name="firstName" type="text" [(ngModel)]="form.firstName"    type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Jhonny">
-              </div>
-          </div>
-
-          <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
-          class="bg-orange-100 border border-orange-400 text-red-400 rounded relative">     
-          </div>
-      </div>
-
-
-      <div class="flex -mx-3">
+    <div class="flex -mx-3">
         <div class="w-full px-3 ">
             <label for="" class="text-xs font-semibold px-1">Last name</label>
             <div class="flex">
                 <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
-                <input  #lastName="ngModel" id="lastName" name="lastName" [(ngModel)]="form.lastName"   type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Smith">
+                <input #lastName="ngModel" id="lastName" name="lastName" [(ngModel)]="form.lastName" type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Smith">
             </div>
         </div>
     </div>
 
 
     <div class="flex -mx-3">
-      <div class="w-full px-3 ">
-          <label for="" class="text-xs font-semibold px-1">Email</label>
-          <div class="flex">
-              <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
-              <input  #email="ngModel" id="email-address" name="email"  autocomplete="email" [(ngModel)]="form.email"    type="email" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Smith@confledis.fr">
-          </div>
-      </div>
-  </div>
-        <div class="rounded-md shadow-sm -space-y-px mt-4">
-  
-          <div>
-           
+        <div class="w-full px-3 ">
+            <label for="" class="text-xs font-semibold px-1">Email</label>
+            <div class="flex">
+                <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
+                <input #email="ngModel" id="email-address" name="email" autocomplete="email" [(ngModel)]="form.email" type="email" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Smith@confledis.fr">
+            </div>
+        </div>
+    </div>
+    <div class="rounded-md shadow-sm -space-y-px mt-4">
+
+        <div>
+
 
             <label for="phone-number" class="sr-only">Phone number</label>
-           
-            <ion-intl-tel-input 
-            #phone="ngModel" id="tel-number"
-            name="phone"
-            class="w-full p-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" 
-            [(ngModel)]="form.telephone"
-            #phoneNumberControl="ngModel"
-            defaultCountryiso="fr"
-            ionIntlTelInputValid >
-          </ion-intl-tel-input>
 
-            <div *ngIf="phone.invalid && (phone.dirty || phone.touched)"
-            class="bg-orange-100 border border-orange-400 text-red-400 rounded relative">
-        
-         
-        
+            <ion-intl-tel-input #phone="ngModel" id="tel-number" name="phone" class="w-full p-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" [(ngModel)]="form.telephone" #phoneNumberControl="ngModel" defaultCountryiso="fr" ionIntlTelInputValid>
+            </ion-intl-tel-input>
+
+            <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="bg-orange-100 border border-orange-400 text-red-400 rounded relative">
+
+
+
+            </div>
         </div>
-          </div>
-  
-         
-          
-          <div class="flex -mx-3">
+
+
+
+        <div class="flex -mx-3">
             <div class="w-full px-3  mb-2">
                 <label for="" class="text-xs font-semibold px-1">Password</label>
                 <div class="flex">
                     <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
-                    <input  id="password" name="password" placeholder="Password"  required  [(ngModel)]="form.password"    type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Smith">
+                    <input id="password" name="password" placeholder="Password" required [(ngModel)]="form.password" type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Smith">
                 </div>
             </div>
         </div>
-  
-  
+
+        <div class="flex -mx-3">
+            <div class="w-full px-3  mb-2">
+                <label for="" class="text-xs font-semibold px-1">Confirm Password</label>
+                <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
+                    <input id="confirm" name="confirm" placeholder="confirm" required [(ngModel)]="confirm" type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-green-500" placeholder="Smith">
+                </div>
+            </div>
         </div>
-  
-  
-  
-        <div>
-     
-          <button (click)="onSubmit()"  class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold">
+
+
+    </div>
+
+
+
+    <div>
+
+        <button (click)="onSubmit()" class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold">
             SIGN UP
     
   
           </button>
-          
-        </div>
-  
-  
-        
-  
-      
-        
-      </form>
+
+    </div>
 
 
+
+
+
+
+</form>
