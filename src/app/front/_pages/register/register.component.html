@@ -1,6 +1,12 @@
-<form class="mt-2 space-y-2" action="#" method="POST">
+<form class="mt-2 space-y-2" action="#" method="POST" *ngIf="register">
     <input type="hidden" name="remember" value="true">
-
+  
+        <div class="text-center mb-5">
+            
+            <h1 class="font-bold text-3xl text-gray-900">Register
+              </h1>
+            <p>You’re welcome</p>
+        </div>
     <div class="flex -mx-3">
         <div class="w-full px-3">
             <label for="" class="text-xs font-semibold px-1">First name</label>
@@ -81,17 +87,21 @@
 
     <div>
 
-        <button (click)="onSubmit()" class="block w-full max-w-xs mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold">
-            SIGN UP
-    
-  
-          </button>
+        <button class="block w-full mx-auto bg-green-500 hover:bg-green-700 focus:bg-green-700 text-white rounded-lg px-3 py-3 font-semibold">REGISTER NOW</button>
 
     </div>
 
+    <div class="flex -mx-3">
+        <div class="w-full px-3 mb-5">
+            <div  (click)="redirectToLogin()" class="w-full px-3 mb-5">
+                <button class="text-green-500 font-medium float-right">Already have account?</button>
+            </div>
+        </div>
 
-
-
-
+    </div>
 
 </form>
+
+<app-login *ngIf="!register">
+
+</app-login>

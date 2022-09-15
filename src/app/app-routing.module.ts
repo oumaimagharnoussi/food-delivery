@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './front/_guards/auth-guard.service';
+import { RegisterComponent } from './front/_pages/register/register.component';
 
 const routes: Routes = [
 
@@ -16,7 +17,7 @@ const routes: Routes = [
     
     loadChildren: () => import('./back/back.module').then( m => m.BackModule),
     canActivate:[AuthGuardService]
-  }
+  },
 
 ];
 

@@ -5,8 +5,11 @@
 export const environment = {
   production: false,
 
-  server: 'https://food.dev.confledis.fr',
-  api_url:'https://food.dev.confledis.fr/api/',
+  server: 'http://localhost:8000',
+
+  sse_server: 'http://localhost:3000',
+
+  api_url: 'http://localhost:8000/api/',
 
   firebase :{
     apiKey: "AIzaSyC9Y1XY7jFJCvB5Wt3_EEUc-BETpOWbQXc",

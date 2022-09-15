@@ -37,6 +37,8 @@ export class HomeComponent implements OnInit {
    this.login=false
 
  }
+
+
  
   change(){
     if(this.dark==true){

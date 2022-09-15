@@ -32,6 +32,7 @@ export class RegisterComponent implements OnInit {
   test=false;
   pressed=false;
   errMsg="";
+  register:boolean=true;
 
   form ={
     firstName: "",
@@ -255,7 +256,10 @@ export class RegisterComponent implements OnInit {
 
  }
   
-
+ redirectToLogin() {
+  console.log('Login page !!!');
+  this.register = false;
+}
 
   
 }
